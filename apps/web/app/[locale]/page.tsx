@@ -71,7 +71,7 @@ export default async function Home({
           <h2 className="font-display text-4xl font-semibold leading-tight tracking-tight text-ink sm:text-6xl">
             {cta("title")}
             <br />
-            <span className="bg-gradient-to-r from-gold-deep to-gold bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#8A6314] via-[#C2922E] to-[#E0B24E] bg-clip-text text-transparent">
               {cta("titleHighlight")}
             </span>
           </h2>

@@ -34,7 +34,7 @@ export function Hero() {
           >
             {t("title")}
             <br />
-            <span className="bg-gradient-to-r from-gold-deep via-gold to-gold-hi bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#8A6314] via-[#C2922E] to-[#E0B24E] bg-clip-text text-transparent">
               {t("titleHighlight")}
             </span>
           </motion.h1>
