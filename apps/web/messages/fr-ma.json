@@ -27,12 +27,11 @@
     "subtitle": "Professionnel, équitable et transparent — il vous suffit du lien de votre publication.",
     "stepWord": "Étape",
     "items": [
-      { "title": "Connectez votre publication", "desc": "Collez le lien du post ou du Reel de votre tirage. Rapide et sans complication.", "tips": ["Ouvrez le menu (•••) sur la publication", "Touchez « Copier le lien » et collez-le ici"] },
-      { "title": "Choisissez la base du tirage", "desc": "Décidez si vous tirez parmi les commentaires ou les likes, puis passez aux règles. Vous pouvez combiner plusieurs publications.", "tips": [] },
-      { "title": "Configurez règles et filtres", "desc": "Nom du tirage, nombre de gagnants et de suppléants, et qui participe : mentions obligatoires, sans doublons, mots-clés et limite équitable.", "tips": ["Laissez l'IA détecter vos règles"] },
-      { "title": "Laissez la collecte se terminer", "desc": "Nous récupérons tous les commentaires — vraiment, même des milliers. Un tirage honnête attend que tout soit chargé avant de se lancer.", "tips": [] },
-      { "title": "Lancez avec un compte à rebours", "desc": "Définissez la durée du compte à rebours et démarrez. Les participants se mélangent à l'écran et les gagnants apparaissent à la fin — avec une option de diffusion en direct.", "tips": [] },
-      { "title": "Partagez les résultats", "desc": "Publiez la page de résultats et le certificat au format story. Votre public vérifie le code et a confiance que c'était équitable.", "tips": [] }
+      { "title": "Connectez votre publication", "desc": "Collez le lien du post ou du Reel de votre tirage. Pour le copier : ouvrez le menu (•••) sur la publication et touchez « Copier le lien ».", "tips": ["Ouvrez le menu (•••) sur la publication", "Touchez « Copier le lien » et collez-le ici"] },
+      { "title": "Commentaires ou likes", "desc": "Choisissez la base du tirage : tirer parmi ceux qui ont commenté ou parmi ceux qui ont aimé la publication.", "tips": [] },
+      { "title": "Choisissez l'animation de la révélation", "desc": "Décidez comment le gagnant est révélé — enveloppe dorée, coffre-fort, scène et plus. Activez la diffusion en direct pour montrer le tirage à votre public en temps réel.", "tips": ["Diffusez le tirage en direct", "Recevez des extraits vidéo prêts à publier"] },
+      { "title": "Lancez avec un compte à rebours", "desc": "Définissez la durée du compte à rebours et démarrez. Les participants se mélangent à l'écran et le gagnant apparaît au climax.", "tips": [] },
+      { "title": "Partagez les résultats", "desc": "Téléchargez les extraits vidéo prêts pour les Stories, Reels et le feed, et publiez la page de résultats avec un certificat vérifiable.", "tips": [] }
     ]
   },
   "features": {

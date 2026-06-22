@@ -27,12 +27,11 @@
     "subtitle": "Profissional, justo e transparente — sem precisar de nada além do link da sua publicação.",
     "stepWord": "Passo",
     "items": [
-      { "title": "Conecte sua publicação", "desc": "Cole o link do post ou Reels do seu sorteio. É o ponto de partida — rápido e sem complicação.", "tips": ["Abra o menu (•••) na publicação", "Toque em “Copiar link” e cole aqui"] },
-      { "title": "Escolha a base do sorteio", "desc": "Defina se vai sortear entre comentários ou curtidas e siga para as regras. Dá para somar mais de uma publicação.", "tips": [] },
-      { "title": "Configure regras e filtros", "desc": "Nome do sorteio, número de vencedores e suplentes, e quem concorre: menções obrigatórias, sem duplicados, palavras-chave e limite justo.", "tips": ["Deixe a IA detectar suas regras"] },
-      { "title": "Deixe a coleta terminar", "desc": "Trazemos todos os comentários — de verdade, mesmo que sejam milhares. Um sorteio honesto espera tudo carregar antes de rodar.", "tips": [] },
-      { "title": "Rode com contagem regressiva", "desc": "Defina o tempo da contagem e inicie. Os participantes embaralham na tela e os vencedores surgem no fim — com opção de transmitir ao vivo.", "tips": [] },
-      { "title": "Compartilhe os resultados", "desc": "Publique a página de resultados e o certificado em formato story. Seu público confere o código e confia que tudo foi justo.", "tips": [] }
+      { "title": "Conecte sua publicação", "desc": "Cole o link do post ou Reels do seu sorteio. Para copiar: abra o menu (•••) na publicação e toque em “Copiar link”.", "tips": ["Abra o menu (•••) na publicação", "Toque em “Copiar link” e cole aqui"] },
+      { "title": "Comentários ou curtidas", "desc": "Escolha a base do sorteio: sortear entre quem comentou ou entre quem curtiu a publicação.", "tips": [] },
+      { "title": "Escolha a animação da revelação", "desc": "Defina como o vencedor será revelado — envelope dourado, cofre, palco e mais. Ative a transmissão ao vivo para mostrar o sorteio em tempo real à sua audiência.", "tips": ["Transmita o sorteio ao vivo", "Receba cortes de vídeo prontos para postar"] },
+      { "title": "Rode com contagem regressiva", "desc": "Defina o tempo da contagem e inicie. Os participantes embaralham na tela e o vencedor surge no clímax.", "tips": [] },
+      { "title": "Compartilhe os resultados", "desc": "Baixe os cortes de vídeo prontos para Stories, Reels e feed, e publique a página de resultados com certificado verificável.", "tips": [] }
     ]
   },
   "features": {

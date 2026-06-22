@@ -27,12 +27,11 @@
     "subtitle": "Professional, fair and transparent — all you need is your post link.",
     "stepWord": "Step",
     "items": [
-      { "title": "Connect your post", "desc": "Paste the link of your giveaway post or Reel. Quick and simple.", "tips": ["Open the (•••) menu on the post", "Tap “Copy link” and paste it here"] },
-      { "title": "Choose the entry source", "desc": "Pick whether to draw from comments or likes, then move on to the rules. You can combine more than one post.", "tips": [] },
-      { "title": "Set rules and filters", "desc": "Name the giveaway, number of winners and backups, and who qualifies: required mentions, no duplicates, keywords and a fair limit.", "tips": ["Let AI detect your rules"] },
-      { "title": "Let the collection finish", "desc": "We pull every comment — for real, even thousands. An honest giveaway waits for everything to load before running.", "tips": [] },
-      { "title": "Run it with a countdown", "desc": "Set the countdown and start. Entrants shuffle on screen and the winners appear at the end — with a live broadcast option.", "tips": [] },
-      { "title": "Share the results", "desc": "Publish the results page and the story-format certificate. Your audience checks the code and trusts it was fair.", "tips": [] }
+      { "title": "Connect your post", "desc": "Paste the link of your giveaway post or Reel. To copy it: open the (•••) menu on the post and tap “Copy link”.", "tips": ["Open the (•••) menu on the post", "Tap “Copy link” and paste it here"] },
+      { "title": "Comments or likes", "desc": "Choose the entry source: draw from people who commented or from people who liked the post.", "tips": [] },
+      { "title": "Choose the reveal animation", "desc": "Decide how the winner is revealed — golden envelope, vault, stage and more. Turn on live broadcast to show the draw to your audience in real time.", "tips": ["Broadcast the draw live", "Get video cuts ready to post"] },
+      { "title": "Run it with a countdown", "desc": "Set the countdown and start. Entrants shuffle on screen and the winner appears at the climax.", "tips": [] },
+      { "title": "Share the results", "desc": "Download the video cuts ready for Stories, Reels and feed, and publish the results page with a verifiable certificate.", "tips": [] }
     ]
   },
   "features": {
