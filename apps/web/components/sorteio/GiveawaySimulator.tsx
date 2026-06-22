@@ -528,9 +528,8 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
           {preview.imageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={preview.imageUrl}
+              src={`/api/instagram/image?url=${encodeURIComponent(preview.imageUrl)}`}
               alt="publicação"
-              referrerPolicy="no-referrer"
               className="h-full w-full object-cover"
             />
           ) : null}
