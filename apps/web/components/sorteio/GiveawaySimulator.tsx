@@ -162,6 +162,7 @@ export function GiveawaySimulator() {
     setResult(r);
     setSpec(s);
     setStep("result");
+    setShowReveal(true); // abre a revelacao automaticamente (suspense antes de mostrar o vencedor)
     setBusy(false);
   }
   async function redraw() {
@@ -369,7 +370,7 @@ export function GiveawaySimulator() {
       {/* ---------- REVEAL OVERLAY ---------- */}
       {showReveal && spec && (
         <div className="fixed inset-0 z-[100] bg-void">
-          <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">✕ fechar</button>
+          <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">ver resultado →</button>
           {module === "bank_vault" ? (
             <CofreReveal handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle} />
           ) : module === "stage_host" ? (
