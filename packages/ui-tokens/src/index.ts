@@ -1,5 +1,5 @@
 /**
- * Design tokens do Prizegram.
+ * Design tokens do AzuraSort.
  *
  * Tema do SITE: "Light Luxury" — claro, premium, sofisticado (AAAAA).
  * Tema das CENAS de revelacao: permanece escuro (cinema), ver `reveal`.

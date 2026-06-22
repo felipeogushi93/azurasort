@@ -16,7 +16,7 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Prizegram — Sorteios de Instagram com final de cinema",
+  title: "AzuraSort — Sorteios de Instagram com final de cinema",
   description:
     "O sorteador de Instagram premium: sorteio justo e verificável, com a revelação do vencedor como uma cena de cinema e vídeo pronto para compartilhar.",
 };

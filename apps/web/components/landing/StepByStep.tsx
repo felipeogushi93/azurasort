@@ -126,7 +126,7 @@ function ResultMock() {
       <div className="rounded-2xl border border-emerald/20 bg-emerald/5 p-4 text-center shadow-soft">
         <div className="mx-auto mb-2 grid h-9 w-9 place-items-center rounded-full bg-emerald/15 text-emerald">✓</div>
         <p className="text-sm text-ink">Resultado salvo</p>
-        <p className="text-[10px] text-inkSoft">via Prizegram</p>
+        <p className="text-[10px] text-inkSoft">via AzuraSort</p>
       </div>
       <Frame>
         <p className="text-[10px] uppercase tracking-widest text-inkSoft">código de verificação</p>

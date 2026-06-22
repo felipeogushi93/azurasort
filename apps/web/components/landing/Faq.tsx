@@ -17,7 +17,7 @@ const FAQ: { q: string; a: string }[] = [
     a: "A IA lê a sua publicação e identifica as regras automaticamente (menções, hashtags, palavras-chave) e ainda ajuda a validar perfis vencedores. Você economiza tempo e evita erros de configuração.",
   },
   {
-    q: "O sorteio do Prizegram é seguro e confiável?",
+    q: "O sorteio do AzuraSort é seguro e confiável?",
     a: "Sim. Cada sorteio usa um sorteio aleatório auditável, com semente assinada que gera um certificado verificável publicamente. Qualquer pessoa pode conferir que o resultado não foi manipulado.",
   },
   {
@@ -49,7 +49,7 @@ const FAQ: { q: string; a: string }[] = [
     a: "Sim, quantas vezes quiser, usando a mesma publicação — útil para testar a animação antes de rodar o sorteio definitivo ao vivo.",
   },
   {
-    q: "O que torna o Prizegram diferente das outras ferramentas?",
+    q: "O que torna o AzuraSort diferente das outras ferramentas?",
     a: "Além de sortear de forma justa, transformamos o anúncio do vencedor numa revelação cinematográfica e geramos automaticamente o vídeo pronto para Stories, Reels e feed. O resultado vira conteúdo que a sua audiência compartilha.",
   },
 ];

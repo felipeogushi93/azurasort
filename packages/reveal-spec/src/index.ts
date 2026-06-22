@@ -71,7 +71,7 @@ export const BrandingSchema = z.object({
   /** cores em hex; a cena adapta seus emissivos/gradientes a partir daqui */
   primaryColor: z.string().regex(/^#([0-9a-fA-F]{6})$/).default("#E8C26B"),
   accentColor: z.string().regex(/^#([0-9a-fA-F]{6})$/).default("#3DF5FF"),
-  /** se a marca dagua "Made with Prizegram" aparece (planos pagos = false) */
+  /** se a marca dagua "Made with AzuraSort" aparece (planos pagos = false) */
   watermark: z.boolean().default(true),
 });
 export type Branding = z.infer<typeof BrandingSchema>;

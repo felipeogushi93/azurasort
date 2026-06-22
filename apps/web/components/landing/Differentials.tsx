@@ -15,7 +15,7 @@ export function Differentials() {
   return (
     <section className="relative mx-auto max-w-6xl px-6 py-28">
       <div className="mb-14 text-center">
-        <p className="text-sm font-medium uppercase tracking-[0.3em] text-gold-deep">Por que Prizegram</p>
+        <p className="text-sm font-medium uppercase tracking-[0.3em] text-gold-deep">Por que AzuraSort</p>
         <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Não é só sortear. É um <span className="text-gold-deep">espetáculo</span>.
         </h2>

@@ -13,7 +13,7 @@ export default function Home() {
       <header className="fixed inset-x-0 top-0 z-50 border-b border-ink/5 bg-canvas/70 backdrop-blur-xl">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ink">
-            Prize<span className="text-gold-deep">gram</span>
+            Azura<span className="text-gold-deep">sort</span>
           </Link>
           <div className="hidden items-center gap-8 text-sm text-inkSoft md:flex">
             <a href="#como-funciona" className="transition hover:text-ink">Como funciona</a>
@@ -78,7 +78,7 @@ export default function Home() {
       <footer className="border-t border-ink/5 bg-canvas px-6 py-12">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 text-sm text-inkSoft sm:flex-row">
           <span className="font-display text-lg font-semibold text-ink">
-            Prize<span className="text-gold-deep">gram</span>
+            Azura<span className="text-gold-deep">sort</span>
           </span>
           <span>Sorteios de Instagram com final de cinema.</span>
           <span className="text-xs text-inkSoft/70">Prototipo · 2026</span>

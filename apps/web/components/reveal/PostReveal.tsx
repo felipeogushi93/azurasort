@@ -59,7 +59,7 @@ export function PostReveal({
       </div>
 
       {spec.branding.watermark && (
-        <p className="text-[10px] tracking-widest text-lo/70">Made with Prizegram</p>
+        <p className="text-[10px] tracking-widest text-lo/70">Made with AzuraSort</p>
       )}
     </motion.div>
   );
