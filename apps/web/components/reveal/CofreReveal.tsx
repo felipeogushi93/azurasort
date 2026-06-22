@@ -14,11 +14,11 @@ export function CofreReveal({
   handle,
   revealAtSec = 3.9, // segundo em que o nome surge no vídeo
   loop = false,
-  // região (% do vídeo) da faixa que cobre o "WINNER_USERNAME"
-  band = { left: 24, top: 46, width: 68, height: 18 },
+  // região (% do vídeo) da faixa que cobre o logo do Insta + "WINNER_USERNAME"
+  band = { left: 12, top: 42, width: 80, height: 24 },
   // centro do @ (% do vídeo)
-  textLeft = 57.5,
-  textTop = 55,
+  textLeft = 52,
+  textTop = 54,
 }: {
   handle: string;
   revealAtSec?: number;
