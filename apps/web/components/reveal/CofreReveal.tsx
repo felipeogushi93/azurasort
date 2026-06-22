@@ -28,8 +28,10 @@ export function CofreReveal({
   textTop?: number;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [t, setT] = useState(0);
   const [w, setW] = useState(0);
+  const [muted, setMuted] = useState(false);
   const show = t >= revealAtSec;
 
   useEffect(() => {
@@ -41,20 +43,50 @@ export function CofreReveal({
     return () => ro.disconnect();
   }, []);
 
+  // tenta tocar COM SOM; se o navegador bloquear, cai pra mudo + botao de ativar
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    v.play().catch(() => {
+      v.muted = true;
+      setMuted(true);
+      v.play().catch(() => {});
+    });
+  }, []);
+
+  function enableSound() {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    setMuted(false);
+    void v.play();
+  }
+
   const fontPx = Math.max(14, w * 0.045);
 
   return (
     <div className="flex h-full w-full items-center justify-center overflow-hidden bg-void">
       <div ref={wrapRef} className="relative inline-block">
         <video
+          ref={videoRef}
           src="/cofre.mp4"
-          autoPlay
-          muted
+          muted={muted}
           playsInline
           loop={loop}
           onTimeUpdate={(e) => setT(e.currentTarget.currentTime)}
           className="block max-h-screen max-w-full"
         />
+
+        {/* fallback: navegador bloqueou autoplay com som */}
+        {muted && (
+          <button
+            onClick={enableSound}
+            className="absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur transition hover:bg-black/80"
+          >
+            🔊 Ativar som
+          </button>
+        )}
 
         {show && (
           <>
