@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: "Fraunces", "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+html,
+body {
+  background: #fbfaf7;
+  color: #16141d;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(194, 146, 46, 0.22);
+}
+
+/* mesh premium claro (fundo do hero/secoes) */
+.bg-mesh {
+  background-image:
+    radial-gradient(48% 38% at 78% 8%, rgba(232, 194, 107, 0.20), transparent 70%),
+    radial-gradient(42% 42% at 12% 18%, rgba(109, 84, 247, 0.12), transparent 70%),
+    radial-gradient(40% 40% at 88% 82%, rgba(242, 107, 138, 0.10), transparent 70%);
+}
+
+/* grade fina (linhas escuras suaves sobre claro) */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(22, 20, 33, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(22, 20, 33, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 35%, transparent 100%);
+  mask-image: radial-gradient(ellipse 75% 55% at 50% 0%, #000 35%, transparent 100%);
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.08); }
+}
+.animate-pulse-slow { animation: pulse-slow 9s ease-in-out infinite; }
+
+@keyframes spotlight {
+  0%, 100% { transform: translateX(-50%) rotate(-2deg); opacity: 0.85; }
+  50% { transform: translateX(-46%) rotate(2deg); opacity: 1; }
+}
+.animate-spotlight {
+  transform-origin: 50% 0%;
+  animation: spotlight 6s ease-in-out infinite;
+}
+
+/* componentes reutilizaveis (light premium) */
+@layer components {
+  .btn-gold {
+    @apply rounded-full bg-gradient-to-b from-gold-hi to-gold px-6 py-3 text-sm font-semibold text-ink shadow-gold transition hover:-translate-y-0.5 active:translate-y-0;
+  }
+  .btn-ghost {
+    @apply rounded-full border border-ink/10 bg-surface px-5 py-3 text-sm font-semibold text-ink shadow-soft transition hover:border-gold/50 hover:-translate-y-0.5;
+  }
+  .inp {
+    @apply w-full rounded-xl border border-ink/10 bg-surface px-3 py-2.5 text-ink outline-none transition placeholder:text-inkSoft/60 focus:border-gold focus:ring-4 focus:ring-gold/10;
+  }
+  .toggle {
+    @apply flex h-7 w-12 items-center rounded-full border border-ink/10 bg-ink/5 p-0.5 transition;
+  }
+  .toggle .dot { @apply block h-5 w-5 rounded-full bg-inkSoft transition; }
+  .toggle-on { @apply border-gold bg-gold/25; }
+  .toggle-on .dot { @apply translate-x-5 bg-gold; }
+}
+
+/* respeita usuarios com movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
