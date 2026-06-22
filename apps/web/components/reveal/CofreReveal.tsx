@@ -3,29 +3,39 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Revelação "Cofre" — toca o vídeo do cofre e, no momento em que o vídeo mostra
- * "WINNER_USERNAME" ao lado do logo do Instagram, cobre esse texto com uma
- * FAIXA PRETA e escreve o @ do vencedor em DOURADO no lugar.
+ * Revelação por VÍDEO + nome do vencedor.
  *
- * O overlay fica ancorado ao VÍDEO (não ao container), então o alinhamento se
- * mantém em qualquer tela. Posição/tempo são props — fáceis de calibrar.
+ * Toca um vídeo (com som) e, no momento em que o vídeo mostra o lugar do nome,
+ * sobrepõe o @ do vencedor em DOURADO — e o mantém fixo até o fim.
+ *
+ * - `showBand`: desenha uma faixa preta para cobrir um nome já gravado (ex: cofre
+ *   tem "WINNER_USERNAME" gravado). Quando o vídeo já tem um cartão preto (ex:
+ *   contagem regressiva), use showBand=false e só o @ aparece sobre o cartão.
+ *
+ * Posições em % do VÍDEO (não da tela) — alinhamento mantém em qualquer tamanho.
  */
 export function CofreReveal({
   handle,
-  revealAtSec = 3.9, // segundo em que o nome surge no vídeo
+  src = "/cofre.mp4",
+  revealAtSec = 3.9,
   loop = false,
-  // região (% do vídeo) da faixa que cobre o logo do Insta + "WINNER_USERNAME"
+  showBand = true,
   band = { left: 12, top: 42, width: 80, height: 24 },
-  // centro do @ (% do vídeo)
   textLeft = 52,
   textTop = 54,
+  rotation = 0,
+  fontScale = 0.045,
 }: {
   handle: string;
+  src?: string;
   revealAtSec?: number;
   loop?: boolean;
+  showBand?: boolean;
   band?: { left: number; top: number; width: number; height: number };
   textLeft?: number;
   textTop?: number;
+  rotation?: number;
+  fontScale?: number;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -63,14 +73,14 @@ export function CofreReveal({
     void v.play();
   }
 
-  const fontPx = Math.max(14, w * 0.045);
+  const fontPx = Math.max(14, w * fontScale);
 
   return (
     <div className="flex h-full w-full items-center justify-center overflow-hidden bg-void">
       <div ref={wrapRef} className="relative inline-block">
         <video
           ref={videoRef}
-          src="/cofre.mp4"
+          src={src}
           muted={muted}
           playsInline
           loop={loop}
@@ -90,25 +100,26 @@ export function CofreReveal({
 
         {show && (
           <>
-            {/* faixa preta cobrindo o "WINNER_USERNAME" gravado no vídeo */}
-            <div
-              className="absolute"
-              style={{
-                left: `${band.left}%`,
-                top: `${band.top}%`,
-                width: `${band.width}%`,
-                height: `${band.height}%`,
-                background: "#000",
-                borderRadius: fontPx * 0.18,
-                boxShadow: "0 0 0 1px rgba(232,194,107,0.25), 0 0 24px rgba(0,0,0,0.6)",
-              }}
-            />
-            {/* @ do vencedor em dourado, no lugar do nome */}
+            {showBand && (
+              <div
+                className="absolute"
+                style={{
+                  left: `${band.left}%`,
+                  top: `${band.top}%`,
+                  width: `${band.width}%`,
+                  height: `${band.height}%`,
+                  background: "#000",
+                  borderRadius: fontPx * 0.18,
+                  boxShadow: "0 0 0 1px rgba(232,194,107,0.25), 0 0 24px rgba(0,0,0,0.6)",
+                }}
+              />
+            )}
             <span
-              className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap font-display font-bold tracking-wide"
+              className="absolute whitespace-nowrap font-display font-bold tracking-wide"
               style={{
                 top: `${textTop}%`,
                 left: `${textLeft}%`,
+                transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
                 fontSize: fontPx,
                 background: "linear-gradient(180deg, #F6DFA0, #E8C26B 45%, #B8862F)",
                 WebkitBackgroundClip: "text",

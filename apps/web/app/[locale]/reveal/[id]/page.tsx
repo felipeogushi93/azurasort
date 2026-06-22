@@ -19,6 +19,15 @@ export default async function RevealPage({
     );
   }
 
+  // Cena "Contagem regressiva" = video do anel de fogo + @ no cartao preto.
+  if (id === "contagem" || id === "countdown") {
+    return (
+      <div className="h-screen w-screen">
+        <CofreReveal handle="mari.costa" src="/contagem.mp4" revealAtSec={15.9} showBand={false} textLeft={50} textTop={50} fontScale={0.04} loop />
+      </div>
+    );
+  }
+
   // Cena "Palco com Apresentadora" = video real + overlay (a abordagem realista).
   if (id === "stage" || id === "palco") {
     const spec = buildStageHostSpec(id, "pt-BR");

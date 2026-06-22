@@ -16,6 +16,7 @@ export const REVEAL_MODULES = [
   "oscar_envelope",
   "stage_host",
   "bank_vault",
+  "countdown",
   "hologram",
   "comment_matrix",
   "casino_roulette",

@@ -265,6 +265,7 @@ export function GiveawaySimulator() {
             <SceneCard active={module === "oscar_envelope"} onClick={() => setModule("oscar_envelope")} emoji="✉️" name="Envelope Dourado" />
             <SceneCard active={module === "stage_host"} onClick={() => setModule("stage_host")} emoji="🎤" name="Palco (vídeo)" />
             <SceneCard active={module === "bank_vault"} onClick={() => setModule("bank_vault")} emoji="🔐" name="Cofre (vídeo)" />
+            <SceneCard active={module === "countdown"} onClick={() => setModule("countdown")} emoji="⏱️" name="Contagem regressiva" />
           </div>
 
           {/* ao vivo */}
@@ -373,6 +374,16 @@ export function GiveawaySimulator() {
           <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">ver resultado →</button>
           {module === "bank_vault" ? (
             <CofreReveal handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle} />
+          ) : module === "countdown" ? (
+            <CofreReveal
+              handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
+              src="/contagem.mp4"
+              revealAtSec={15.9}
+              showBand={false}
+              textLeft={50}
+              textTop={50}
+              fontScale={0.04}
+            />
           ) : module === "stage_host" ? (
             <div className="h-full w-full"><VideoReveal spec={spec} /></div>
           ) : (
