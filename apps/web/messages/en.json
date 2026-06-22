@@ -1,0 +1,118 @@
+{
+  "nav": {
+    "comoFunciona": "How it works",
+    "recursos": "Features",
+    "galeria": "Gallery",
+    "faq": "FAQ",
+    "criarSorteio": "Create giveaway"
+  },
+  "hero": {
+    "badge": "Fair, verifiable giveaways · SHA-256",
+    "title": "Instagram giveaways",
+    "titleHighlight": "with a cinematic finale.",
+    "subtitle": "Draw winners from your comments fairly and verifiably — and reveal the winner like a movie scene, with a video ready to share.",
+    "ctaPrimary": "Create my giveaway →",
+    "ctaSecondary": "How it works",
+    "trust1": "🔒 Verifiable result",
+    "trust2": "🎬 Cinematic reveal",
+    "trust3": "🎞️ Video 9:16 · 16:9 · 1:1"
+  },
+  "showcase": {
+    "caption": "Real example · Stage Host scene"
+  },
+  "steps": {
+    "label": "Step by step",
+    "title": "Your giveaway live in",
+    "titleHighlight": "minutes",
+    "subtitle": "Professional, fair and transparent — all you need is your post link.",
+    "stepWord": "Step",
+    "items": [
+      { "title": "Connect your post", "desc": "Paste the link of your giveaway post or Reel. Quick and simple.", "tips": ["Open the (•••) menu on the post", "Tap “Copy link” and paste it here"] },
+      { "title": "Choose the entry source", "desc": "Pick whether to draw from comments or likes, then move on to the rules. You can combine more than one post.", "tips": [] },
+      { "title": "Set rules and filters", "desc": "Name the giveaway, number of winners and backups, and who qualifies: required mentions, no duplicates, keywords and a fair limit.", "tips": ["Let AI detect your rules"] },
+      { "title": "Let the collection finish", "desc": "We pull every comment — for real, even thousands. An honest giveaway waits for everything to load before running.", "tips": [] },
+      { "title": "Run it with a countdown", "desc": "Set the countdown and start. Entrants shuffle on screen and the winners appear at the end — with a live broadcast option.", "tips": [] },
+      { "title": "Share the results", "desc": "Publish the results page and the story-format certificate. Your audience checks the code and trusts it was fair.", "tips": [] }
+    ]
+  },
+  "features": {
+    "label": "Features",
+    "title": "Everything for a",
+    "titleHighlight": "professional giveaway",
+    "subtitle": "Create, filter and pick winners on Instagram — with the transparency and polish your brand deserves.",
+    "items": [
+      { "title": "Unlimited giveaways", "desc": "Create as many giveaways as you want, whenever you want — no quota holding back your growth." },
+      { "title": "Export the list", "desc": "Download all entrants, comments and likes as a spreadsheet (XLS/CSV) to use however you like." },
+      { "title": "Redo anytime", "desc": "Didn't like a test? Run the same post again as many times as you need." },
+      { "title": "Countdown timer", "desc": "Set the duration of the suspense animation before revealing the winner." },
+      { "title": "Advanced validation", "desc": "Check whether the winner follows a profile, has a photo, bio or name — before confirming the prize." },
+      { "title": "Multiple posts", "desc": "Combine more than one post in the same giveaway to widen your campaign's reach." },
+      { "title": "Verifiable certificate", "desc": "Generate a shareable, auditable certificate of the results, with a public code." },
+      { "title": "AI rules", "desc": "AI reads your post and suggests the rules automatically — faster and error-free." },
+      { "title": "Results page", "desc": "List the winners on a dedicated page and prove to your audience it was fair." },
+      { "title": "Fair limit per person", "desc": "Set how many comments from each user count. Everyone gets the same chance." },
+      { "title": "Winners + backups", "desc": "Pick several winners and backups to replace anyone who breaks the rules." },
+      { "title": "Smart filters", "desc": "Hashtags, required mentions and duplicate removal in one click." }
+    ]
+  },
+  "gallery": {
+    "label": "The gallery",
+    "titleNum": "24",
+    "titleRest": "ways to reveal a winner",
+    "subtitle": "Each scene has its own script, camera, lighting and sound. Choose the mood of your giveaway — from the Oscars to the casino, from the future to treasure.",
+    "live": "live",
+    "soon": "soon",
+    "tier": "Tier {n}"
+  },
+  "diff": {
+    "label": "Why AzuraSort",
+    "title": "It's not just drawing. It's a",
+    "titleHighlight": "spectacle.",
+    "items": [
+      { "title": "Automatic video in 3 formats", "desc": "9:16, 16:9 and 1:1 generated instantly. Competitors give you a screenshot — we deliver a ready-made Reel." },
+      { "title": "Transparency certificate", "desc": "Giveaway with a signed, publicly verifiable seed. Prove to your audience it was fair." },
+      { "title": "Provably-fair result", "desc": "We publish the hash before and reveal the seed after: anyone can re-audit the draw." },
+      { "title": "Live / stage mode", "desc": "Reveal at events and live streams, controlled from your phone. Real-time suspense for your audience." },
+      { "title": "Screen ↔ video parity", "desc": "The downloaded MP4 is identical to what you saw on screen. Same engine, zero surprises." },
+      { "title": "60fps performance", "desc": "Real 3D effects with optimized WebGL. True cinema, smooth even on mobile." }
+    ]
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Frequently asked questions",
+    "subtitle": "The most common questions about Instagram giveaways.",
+    "items": [
+      { "q": "Why run an Instagram giveaway?", "a": "Giveaways are one of the fastest ways to grow: they boost comments, reach and followers in days, strengthen your bond with your audience, and give your brand a reason to celebrate that people love to share." },
+      { "q": "Why does collecting every comment matter?", "a": "If a tool reads only part of the comments, the draw is unfair — several people never even enter. We pull the complete list, even with thousands of entrants, so everyone has exactly the same chance." },
+      { "q": "How does the AI giveaway work?", "a": "The AI reads your post and identifies the rules automatically (mentions, hashtags, keywords) and even helps validate winning profiles. You save time and avoid setup mistakes." },
+      { "q": "Is the AzuraSort draw safe and trustworthy?", "a": "Yes. Each draw uses an auditable random algorithm with a signed seed that produces a publicly verifiable certificate. Anyone can confirm the result wasn't manipulated." },
+      { "q": "Can I draw from Reels and carousels?", "a": "Yes. It works with posts, Reels and carousels — just paste the link of the giveaway post." },
+      { "q": "Can I run a free giveaway?", "a": "You can. The free plan lets you run giveaways with the essential scenes (videos come with our watermark). Paid plans unlock more scenes, watermark-free video and advanced features." },
+      { "q": "How much does a professional giveaway cost?", "a": "You start for free. When you want to remove the watermark, use your logo, export lists or unlock all reveal scenes, there are affordable plans — with regional pricing." },
+      { "q": "How many winners can I choose?", "a": "As many as you want. You can also set backups to replace anyone who breaks the rules or doesn't claim the prize, plus enable required mentions, remove duplicates and limit entries per person." },
+      { "q": "How do I ensure the giveaway is fair and transparent?", "a": "We collect every comment, draw with a reproducible random algorithm and generate a certificate with a verification code. You share the results page and your followers confirm everything." },
+      { "q": "Does it work with private accounts?", "a": "To guarantee a fully official giveaway within Instagram's rules, we work with securely connected business or creator accounts. Private accounts don't expose comments publicly." },
+      { "q": "Can I restart the same giveaway?", "a": "Yes, as many times as you want, using the same post — handy for testing the animation before the final live draw." },
+      { "q": "What makes AzuraSort different from other tools?", "a": "Besides drawing fairly, we turn the winner announcement into a cinematic reveal and automatically generate a video ready for Stories, Reels and feed. The result becomes content your audience shares." }
+    ]
+  },
+  "cta": {
+    "title": "Your next giveaway deserves a",
+    "titleHighlight": "cinematic finale.",
+    "subtitle": "Get started now. Create a fair, verifiable and unforgettable giveaway in minutes.",
+    "ctaPrimary": "Create my giveaway →",
+    "ctaSecondary": "Watch a reveal"
+  },
+  "footer": {
+    "tagline": "Instagram giveaways with a cinematic finale.",
+    "proto": "Prototype · 2026"
+  },
+  "locale": {
+    "label": "Language",
+    "pt-br": "Português",
+    "es": "Español",
+    "ar-ma": "العربية",
+    "fr-ma": "Français",
+    "en": "English"
+  }
+}

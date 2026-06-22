@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
@@ -142,36 +143,39 @@ function ResultMock() {
 
 /* --------------------------------- steps --------------------------------- */
 
-type Step = { n: string; emoji: string; title: string; desc: string; tips?: string[]; mock: ReactNode };
+type StepText = { title: string; desc: string; tips?: string[] };
 
-const STEPS: Step[] = [
-  { n: "01", emoji: "🔗", title: "Conecte sua publicação", desc: "Cole o link do post ou Reels do seu sorteio. É o ponto de partida — rápido e sem complicação.", tips: ["Abra o menu (•••) na publicação", "Toque em “Copiar link” e cole aqui"], mock: <PostMock /> },
-  { n: "02", emoji: "📥", title: "Escolha a base do sorteio", desc: "Defina se vai sortear entre comentários ou curtidas e siga para as regras. Dá para somar mais de uma publicação.", mock: <PasteMock /> },
-  { n: "03", emoji: "🎚️", title: "Configure regras e filtros", desc: "Nome do sorteio, número de vencedores e suplentes, e quem concorre: menções obrigatórias, sem duplicados, palavras-chave e limite justo.", tips: ["Deixe a IA detectar suas regras"], mock: <RulesMock /> },
-  { n: "04", emoji: "⏳", title: "Deixe a coleta terminar", desc: "Trazemos todos os comentários — de verdade, mesmo que sejam milhares. Um sorteio honesto espera tudo carregar antes de rodar.", mock: <FetchMock /> },
-  { n: "05", emoji: "🎬", title: "Rode com contagem regressiva", desc: "Defina o tempo da contagem e inicie. Os participantes embaralham na tela e os vencedores surgem no fim — com opção de transmitir ao vivo.", mock: <CountdownMock /> },
-  { n: "06", emoji: "🚀", title: "Compartilhe os resultados", desc: "Publique a página de resultados e o certificado em formato story. Seu público confere o código e confia que tudo foi justo.", mock: <ResultMock /> },
+// visual (emoji + mock) por indice — o texto vem das traducoes
+const STEP_VISUALS: { n: string; emoji: string; mock: ReactNode }[] = [
+  { n: "01", emoji: "🔗", mock: <PostMock /> },
+  { n: "02", emoji: "📥", mock: <PasteMock /> },
+  { n: "03", emoji: "🎚️", mock: <RulesMock /> },
+  { n: "04", emoji: "⏳", mock: <FetchMock /> },
+  { n: "05", emoji: "🎬", mock: <CountdownMock /> },
+  { n: "06", emoji: "🚀", mock: <ResultMock /> },
 ];
 
 export function StepByStep() {
+  const t = useTranslations("steps");
+  const items = t.raw("items") as StepText[];
+
   return (
     <section className="relative mx-auto max-w-6xl px-6 py-28">
       <div className="mb-20 text-center">
-        <p className="text-sm font-medium uppercase tracking-[0.3em] text-gold-deep">Passo a passo</p>
+        <p className="text-sm font-medium uppercase tracking-[0.3em] text-gold-deep">{t("label")}</p>
         <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-          Seu sorteio no ar em <span className="text-gold-deep">minutos</span>
+          {t("title")} <span className="text-gold-deep">{t("titleHighlight")}</span>
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-inkSoft">
-          Profissional, justo e transparente — sem precisar de nada além do link da sua publicação.
-        </p>
+        <p className="mx-auto mt-4 max-w-xl text-inkSoft">{t("subtitle")}</p>
       </div>
 
       <div className="space-y-20 lg:space-y-28">
-        {STEPS.map((s, i) => {
+        {STEP_VISUALS.map((v, i) => {
+          const s = items[i] ?? { title: "", desc: "", tips: [] };
           const flip = i % 2 === 1;
           return (
             <motion.div
-              key={s.n}
+              key={v.n}
               initial={{ opacity: 0, y: 36 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
@@ -180,19 +184,21 @@ export function StepByStep() {
             >
               <div className={`relative ${flip ? "lg:[direction:ltr]" : ""}`}>
                 <span className="pointer-events-none absolute -top-16 -left-1 font-display text-[7rem] font-semibold leading-none text-ink/[0.05]">
-                  {s.n}
+                  {v.n}
                 </span>
-                <p className="text-xs font-medium uppercase tracking-[0.3em] text-inkSoft">Passo {s.n}</p>
+                <p className="text-xs font-medium uppercase tracking-[0.3em] text-inkSoft">
+                  {t("stepWord")} {v.n}
+                </p>
                 <h3 className="mt-2 font-display text-2xl font-semibold text-ink sm:text-3xl">
-                  <span className="mr-2">{s.emoji}</span>
+                  <span className="mr-2">{v.emoji}</span>
                   {s.title}
                 </h3>
                 <p className="mt-3 max-w-md leading-relaxed text-inkSoft">{s.desc}</p>
-                {s.tips && (
+                {s.tips && s.tips.length > 0 && (
                   <ul className="mt-4 space-y-2">
-                    {s.tips.map((t) => (
-                      <li key={t} className="flex items-center gap-2 text-sm text-ink/80">
-                        <span className="text-gold">▹</span> {t}
+                    {s.tips.map((tip) => (
+                      <li key={tip} className="flex items-center gap-2 text-sm text-ink/80">
+                        <span className="text-gold">▹</span> {tip}
                       </li>
                     ))}
                   </ul>
@@ -202,7 +208,7 @@ export function StepByStep() {
               <div className={`flex justify-center ${flip ? "lg:[direction:ltr]" : ""}`}>
                 <div className="relative">
                   <div className="absolute -inset-10 -z-10 rounded-full bg-gold-hi/15 blur-3xl" />
-                  {s.mock}
+                  {v.mock}
                 </div>
               </div>
             </motion.div>

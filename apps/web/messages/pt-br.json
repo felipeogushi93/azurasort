@@ -1,0 +1,118 @@
+{
+  "nav": {
+    "comoFunciona": "Como funciona",
+    "recursos": "Recursos",
+    "galeria": "Galeria",
+    "faq": "FAQ",
+    "criarSorteio": "Criar sorteio"
+  },
+  "hero": {
+    "badge": "Sorteio justo e verificável · SHA-256",
+    "title": "Sorteios de Instagram",
+    "titleHighlight": "com final de cinema.",
+    "subtitle": "Sorteie entre os comentários de forma justa e auditável — e revele o vencedor como uma cena de cinema, com vídeo pronto para compartilhar.",
+    "ctaPrimary": "Criar meu sorteio →",
+    "ctaSecondary": "Como funciona",
+    "trust1": "🔒 Resultado verificável",
+    "trust2": "🎬 Revelação cinematográfica",
+    "trust3": "🎞️ Vídeo 9:16 · 16:9 · 1:1"
+  },
+  "showcase": {
+    "caption": "Exemplo real · cena Palco com Apresentadora"
+  },
+  "steps": {
+    "label": "Passo a passo",
+    "title": "Seu sorteio no ar em",
+    "titleHighlight": "minutos",
+    "subtitle": "Profissional, justo e transparente — sem precisar de nada além do link da sua publicação.",
+    "stepWord": "Passo",
+    "items": [
+      { "title": "Conecte sua publicação", "desc": "Cole o link do post ou Reels do seu sorteio. É o ponto de partida — rápido e sem complicação.", "tips": ["Abra o menu (•••) na publicação", "Toque em “Copiar link” e cole aqui"] },
+      { "title": "Escolha a base do sorteio", "desc": "Defina se vai sortear entre comentários ou curtidas e siga para as regras. Dá para somar mais de uma publicação.", "tips": [] },
+      { "title": "Configure regras e filtros", "desc": "Nome do sorteio, número de vencedores e suplentes, e quem concorre: menções obrigatórias, sem duplicados, palavras-chave e limite justo.", "tips": ["Deixe a IA detectar suas regras"] },
+      { "title": "Deixe a coleta terminar", "desc": "Trazemos todos os comentários — de verdade, mesmo que sejam milhares. Um sorteio honesto espera tudo carregar antes de rodar.", "tips": [] },
+      { "title": "Rode com contagem regressiva", "desc": "Defina o tempo da contagem e inicie. Os participantes embaralham na tela e os vencedores surgem no fim — com opção de transmitir ao vivo.", "tips": [] },
+      { "title": "Compartilhe os resultados", "desc": "Publique a página de resultados e o certificado em formato story. Seu público confere o código e confia que tudo foi justo.", "tips": [] }
+    ]
+  },
+  "features": {
+    "label": "Recursos",
+    "title": "Tudo para um sorteio",
+    "titleHighlight": "profissional",
+    "subtitle": "Criar, filtrar e escolher vencedores no Instagram — com a transparência e o acabamento que a sua marca merece.",
+    "items": [
+      { "title": "Sorteios sem limite", "desc": "Crie quantos sorteios quiser, sempre que precisar — sem cota travando o seu crescimento." },
+      { "title": "Exportação da lista", "desc": "Baixe todos os participantes, comentários e curtidas em planilha (XLS/CSV) para usar como quiser." },
+      { "title": "Refazer à vontade", "desc": "Não gostou de um teste? Rode o mesmo post de novo quantas vezes precisar." },
+      { "title": "Contagem regressiva", "desc": "Defina a duração da animação de suspense antes de revelar o vencedor." },
+      { "title": "Validação avançada", "desc": "Confira se o ganhador segue um perfil, tem foto, bio ou nome — antes de confirmar o prêmio." },
+      { "title": "Várias publicações", "desc": "Combine mais de um post no mesmo sorteio para ampliar o alcance da campanha." },
+      { "title": "Certificado verificável", "desc": "Gere um certificado compartilhável e auditável dos resultados, com código público." },
+      { "title": "Regras com IA", "desc": "A IA lê seu post e sugere as regras automaticamente — mais rápido e sem erro." },
+      { "title": "Página de resultados", "desc": "Liste os ganhadores numa página própria e prove à sua audiência que foi justo." },
+      { "title": "Limite justo por pessoa", "desc": "Defina quantos comentários de cada usuário valem. Todo mundo com a mesma chance." },
+      { "title": "Vencedores + suplentes", "desc": "Escolha vários ganhadores e reservas para substituir quem não cumprir as regras." },
+      { "title": "Filtros inteligentes", "desc": "Hashtags, menções obrigatórias e remoção de duplicados num clique." }
+    ]
+  },
+  "gallery": {
+    "label": "A galeria",
+    "titleNum": "24",
+    "titleRest": "formas de revelar um vencedor",
+    "subtitle": "Cada cena tem roteiro, câmera, iluminação e som próprios. Escolha o clima do seu sorteio — do Oscar ao cassino, do futuro ao tesouro.",
+    "live": "ao vivo",
+    "soon": "em breve",
+    "tier": "Tier {n}"
+  },
+  "diff": {
+    "label": "Por que AzuraSort",
+    "title": "Não é só sortear. É um",
+    "titleHighlight": "espetáculo.",
+    "items": [
+      { "title": "Vídeo automático em 3 formatos", "desc": "9:16, 16:9 e 1:1 gerados na hora. Concorrentes dão um print — nós entregamos um Reels pronto." },
+      { "title": "Certificado de transparência", "desc": "Sorteio com semente assinada e verificável publicamente. Prove para a sua audiência que foi justo." },
+      { "title": "Resultado provably-fair", "desc": "Publicamos o hash antes e revelamos a semente depois: qualquer pessoa pode reauditar o sorteio." },
+      { "title": "Modo ao vivo / palco", "desc": "Revele em eventos e lives controlando pelo celular. Suspense em tempo real para a sua plateia." },
+      { "title": "Paridade tela ↔ vídeo", "desc": "O MP4 baixado é idêntico ao que você viu na tela. Mesma engine, zero surpresas." },
+      { "title": "Performance 60fps", "desc": "Efeitos 3D reais com WebGL otimizado. Cinema de verdade, fluido até no celular." }
+    ]
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Perguntas frequentes",
+    "subtitle": "As dúvidas mais comuns sobre sorteios no Instagram.",
+    "items": [
+      { "q": "Por que vale a pena fazer um sorteio no Instagram?", "a": "Sorteios são uma das formas mais rápidas de crescer: aumentam comentários, alcance e seguidores em poucos dias, fortalecem o relacionamento com a audiência e dão à sua marca um motivo de celebração que as pessoas adoram compartilhar." },
+      { "q": "Por que é importante coletar todos os comentários?", "a": "Se a ferramenta lê só uma parte dos comentários, o sorteio fica injusto — várias pessoas nem entram no resultado. Nós recuperamos a lista completa, mesmo com milhares de participantes, para que cada pessoa tenha exatamente a mesma chance." },
+      { "q": "Como funciona o sorteio com inteligência artificial?", "a": "A IA lê a sua publicação e identifica as regras automaticamente (menções, hashtags, palavras-chave) e ainda ajuda a validar perfis vencedores. Você economiza tempo e evita erros de configuração." },
+      { "q": "O sorteio do AzuraSort é seguro e confiável?", "a": "Sim. Cada sorteio usa um sorteio aleatório auditável, com semente assinada que gera um certificado verificável publicamente. Qualquer pessoa pode conferir que o resultado não foi manipulado." },
+      { "q": "Posso sortear a partir de Reels e carrosséis?", "a": "Sim. Funciona com posts, Reels e carrosséis — basta colar o link da publicação do sorteio." },
+      { "q": "Dá para fazer sorteio grátis?", "a": "Dá. O plano gratuito permite realizar sorteios com as cenas essenciais (os vídeos saem com nossa marca d'água). Os planos pagos liberam mais cenas, vídeo sem marca e recursos avançados." },
+      { "q": "Quanto custa um sorteio profissional?", "a": "Você começa sem pagar nada. Quando quiser remover a marca d'água, usar o seu logo, exportar listas ou liberar todas as cenas de revelação, há planos mensais acessíveis — com preço ajustado por região." },
+      { "q": "Quantos vencedores posso escolher?", "a": "Quantos quiser. Também é possível definir suplentes para substituir quem não cumprir as regras ou não resgatar o prêmio, além de ativar menções obrigatórias, remover duplicados e limitar participações por pessoa." },
+      { "q": "Como garanto que o sorteio seja justo e transparente?", "a": "Coletamos todos os comentários, sorteamos com um algoritmo aleatório reproduzível e geramos um certificado com código de verificação. Você compartilha a página de resultados e seus seguidores confirmam tudo." },
+      { "q": "Funciona com contas privadas?", "a": "Para garantir um sorteio 100% oficial e dentro das regras do Instagram, trabalhamos com contas comerciais ou de criador de conteúdo conectadas com segurança. Contas privadas não expõem os comentários publicamente." },
+      { "q": "Posso reiniciar o mesmo sorteio?", "a": "Sim, quantas vezes quiser, usando a mesma publicação — útil para testar a animação antes de rodar o sorteio definitivo ao vivo." },
+      { "q": "O que torna o AzuraSort diferente das outras ferramentas?", "a": "Além de sortear de forma justa, transformamos o anúncio do vencedor numa revelação cinematográfica e geramos automaticamente o vídeo pronto para Stories, Reels e feed. O resultado vira conteúdo que a sua audiência compartilha." }
+    ]
+  },
+  "cta": {
+    "title": "Seu próximo sorteio merece um",
+    "titleHighlight": "final de cinema.",
+    "subtitle": "Comece agora. Crie um sorteio justo, verificável e inesquecível em minutos.",
+    "ctaPrimary": "Criar meu sorteio →",
+    "ctaSecondary": "Ver uma revelação"
+  },
+  "footer": {
+    "tagline": "Sorteios de Instagram com final de cinema.",
+    "proto": "Protótipo · 2026"
+  },
+  "locale": {
+    "label": "Idioma",
+    "pt-br": "Português",
+    "es": "Español",
+    "ar-ma": "العربية",
+    "fr-ma": "Français",
+    "en": "English"
+  }
+}

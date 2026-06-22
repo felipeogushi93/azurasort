@@ -1,12 +1,24 @@
-import Link from "next/link";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { Hero } from "@/components/landing/Hero";
 import { StepByStep } from "@/components/landing/StepByStep";
 import { Features } from "@/components/landing/Features";
 import { SceneGallery } from "@/components/landing/SceneGallery";
 import { Differentials } from "@/components/landing/Differentials";
 import { Faq } from "@/components/landing/Faq";
+import { LocaleSwitcher } from "@/components/landing/LocaleSwitcher";
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const nav = await getTranslations("nav");
+  const cta = await getTranslations("cta");
+  const footer = await getTranslations("footer");
+
   return (
     <main className="relative bg-canvas">
       {/* NAV */}
@@ -16,14 +28,17 @@ export default function Home() {
             Azura<span className="text-gold-deep">sort</span>
           </Link>
           <div className="hidden items-center gap-8 text-sm text-inkSoft md:flex">
-            <a href="#como-funciona" className="transition hover:text-ink">Como funciona</a>
-            <a href="#recursos" className="transition hover:text-ink">Recursos</a>
-            <a href="#galeria" className="transition hover:text-ink">Galeria</a>
-            <a href="#faq" className="transition hover:text-ink">FAQ</a>
+            <a href="#como-funciona" className="transition hover:text-ink">{nav("comoFunciona")}</a>
+            <a href="#recursos" className="transition hover:text-ink">{nav("recursos")}</a>
+            <a href="#galeria" className="transition hover:text-ink">{nav("galeria")}</a>
+            <a href="#faq" className="transition hover:text-ink">{nav("faq")}</a>
           </div>
-          <Link href="/sorteio" className="btn-gold py-2 text-sm">
-            Criar sorteio
-          </Link>
+          <div className="flex items-center gap-3">
+            <LocaleSwitcher />
+            <Link href="/sorteio" className="btn-gold py-2 text-sm">
+              {nav("criarSorteio")}
+            </Link>
+          </div>
         </nav>
       </header>
 
@@ -54,21 +69,19 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 bg-mesh opacity-80" />
         <div className="relative mx-auto max-w-4xl px-6 py-32 text-center">
           <h2 className="font-display text-4xl font-semibold leading-tight tracking-tight text-ink sm:text-6xl">
-            Seu próximo sorteio merece um
+            {cta("title")}
             <br />
             <span className="bg-gradient-to-r from-gold-deep to-gold bg-clip-text text-transparent">
-              final de cinema.
+              {cta("titleHighlight")}
             </span>
           </h2>
-          <p className="mx-auto mt-6 max-w-lg text-inkSoft">
-            Comece agora. Crie um sorteio justo, verificável e inesquecível em minutos.
-          </p>
+          <p className="mx-auto mt-6 max-w-lg text-inkSoft">{cta("subtitle")}</p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/sorteio" className="btn-gold text-base">
-              Criar meu sorteio →
+              {cta("ctaPrimary")}
             </Link>
             <Link href="/reveal/stage" className="btn-ghost text-base">
-              Ver uma revelação
+              {cta("ctaSecondary")}
             </Link>
           </div>
         </div>
@@ -80,8 +93,8 @@ export default function Home() {
           <span className="font-display text-lg font-semibold text-ink">
             Azura<span className="text-gold-deep">sort</span>
           </span>
-          <span>Sorteios de Instagram com final de cinema.</span>
-          <span className="text-xs text-inkSoft/70">Prototipo · 2026</span>
+          <span>{footer("tagline")}</span>
+          <span className="text-xs text-inkSoft/70">{footer("proto")}</span>
         </div>
       </footer>
     </main>

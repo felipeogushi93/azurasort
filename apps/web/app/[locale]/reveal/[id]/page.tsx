@@ -5,7 +5,7 @@ import { buildDemoSpec, buildStageHostSpec } from "@/lib/demoSpecs";
 export default async function RevealPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ locale: string; id: string }>;
 }) {
   const { id } = await params;
 

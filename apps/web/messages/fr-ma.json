@@ -1,0 +1,118 @@
+{
+  "nav": {
+    "comoFunciona": "Comment ça marche",
+    "recursos": "Fonctionnalités",
+    "galeria": "Galerie",
+    "faq": "FAQ",
+    "criarSorteio": "Créer un tirage"
+  },
+  "hero": {
+    "badge": "Tirage équitable et vérifiable · SHA-256",
+    "title": "Tirages au sort Instagram",
+    "titleHighlight": "avec une fin de cinéma.",
+    "subtitle": "Tirez au sort parmi les commentaires de façon équitable et vérifiable — et révélez le gagnant comme une scène de film, avec une vidéo prête à partager.",
+    "ctaPrimary": "Créer mon tirage →",
+    "ctaSecondary": "Comment ça marche",
+    "trust1": "🔒 Résultat vérifiable",
+    "trust2": "🎬 Révélation cinématographique",
+    "trust3": "🎞️ Vidéo 9:16 · 16:9 · 1:1"
+  },
+  "showcase": {
+    "caption": "Exemple réel · scène Présentatrice sur scène"
+  },
+  "steps": {
+    "label": "Étape par étape",
+    "title": "Votre tirage en ligne en",
+    "titleHighlight": "quelques minutes",
+    "subtitle": "Professionnel, équitable et transparent — il vous suffit du lien de votre publication.",
+    "stepWord": "Étape",
+    "items": [
+      { "title": "Connectez votre publication", "desc": "Collez le lien du post ou du Reel de votre tirage. Rapide et sans complication.", "tips": ["Ouvrez le menu (•••) sur la publication", "Touchez « Copier le lien » et collez-le ici"] },
+      { "title": "Choisissez la base du tirage", "desc": "Décidez si vous tirez parmi les commentaires ou les likes, puis passez aux règles. Vous pouvez combiner plusieurs publications.", "tips": [] },
+      { "title": "Configurez règles et filtres", "desc": "Nom du tirage, nombre de gagnants et de suppléants, et qui participe : mentions obligatoires, sans doublons, mots-clés et limite équitable.", "tips": ["Laissez l'IA détecter vos règles"] },
+      { "title": "Laissez la collecte se terminer", "desc": "Nous récupérons tous les commentaires — vraiment, même des milliers. Un tirage honnête attend que tout soit chargé avant de se lancer.", "tips": [] },
+      { "title": "Lancez avec un compte à rebours", "desc": "Définissez la durée du compte à rebours et démarrez. Les participants se mélangent à l'écran et les gagnants apparaissent à la fin — avec une option de diffusion en direct.", "tips": [] },
+      { "title": "Partagez les résultats", "desc": "Publiez la page de résultats et le certificat au format story. Votre public vérifie le code et a confiance que c'était équitable.", "tips": [] }
+    ]
+  },
+  "features": {
+    "label": "Fonctionnalités",
+    "title": "Tout pour un tirage",
+    "titleHighlight": "professionnel",
+    "subtitle": "Créer, filtrer et choisir les gagnants sur Instagram — avec la transparence et la finition que votre marque mérite.",
+    "items": [
+      { "title": "Tirages illimités", "desc": "Créez autant de tirages que vous voulez, quand vous voulez — sans quota qui freine votre croissance." },
+      { "title": "Exporter la liste", "desc": "Téléchargez tous les participants, commentaires et likes dans un tableur (XLS/CSV) à utiliser comme vous voulez." },
+      { "title": "Refaire à volonté", "desc": "Un test ne vous a pas plu ? Relancez le même post autant de fois que nécessaire." },
+      { "title": "Compte à rebours", "desc": "Définissez la durée de l'animation de suspense avant de révéler le gagnant." },
+      { "title": "Validation avancée", "desc": "Vérifiez si le gagnant suit un profil, a une photo, une bio ou un nom — avant de confirmer le prix." },
+      { "title": "Plusieurs publications", "desc": "Combinez plusieurs posts dans le même tirage pour élargir la portée de la campagne." },
+      { "title": "Certificat vérifiable", "desc": "Générez un certificat partageable et vérifiable des résultats, avec un code public." },
+      { "title": "Règles avec IA", "desc": "L'IA lit votre post et suggère les règles automatiquement — plus rapide et sans erreur." },
+      { "title": "Page de résultats", "desc": "Listez les gagnants sur une page dédiée et prouvez à votre audience que c'était équitable." },
+      { "title": "Limite équitable par personne", "desc": "Définissez combien de commentaires de chaque utilisateur comptent. Tout le monde a la même chance." },
+      { "title": "Gagnants + suppléants", "desc": "Choisissez plusieurs gagnants et suppléants pour remplacer ceux qui ne respectent pas les règles." },
+      { "title": "Filtres intelligents", "desc": "Hashtags, mentions obligatoires et suppression des doublons en un clic." }
+    ]
+  },
+  "gallery": {
+    "label": "La galerie",
+    "titleNum": "24",
+    "titleRest": "façons de révéler un gagnant",
+    "subtitle": "Chaque scène a son propre scénario, sa caméra, son éclairage et son son. Choisissez l'ambiance de votre tirage — des Oscars au casino, du futur au trésor.",
+    "live": "en direct",
+    "soon": "bientôt",
+    "tier": "Niveau {n}"
+  },
+  "diff": {
+    "label": "Pourquoi AzuraSort",
+    "title": "Ce n'est pas qu'un tirage. C'est un",
+    "titleHighlight": "spectacle.",
+    "items": [
+      { "title": "Vidéo automatique en 3 formats", "desc": "9:16, 16:9 et 1:1 générés instantanément. Les concurrents donnent une capture — nous livrons un Reel prêt." },
+      { "title": "Certificat de transparence", "desc": "Tirage avec une graine signée et vérifiable publiquement. Prouvez à votre audience que c'était équitable." },
+      { "title": "Résultat provably-fair", "desc": "Nous publions le hash avant et révélons la graine après : n'importe qui peut réauditer le tirage." },
+      { "title": "Mode direct / scène", "desc": "Révélez lors d'événements et de lives en contrôlant depuis votre téléphone. Suspense en temps réel pour votre public." },
+      { "title": "Parité écran ↔ vidéo", "desc": "Le MP4 téléchargé est identique à ce que vous avez vu à l'écran. Même moteur, zéro surprise." },
+      { "title": "Performance 60 ips", "desc": "Effets 3D réels avec WebGL optimisé. Du vrai cinéma, fluide même sur mobile." }
+    ]
+  },
+  "faq": {
+    "label": "FAQ",
+    "title": "Questions fréquentes",
+    "subtitle": "Les questions les plus courantes sur les tirages Instagram.",
+    "items": [
+      { "q": "Pourquoi organiser un tirage sur Instagram ?", "a": "Les tirages sont l'un des moyens les plus rapides de grandir : ils augmentent commentaires, portée et abonnés en quelques jours, renforcent la relation avec votre audience et donnent à votre marque une raison de célébrer que les gens adorent partager." },
+      { "q": "Pourquoi est-il important de collecter tous les commentaires ?", "a": "Si un outil ne lit qu'une partie des commentaires, le tirage est injuste — plusieurs personnes n'entrent même pas. Nous récupérons la liste complète, même avec des milliers de participants, pour que chacun ait exactement la même chance." },
+      { "q": "Comment fonctionne le tirage avec intelligence artificielle ?", "a": "L'IA lit votre publication et identifie les règles automatiquement (mentions, hashtags, mots-clés) et aide à valider les profils gagnants. Vous gagnez du temps et évitez les erreurs de configuration." },
+      { "q": "Le tirage AzuraSort est-il sûr et fiable ?", "a": "Oui. Chaque tirage utilise un algorithme aléatoire vérifiable avec une graine signée qui génère un certificat vérifiable publiquement. N'importe qui peut confirmer que le résultat n'a pas été manipulé." },
+      { "q": "Puis-je tirer au sort à partir de Reels et de carrousels ?", "a": "Oui. Cela fonctionne avec les posts, Reels et carrousels — collez simplement le lien de la publication du tirage." },
+      { "q": "Peut-on faire un tirage gratuit ?", "a": "Oui. Le plan gratuit permet de réaliser des tirages avec les scènes essentielles (les vidéos comportent notre filigrane). Les plans payants débloquent plus de scènes, la vidéo sans filigrane et des fonctions avancées." },
+      { "q": "Combien coûte un tirage professionnel ?", "a": "Vous commencez gratuitement. Quand vous voulez retirer le filigrane, utiliser votre logo, exporter des listes ou débloquer toutes les scènes, il existe des plans abordables — avec un prix ajusté par région." },
+      { "q": "Combien de gagnants puis-je choisir ?", "a": "Autant que vous voulez. Vous pouvez aussi définir des suppléants pour remplacer ceux qui ne respectent pas les règles ou ne réclament pas le prix, et activer les mentions obligatoires, supprimer les doublons et limiter les participations par personne." },
+      { "q": "Comment garantir que le tirage soit équitable et transparent ?", "a": "Nous collectons tous les commentaires, tirons au sort avec un algorithme aléatoire reproductible et générons un certificat avec un code de vérification. Vous partagez la page de résultats et vos abonnés confirment tout." },
+      { "q": "Cela fonctionne-t-il avec les comptes privés ?", "a": "Pour garantir un tirage entièrement officiel et conforme aux règles d'Instagram, nous travaillons avec des comptes professionnels ou créateurs connectés en toute sécurité. Les comptes privés n'exposent pas les commentaires publiquement." },
+      { "q": "Puis-je relancer le même tirage ?", "a": "Oui, autant de fois que vous voulez, avec la même publication — pratique pour tester l'animation avant le tirage final en direct." },
+      { "q": "Qu'est-ce qui distingue AzuraSort des autres outils ?", "a": "En plus de tirer au sort équitablement, nous transformons l'annonce du gagnant en une révélation cinématographique et générons automatiquement la vidéo prête pour les Stories, Reels et le feed. Le résultat devient un contenu que votre audience partage." }
+    ]
+  },
+  "cta": {
+    "title": "Votre prochain tirage mérite une",
+    "titleHighlight": "fin de cinéma.",
+    "subtitle": "Commencez maintenant. Créez un tirage équitable, vérifiable et inoubliable en quelques minutes.",
+    "ctaPrimary": "Créer mon tirage →",
+    "ctaSecondary": "Voir une révélation"
+  },
+  "footer": {
+    "tagline": "Tirages au sort Instagram avec une fin de cinéma.",
+    "proto": "Prototype · 2026"
+  },
+  "locale": {
+    "label": "Langue",
+    "pt-br": "Português",
+    "es": "Español",
+    "ar-ma": "العربية",
+    "fr-ma": "Français",
+    "en": "English"
+  }
+}

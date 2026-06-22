@@ -1,12 +1,14 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { RevealShowcase } from "./RevealShowcase";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Hero() {
+  const t = useTranslations("hero");
   return (
     <section className="relative overflow-hidden bg-mesh">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-70" />
@@ -21,7 +23,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-surface px-4 py-1.5 text-xs font-medium tracking-wide text-inkSoft shadow-soft"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald" />
-            Sorteio justo e verificável · SHA-256
+            {t("badge")}
           </motion.span>
 
           <motion.h1
@@ -30,11 +32,10 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.05, ease }}
             className="mt-6 font-display text-5xl font-semibold leading-[1.04] tracking-tight text-ink sm:text-6xl lg:text-7xl"
           >
-            Sorteios de Instagram
+            {t("title")}
             <br />
-            com{" "}
             <span className="bg-gradient-to-r from-gold-deep via-gold to-gold-hi bg-clip-text text-transparent">
-              final de cinema.
+              {t("titleHighlight")}
             </span>
           </motion.h1>
 
@@ -44,8 +45,7 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.15, ease }}
             className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-inkSoft lg:mx-0"
           >
-            Sorteie entre os comentários de forma justa e auditável — e revele o
-            vencedor como uma cena de cinema, com vídeo pronto para compartilhar.
+            {t("subtitle")}
           </motion.p>
 
           <motion.div
@@ -55,10 +55,10 @@ export function Hero() {
             className="mt-10 flex flex-col items-center gap-3 sm:flex-row lg:justify-start"
           >
             <Link href="/sorteio" className="btn-gold text-base">
-              Criar meu sorteio →
+              {t("ctaPrimary")}
             </Link>
             <a href="#como-funciona" className="btn-ghost text-base">
-              Como funciona
+              {t("ctaSecondary")}
             </a>
           </motion.div>
 
@@ -68,9 +68,9 @@ export function Hero() {
             transition={{ duration: 1, delay: 0.5 }}
             className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-inkSoft lg:justify-start"
           >
-            <span className="flex items-center gap-1.5">🔒 Resultado verificável</span>
-            <span className="flex items-center gap-1.5">🎬 Revelação cinematográfica</span>
-            <span className="flex items-center gap-1.5">🎞️ Vídeo 9:16 · 16:9 · 1:1</span>
+            <span className="flex items-center gap-1.5">{t("trust1")}</span>
+            <span className="flex items-center gap-1.5">{t("trust2")}</span>
+            <span className="flex items-center gap-1.5">{t("trust3")}</span>
           </motion.div>
         </div>
 

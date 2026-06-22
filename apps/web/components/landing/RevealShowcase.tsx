@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
 import { buildStageHostSpec } from "@/lib/demoSpecs";
 
@@ -11,6 +12,7 @@ import { buildStageHostSpec } from "@/lib/demoSpecs";
  * e premium. A tela (cena) e escura de proposito — cinema.
  */
 export function RevealShowcase() {
+  const t = useTranslations("showcase");
   const [spec] = useState(() => buildStageHostSpec("showcase", "pt-BR"));
 
   return (
@@ -37,9 +39,7 @@ export function RevealShowcase() {
         </div>
       </motion.div>
 
-      <p className="mt-5 text-center text-xs text-inkSoft">
-        Exemplo real · cena <span className="font-medium text-gold-deep">Palco com Apresentadora</span>
-      </p>
+      <p className="mt-5 text-center text-xs text-inkSoft">{t("caption")}</p>
     </div>
   );
 }
