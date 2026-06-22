@@ -13,16 +13,20 @@ import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from
 
 type Step = "link" | "base" | "scene" | "result";
 type Base = "comments" | "likes";
-type PreviewState = { status: "loading" | "loaded"; total: number; loaded: number; isReel: boolean; author: string };
+type PreviewState = {
+  status: "loading" | "loadingComments" | "loaded" | "error";
+  imageUrl?: string;
+  username?: string;
+  isReel: boolean;
+  isVideo?: boolean;
+  total: number;
+  loaded: number;
+  likesCount?: number;
+  caption?: string;
+  error?: string;
+};
 
 const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
-const AUTHORS = ["studio.lumen", "marca.oficial", "loja.aurora", "viaje.mais", "tech.brasil", "casa.estilo"];
-
-function hashStr(s: string): number {
-  let h = 0;
-  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
-  return h;
-}
 
 export function GiveawaySimulator() {
   const [step, setStep] = useState<Step>("link");
@@ -59,35 +63,64 @@ export function GiveawaySimulator() {
       return;
     }
     let cancelled = false;
-    let interval: ReturnType<typeof setInterval> | undefined;
-    const seed = Math.abs(hashStr(link));
-    const total = 400 + (seed % 1200);
-    const isReel = /\/reels?\//i.test(link);
-    const author = AUTHORS[seed % AUTHORS.length];
+    let progress: ReturnType<typeof setInterval> | undefined;
 
-    const start = setTimeout(() => {
-      setPreview({ status: "loading", total, loaded: 0, isReel, author });
-      const generated = normalizeComments(generateMockComments(total, seed));
-      let cur = 0;
-      interval = setInterval(() => {
-        cur += Math.max(1, Math.ceil(total / 24));
-        if (cur >= total) {
-          cur = total;
-          if (interval) clearInterval(interval);
-          if (!cancelled) {
-            setComments(generated);
-            setPreview({ status: "loaded", total, loaded: total, isReel, author });
-          }
-        } else if (!cancelled) {
-          setPreview((p) => (p ? { ...p, loaded: cur } : p));
+    const debounce = setTimeout(async () => {
+      setPreview({ status: "loading", total: 0, loaded: 0, isReel: /\/reels?\//i.test(link) });
+      try {
+        // 1) prévia barata: imagem + contagem
+        const pr = await fetch(`/api/instagram/preview?url=${encodeURIComponent(link)}`);
+        const p = await pr.json();
+        if (cancelled) return;
+        if (!pr.ok || p.error) {
+          setPreview({ status: "error", total: 0, loaded: 0, isReel: false, error: p.error || "Falha ao buscar a publicação" });
+          return;
         }
-      }, 70);
-    }, 600);
+        const total: number = p.commentsCount ?? 0;
+        setPreview({
+          status: "loadingComments",
+          imageUrl: p.imageUrl,
+          username: p.username,
+          isReel: p.isReel,
+          isVideo: p.isVideo,
+          total,
+          loaded: 0,
+          likesCount: p.likesCount,
+          caption: p.caption,
+        });
+
+        // anima a barra enquanto os comentários carregam (Apify entrega de uma vez)
+        let cur = 0;
+        progress = setInterval(() => {
+          cur += Math.max(1, Math.ceil((total || 100) / 40));
+          if (cur < total * 0.92 && !cancelled) {
+            setPreview((s) => (s ? { ...s, loaded: cur } : s));
+          } else if (progress) {
+            clearInterval(progress);
+          }
+        }, 120);
+
+        // 2) comentários reais (alimenta o sorteio)
+        const cr = await fetch(`/api/instagram/comments?url=${encodeURIComponent(link)}`);
+        const c = await cr.json();
+        if (cancelled) return;
+        if (progress) clearInterval(progress);
+        if (!cr.ok || c.error) {
+          setPreview((s) => (s ? { ...s, status: "error", error: c.error || "Falha ao carregar comentários" } : s));
+          return;
+        }
+        const list = normalizeComments((c.comments ?? []).map((x: { handle: string; text: string }) => ({ handle: x.handle, text: x.text })));
+        setComments(list);
+        setPreview((s) => (s ? { ...s, status: "loaded", total: total || list.length, loaded: total || list.length } : s));
+      } catch (e) {
+        if (!cancelled) setPreview({ status: "error", total: 0, loaded: 0, isReel: false, error: e instanceof Error ? e.message : "Erro de rede" });
+      }
+    }, 700);
 
     return () => {
       cancelled = true;
-      clearTimeout(start);
-      if (interval) clearInterval(interval);
+      clearTimeout(debounce);
+      if (progress) clearInterval(progress);
     };
   }, [link]);
 
@@ -436,7 +469,7 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
   // estado vazio
   if (!preview && !hasManual) {
     return (
-      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border border-dashed border-ink/15 bg-canvasAlt/50 p-6 text-center">
+      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-ink/15 bg-canvasAlt/50 p-6 text-center">
         <span className="text-3xl opacity-40">🔗</span>
         <p className="mt-3 text-sm text-inkSoft">A prévia da publicação aparece aqui assim que você colar o link.</p>
       </div>
@@ -446,53 +479,84 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
   // lista manual (CSV/teste)
   if (!preview && hasManual) {
     return (
-      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border border-emerald/20 bg-emerald/5 p-6 text-center">
+      <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-emerald/20 bg-emerald/5 p-6 text-center">
         <span className="text-3xl">📄</span>
         <p className="mt-3 font-display text-lg font-semibold text-ink">Lista manual</p>
         <p className="text-sm text-inkSoft">{manualCount.toLocaleString("pt-BR")} participantes carregados</p>
       </div>
     );
   }
-
   if (!preview) return null;
-  const pct = Math.round((preview.loaded / preview.total) * 100);
-  const loading = preview.status === "loading";
+
+  // buscando a publicacao
+  if (preview.status === "loading") {
+    return (
+      <div className="flex min-h-[300px] flex-col items-center justify-center gap-3 rounded-2xl border border-ink/5 bg-surface p-6 text-center shadow-soft">
+        <span className="h-7 w-7 animate-spin rounded-full border-2 border-ink/15 border-t-gold" />
+        <p className="text-sm text-inkSoft">Buscando a publicação…</p>
+      </div>
+    );
+  }
+
+  // erro
+  if (preview.status === "error") {
+    return (
+      <div className="flex min-h-[300px] flex-col items-center justify-center gap-2 rounded-2xl border border-rose/30 bg-rose/5 p-6 text-center">
+        <span className="text-3xl">⚠️</span>
+        <p className="text-sm font-medium text-ink">Não consegui carregar</p>
+        <p className="text-xs text-inkSoft">{preview.error}</p>
+        <p className="mt-1 text-[11px] text-inkSoft/70">Confira se o link está completo e o perfil é público.</p>
+      </div>
+    );
+  }
+
+  // carregada (post real)
+  const loadingComments = preview.status === "loadingComments";
+  const pct = preview.total ? Math.round((preview.loaded / preview.total) * 100) : 0;
 
   return (
     <div className="rounded-2xl border border-ink/5 bg-surface p-3 shadow-card">
-      {/* cartao da publicacao */}
       <div className="overflow-hidden rounded-xl border border-ink/5">
         <div className="flex items-center gap-2 px-3 py-2">
           <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet to-rose" />
-          <span className="text-sm font-medium text-ink">@{preview.author}</span>
+          <span className="truncate text-sm font-medium text-ink">@{preview.username}</span>
           <span className="ml-auto rounded-full bg-ink/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-inkSoft">
             {preview.isReel ? "Reels" : "Post"}
           </span>
         </div>
-        <div className="relative h-40 bg-gradient-to-br from-[#fce8c9] via-[#f3d7e2] to-[#dfe6ff]">
-          {preview.isReel && (
-            <span className="absolute inset-0 grid place-items-center text-4xl text-white/80 drop-shadow">▶</span>
+        <div className="relative h-44 bg-gradient-to-br from-[#fce8c9] via-[#f3d7e2] to-[#dfe6ff]">
+          {preview.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={preview.imageUrl}
+              alt="publicação"
+              referrerPolicy="no-referrer"
+              className="h-full w-full object-cover"
+            />
+          ) : null}
+          {preview.isVideo && (
+            <span className="absolute inset-0 grid place-items-center text-4xl text-white/90 drop-shadow">▶</span>
           )}
-          {loading && <div className="absolute inset-0 animate-pulse bg-white/30" />}
         </div>
         <div className="flex items-center gap-3 px-3 py-2 text-xs text-inkSoft">
-          <span>❤️ {(preview.total * 6).toLocaleString("pt-BR")}</span>
+          <span>❤️ {(preview.likesCount ?? 0).toLocaleString("pt-BR")}</span>
           <span>💬 {preview.total.toLocaleString("pt-BR")}</span>
         </div>
       </div>
 
-      {/* status de carregamento dos comentarios */}
       <div className="mt-3 px-1">
-        {loading ? (
+        {loadingComments ? (
           <>
             <div className="mb-1.5 flex items-center justify-between text-xs">
               <span className="flex items-center gap-1.5 text-inkSoft">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-gold" /> carregando comentários…
               </span>
-              <span className="font-mono text-ink">{preview.loaded.toLocaleString("pt-BR")} / {preview.total.toLocaleString("pt-BR")}</span>
+              <span className="font-mono text-ink">
+                {preview.loaded.toLocaleString("pt-BR")} / {preview.total.toLocaleString("pt-BR")}
+              </span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-ink/10">
-              <div className="h-full bg-gradient-to-r from-gold to-violet transition-[width] duration-100" style={{ width: `${pct}%` }} />
+              <div className="h-full bg-gradient-to-r from-gold to-violet transition-[width] duration-200" style={{ width: `${pct}%` }} />
             </div>
           </>
         ) : (
