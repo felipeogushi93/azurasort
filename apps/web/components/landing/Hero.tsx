@@ -4,14 +4,16 @@ import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { RevealShowcase } from "./RevealShowcase";
+import { Confetti } from "./Confetti";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 export function Hero() {
   const t = useTranslations("hero");
   return (
-    <section className="relative overflow-hidden bg-mesh">
+    <section className="relative overflow-hidden bg-aurora">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-grid opacity-70" />
+      <Confetti className="-z-10 opacity-70" />
 
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 pb-20 pt-32 lg:grid-cols-2 lg:gap-8 lg:pt-40">
         {/* coluna texto */}
@@ -34,9 +36,7 @@ export function Hero() {
           >
             {t("title")}
             <br />
-            <span className="bg-gradient-to-r from-[#8A6314] via-[#C2922E] to-[#E0B24E] bg-clip-text text-transparent">
-              {t("titleHighlight")}
-            </span>
+            <span className="text-shimmer">{t("titleHighlight")}</span>
           </motion.h1>
 
           <motion.p

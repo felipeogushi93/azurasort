@@ -16,8 +16,10 @@ export const light = {
   gold: "#C2922E", // ouro legivel em fundo claro
   goldHi: "#E8C26B", // ouro claro (gradiente)
   goldDeep: "#8A6314", // ouro escuro (texto forte)
-  violet: "#6D54F7", // acento premium
+  violet: "#7C3AED", // acento premium (mais elétrico)
   rose: "#F26B8A", // acento quente
+  pink: "#EC4899", // acento vibrante
+  cyan: "#06B6D4", // acento fresco
   emerald: "#16A34A",
 } as const;
 

@@ -16,6 +16,8 @@ const config: Config = {
         gold: { DEFAULT: light.gold, hi: light.goldHi, deep: light.goldDeep },
         violet: light.violet,
         rose: light.rose,
+        pink: light.pink,
+        cyan: light.cyan,
         emerald: light.emerald,
 
         // ----- CENAS de revelacao (dark) — mantido p/ R3F/VideoReveal -----

@@ -30,6 +30,14 @@ type PreviewState = {
 
 const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
 
+// Cenas disponíveis (com vídeo de exemplo). Para adicionar uma nova no futuro,
+// basta colocar o vídeo em /public e acrescentar um item aqui.
+type SceneOption = { module: RevealModule; name: string; desc: string; src: string };
+const SCENE_OPTIONS: SceneOption[] = [
+  { module: "bank_vault", name: "Cofre", desc: "Cofre que se abre revelando o vencedor", src: "/cofre.mp4" },
+  { module: "countdown", name: "Contagem regressiva", desc: "Anel de fogo com revelação no clímax", src: "/contagem.mp4" },
+];
+
 export function GiveawaySimulator() {
   const [step, setStep] = useState<Step>("link");
 
@@ -45,7 +53,7 @@ export function GiveawaySimulator() {
   const [base, setBase] = useState<Base>("comments");
 
   // passo 3 — animacao
-  const [module, setModule] = useState<RevealModule>("oscar_envelope");
+  const [module, setModule] = useState<RevealModule>("bank_vault");
   const [live, setLive] = useState(false);
   const [filters, setFilters] = useState<DrawFilters>(DEFAULT_FILTERS);
   const [hashtagInput, setHashtagInput] = useState("");
@@ -261,12 +269,13 @@ export function GiveawaySimulator() {
       {/* ---------- 3 · ANIMAÇÃO ---------- */}
       {step === "scene" && (
         <Card title="3 · Escolha a animação" subtitle="Como o vencedor será revelado — e os extras do sorteio.">
-          <label className="mb-2 block text-xs font-medium uppercase tracking-widest text-inkSoft">Animação da revelação</label>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            <SceneCard active={module === "oscar_envelope"} onClick={() => setModule("oscar_envelope")} emoji="✉️" name="Envelope Dourado" />
-            <SceneCard active={module === "stage_host"} onClick={() => setModule("stage_host")} emoji="🎤" name="Palco (vídeo)" />
-            <SceneCard active={module === "bank_vault"} onClick={() => setModule("bank_vault")} emoji="🔐" name="Cofre (vídeo)" />
-            <SceneCard active={module === "countdown"} onClick={() => setModule("countdown")} emoji="⏱️" name="Contagem regressiva" />
+          <label className="mb-2 block text-xs font-medium uppercase tracking-widest text-inkSoft">
+            Escolha a animação — veja o exemplo antes
+          </label>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {SCENE_OPTIONS.map((s) => (
+              <ScenePreviewCard key={s.module} scene={s} active={module === s.module} onClick={() => setModule(s.module)} />
+            ))}
           </div>
 
           {/* ao vivo */}
@@ -487,18 +496,26 @@ function BaseCard({ active, onClick, icon, title, desc }: { active: boolean; onC
   );
 }
 
-function SceneCard({ active, onClick, emoji, name, soon }: { active: boolean; onClick: () => void; emoji: string; name: string; soon?: boolean }) {
+function ScenePreviewCard({ scene, active, onClick }: { scene: SceneOption; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
-      disabled={soon}
-      className={`relative flex h-24 flex-col items-center justify-center gap-1 rounded-2xl border transition ${
-        active ? "border-gold bg-gold/10 shadow-gold" : "border-ink/10 bg-surface hover:border-gold/40"
-      } ${soon ? "cursor-not-allowed opacity-50" : ""}`}
+      className={`group overflow-hidden rounded-2xl border text-left transition hover:-translate-y-0.5 ${
+        active ? "border-gold bg-gold/5 shadow-gold" : "border-ink/10 bg-surface hover:border-gold/40 shadow-soft"
+      }`}
     >
-      <span className="text-3xl">{emoji}</span>
-      <span className="text-xs font-medium text-ink">{name}</span>
-      {soon && <span className="absolute right-2 top-2 rounded-full bg-ink/5 px-1.5 text-[8px] uppercase text-inkSoft">em breve</span>}
+      <div className="relative aspect-video overflow-hidden bg-void">
+        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+        <video src={scene.src} autoPlay muted loop playsInline className="h-full w-full object-cover" />
+        {active && (
+          <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-gold text-xs font-bold text-void">✓</span>
+        )}
+        <span className="absolute bottom-2 left-2 rounded-md bg-black/45 px-2 py-0.5 text-[10px] text-white backdrop-blur">exemplo</span>
+      </div>
+      <div className="p-3">
+        <p className="text-sm font-bold text-ink">{scene.name}</p>
+        <p className="text-xs text-inkSoft">{scene.desc}</p>
+      </div>
     </button>
   );
 }
