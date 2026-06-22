@@ -6,13 +6,14 @@ import type { RevealModule, RevealSpec } from "@prizegram/reveal-spec";
 import { RevealClient } from "@/components/reveal/RevealClient";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
 import { CofreReveal } from "@/components/reveal/CofreReveal";
+import { Paywall } from "./Paywall";
 import { normalizeComments, applyFilters, runDraw } from "@/lib/draw/engine";
 import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
-type Step = "link" | "base" | "scene" | "result";
+type Step = "link" | "base" | "scene" | "unlock" | "result";
 type Base = "comments" | "likes";
 type PreviewState = {
   status: "loading" | "loadingComments" | "loaded" | "error";
@@ -314,16 +315,34 @@ export function GiveawaySimulator() {
 
           <div className="mt-5 flex items-center justify-between">
             <button onClick={() => setStep("base")} className="text-sm text-inkSoft hover:text-ink">← voltar</button>
-            <button disabled={!eligibleCount || busy} onClick={doDraw} className="btn-gold py-2.5 disabled:opacity-40">
-              {busy ? "sorteando…" : "🎲 Sortear"}
+            <button disabled={!eligibleCount} onClick={() => setStep("unlock")} className="btn-gold py-2.5 disabled:opacity-40">
+              Continuar →
             </button>
           </div>
         </Card>
       )}
 
+      {/* ---------- 4 · DESBLOQUEAR (paywall) ---------- */}
+      {step === "unlock" && (
+        <div>
+          <div className="mb-4">
+            <button onClick={() => setStep("scene")} className="text-sm text-inkSoft hover:text-ink">← voltar para opções</button>
+          </div>
+          <Paywall
+            count={eligibleCount}
+            campaign={campaign}
+            sample={applyFilters(comments, liveFilters)
+              .filter((c) => c.eligible)
+              .slice(0, 5)
+              .map((c) => ({ handle: c.handle, text: c.text }))}
+            onTest={doDraw}
+          />
+        </div>
+      )}
+
       {/* ---------- 4 · RESULTADO ---------- */}
       {step === "result" && result && spec && (
-        <Card title="4 · Resultado" subtitle="Sorteio auditável concluído. Veja a revelação e baixe os cortes.">
+        <Card title="5 · Resultado" subtitle="Sorteio auditável concluído. Veja a revelação e baixe os cortes.">
           <div className="space-y-2">
             {result.winners.map((w) => (
               <div key={w.position} className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${w.isBackup ? "border-ink/5 bg-canvasAlt" : "border-gold/40 bg-gold/5"}`}>
@@ -406,6 +425,7 @@ function Stepper({ step }: { step: Step }) {
     { k: "link", label: "Publicação" },
     { k: "base", label: "Base" },
     { k: "scene", label: "Animação" },
+    { k: "unlock", label: "Desbloquear" },
     { k: "result", label: "Resultado" },
   ];
   const idx = steps.findIndex((s) => s.k === step);
