@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { RevealModule, RevealSpec } from "@prizegram/reveal-spec";
 import { RevealClient } from "@/components/reveal/RevealClient";
@@ -13,6 +13,16 @@ import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from
 
 type Step = "link" | "base" | "scene" | "result";
 type Base = "comments" | "likes";
+type PreviewState = { status: "loading" | "loaded"; total: number; loaded: number; isReel: boolean; author: string };
+
+const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
+const AUTHORS = ["studio.lumen", "marca.oficial", "loja.aurora", "viaje.mais", "tech.brasil", "casa.estilo"];
+
+function hashStr(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
+  return h;
+}
 
 export function GiveawaySimulator() {
   const [step, setStep] = useState<Step>("link");
@@ -23,6 +33,7 @@ export function GiveawaySimulator() {
   const [comments, setComments] = useState<Comment[]>([]);
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [raw, setRaw] = useState("");
+  const [preview, setPreview] = useState<PreviewState | null>(null);
 
   // passo 2 — base
   const [base, setBase] = useState<Base>("comments");
@@ -40,11 +51,46 @@ export function GiveawaySimulator() {
   const [showReveal, setShowReveal] = useState(false);
   const [busy, setBusy] = useState(false);
 
-  /* ----- passo 1: conectar publicacao (demo: gera participantes de exemplo) ----- */
-  function connectFromLink() {
-    setComments(normalizeComments(generateMockComments(800, link.length + 7)));
-    setStep("base");
-  }
+  /* ----- passo 1: ao colar o link, busca a publicacao e carrega os comentarios
+     (modo demonstracao — quando o backend existir, troca por coleta real) ----- */
+  useEffect(() => {
+    if (!IG_URL_RE.test(link)) {
+      setPreview(null);
+      return;
+    }
+    let cancelled = false;
+    let interval: ReturnType<typeof setInterval> | undefined;
+    const seed = Math.abs(hashStr(link));
+    const total = 400 + (seed % 1200);
+    const isReel = /\/reels?\//i.test(link);
+    const author = AUTHORS[seed % AUTHORS.length];
+
+    const start = setTimeout(() => {
+      setPreview({ status: "loading", total, loaded: 0, isReel, author });
+      const generated = normalizeComments(generateMockComments(total, seed));
+      let cur = 0;
+      interval = setInterval(() => {
+        cur += Math.max(1, Math.ceil(total / 24));
+        if (cur >= total) {
+          cur = total;
+          if (interval) clearInterval(interval);
+          if (!cancelled) {
+            setComments(generated);
+            setPreview({ status: "loaded", total, loaded: total, isReel, author });
+          }
+        } else if (!cancelled) {
+          setPreview((p) => (p ? { ...p, loaded: cur } : p));
+        }
+      }, 70);
+    }, 600);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(start);
+      if (interval) clearInterval(interval);
+    };
+  }, [link]);
+
   function loadPasted() {
     const c = normalizeComments(parsePastedComments(raw));
     if (c.length) setComments(c);
@@ -106,59 +152,59 @@ export function GiveawaySimulator() {
       {/* ---------- 1 · PUBLICAÇÃO ---------- */}
       {step === "link" && (
         <Card title="1 · Conecte sua publicação" subtitle="Cole o link do post ou Reels do seu sorteio.">
-          <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Nome do sorteio</label>
-          <input value={campaign} onChange={(e) => setCampaign(e.target.value)} className="inp mb-5" />
+          <div className="grid gap-6 md:grid-cols-2">
+            {/* coluna esquerda: formulario */}
+            <div>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Nome do sorteio</label>
+              <input value={campaign} onChange={(e) => setCampaign(e.target.value)} className="inp mb-5" />
 
-          <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Link da publicação</label>
-          <input
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            placeholder="https://instagram.com/p/..."
-            className="inp"
-          />
+              <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Link da publicação</label>
+              <input
+                value={link}
+                onChange={(e) => setLink(e.target.value)}
+                placeholder="https://instagram.com/p/..."
+                className="inp"
+              />
 
-          {/* exemplo de como copiar o link */}
-          <div className="mt-4 rounded-xl border border-gold/20 bg-gold/5 p-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gold-deep">Como copiar o link</p>
-            <ol className="space-y-1.5 text-sm text-ink/80">
-              <li className="flex gap-2"><span className="text-gold-deep">1.</span> Abra o menu <span className="rounded bg-ink/5 px-1.5 font-semibold">•••</span> no topo da publicação.</li>
-              <li className="flex gap-2"><span className="text-gold-deep">2.</span> Toque em <span className="font-semibold">“Copiar link”</span>.</li>
-              <li className="flex gap-2"><span className="text-gold-deep">3.</span> Cole aqui em cima.</li>
-            </ol>
+              <div className="mt-4 rounded-xl border border-gold/20 bg-gold/5 p-4">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gold-deep">Como copiar o link</p>
+                <ol className="space-y-1.5 text-sm text-ink/80">
+                  <li className="flex gap-2"><span className="text-gold-deep">1.</span> Abra o menu <span className="rounded bg-ink/5 px-1.5 font-semibold">•••</span> no topo da publicação.</li>
+                  <li className="flex gap-2"><span className="text-gold-deep">2.</span> Toque em <span className="font-semibold">“Copiar link”</span>.</li>
+                  <li className="flex gap-2"><span className="text-gold-deep">3.</span> Cole aqui em cima.</li>
+                </ol>
+              </div>
+
+              <button onClick={() => setAdvancedOpen((v) => !v)} className="mt-4 text-xs text-inkSoft underline-offset-2 hover:text-ink hover:underline">
+                {advancedOpen ? "− ocultar" : "+ usar lista de teste ou CSV (modo avançado)"}
+              </button>
+              {advancedOpen && (
+                <div className="mt-3 space-y-3 rounded-xl border border-ink/5 bg-canvasAlt p-4">
+                  <div className="flex flex-wrap gap-2">
+                    <button onClick={() => { setComments(normalizeComments(generateMockComments(200, 13))); setPreview(null); }} className="btn-ghost py-2">⚡ 200 de teste</button>
+                    <button onClick={() => { setComments(normalizeComments(generateMockComments(1000, 29))); setPreview(null); }} className="btn-ghost py-2">⚡ 1.000</button>
+                    <label className="btn-ghost cursor-pointer py-2">📄 CSV<input type="file" accept=".csv,.txt" onChange={onFile} className="hidden" /></label>
+                  </div>
+                  <textarea value={raw} onChange={(e) => setRaw(e.target.value)} onBlur={loadPasted} rows={4} placeholder="@ana.silva: eu quero! #sorteio" className="inp font-mono text-xs" />
+                  {comments.length > 0 && !preview && <p className="text-xs text-emerald">✓ {comments.length} participantes carregados</p>}
+                </div>
+              )}
+            </div>
+
+            {/* coluna direita: previa da publicacao */}
+            <PostPreview preview={preview} hasManual={!preview && comments.length > 0} manualCount={comments.length} />
           </div>
 
-          {/* opcao de teste / dados */}
-          <button
-            onClick={() => setAdvancedOpen((v) => !v)}
-            className="mt-4 text-xs text-inkSoft underline-offset-2 hover:text-ink hover:underline"
-          >
-            {advancedOpen ? "− ocultar" : "+ usar lista de teste ou CSV (modo avançado)"}
-          </button>
-          {advancedOpen && (
-            <div className="mt-3 space-y-3 rounded-xl border border-ink/5 bg-canvasAlt p-4">
-              <div className="flex flex-wrap gap-2">
-                <button onClick={() => setComments(normalizeComments(generateMockComments(200, 13)))} className="btn-ghost py-2">⚡ 200 de teste</button>
-                <button onClick={() => setComments(normalizeComments(generateMockComments(1000, 29)))} className="btn-ghost py-2">⚡ 1.000</button>
-                <label className="btn-ghost cursor-pointer py-2">📄 CSV<input type="file" accept=".csv,.txt" onChange={onFile} className="hidden" /></label>
-              </div>
-              <textarea value={raw} onChange={(e) => setRaw(e.target.value)} onBlur={loadPasted} rows={4} placeholder="@ana.silva: eu quero! #sorteio" className="inp font-mono text-xs" />
-              {comments.length > 0 && <p className="text-xs text-emerald">✓ {comments.length} participantes carregados</p>}
-            </div>
-          )}
-
-          <div className="mt-6 flex items-center justify-between">
-            <span className="text-xs text-inkSoft">
-              {comments.length ? `${comments.length} participantes prontos` : "modo demonstração: geramos participantes de exemplo"}
-            </span>
+          <div className="mt-6 flex items-center justify-between border-t border-ink/5 pt-5">
+            <span className="text-[11px] text-inkSoft/70">A coleta real do Instagram entra com o backend — por enquanto, prévia e participantes de exemplo.</span>
             <button
-              disabled={!link && comments.length === 0}
-              onClick={() => (comments.length ? setStep("base") : connectFromLink())}
+              disabled={!(preview?.status === "loaded" || comments.length > 0)}
+              onClick={() => setStep("base")}
               className="btn-gold py-2.5 disabled:opacity-40"
             >
               Continuar →
             </button>
           </div>
-          <p className="mt-2 text-[11px] text-inkSoft/70">A coleta real do Instagram entra com o backend — por enquanto usamos participantes de exemplo.</p>
         </Card>
       )}
 
@@ -382,5 +428,79 @@ function SceneCard({ active, onClick, emoji, name, soon }: { active: boolean; on
       <span className="text-xs font-medium text-ink">{name}</span>
       {soon && <span className="absolute right-2 top-2 rounded-full bg-ink/5 px-1.5 text-[8px] uppercase text-inkSoft">em breve</span>}
     </button>
+  );
+}
+
+/** Previa da publicacao + carregamento dos comentarios (lado direito do passo 1). */
+function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewState | null; hasManual: boolean; manualCount: number }) {
+  // estado vazio
+  if (!preview && !hasManual) {
+    return (
+      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border border-dashed border-ink/15 bg-canvasAlt/50 p-6 text-center">
+        <span className="text-3xl opacity-40">🔗</span>
+        <p className="mt-3 text-sm text-inkSoft">A prévia da publicação aparece aqui assim que você colar o link.</p>
+      </div>
+    );
+  }
+
+  // lista manual (CSV/teste)
+  if (!preview && hasManual) {
+    return (
+      <div className="flex min-h-[280px] flex-col items-center justify-center rounded-2xl border border-emerald/20 bg-emerald/5 p-6 text-center">
+        <span className="text-3xl">📄</span>
+        <p className="mt-3 font-display text-lg font-semibold text-ink">Lista manual</p>
+        <p className="text-sm text-inkSoft">{manualCount.toLocaleString("pt-BR")} participantes carregados</p>
+      </div>
+    );
+  }
+
+  if (!preview) return null;
+  const pct = Math.round((preview.loaded / preview.total) * 100);
+  const loading = preview.status === "loading";
+
+  return (
+    <div className="rounded-2xl border border-ink/5 bg-surface p-3 shadow-card">
+      {/* cartao da publicacao */}
+      <div className="overflow-hidden rounded-xl border border-ink/5">
+        <div className="flex items-center gap-2 px-3 py-2">
+          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet to-rose" />
+          <span className="text-sm font-medium text-ink">@{preview.author}</span>
+          <span className="ml-auto rounded-full bg-ink/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-inkSoft">
+            {preview.isReel ? "Reels" : "Post"}
+          </span>
+        </div>
+        <div className="relative h-40 bg-gradient-to-br from-[#fce8c9] via-[#f3d7e2] to-[#dfe6ff]">
+          {preview.isReel && (
+            <span className="absolute inset-0 grid place-items-center text-4xl text-white/80 drop-shadow">▶</span>
+          )}
+          {loading && <div className="absolute inset-0 animate-pulse bg-white/30" />}
+        </div>
+        <div className="flex items-center gap-3 px-3 py-2 text-xs text-inkSoft">
+          <span>❤️ {(preview.total * 6).toLocaleString("pt-BR")}</span>
+          <span>💬 {preview.total.toLocaleString("pt-BR")}</span>
+        </div>
+      </div>
+
+      {/* status de carregamento dos comentarios */}
+      <div className="mt-3 px-1">
+        {loading ? (
+          <>
+            <div className="mb-1.5 flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1.5 text-inkSoft">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-gold" /> carregando comentários…
+              </span>
+              <span className="font-mono text-ink">{preview.loaded.toLocaleString("pt-BR")} / {preview.total.toLocaleString("pt-BR")}</span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-ink/10">
+              <div className="h-full bg-gradient-to-r from-gold to-violet transition-[width] duration-100" style={{ width: `${pct}%` }} />
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center justify-center gap-2 rounded-lg bg-emerald/10 py-2 text-xs text-emerald">
+            <span className="h-2 w-2 rounded-full bg-emerald" /> {preview.total.toLocaleString("pt-BR")} comentários carregados
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
