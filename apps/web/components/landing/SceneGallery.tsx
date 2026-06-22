@@ -9,7 +9,7 @@ type Scene = { name: string; emoji: string; tier: 1 | 2 | 3; live?: boolean; hre
 const SCENES: Scene[] = [
   { name: "Stage Host", emoji: "🎤", tier: 1, live: true, href: "/reveal/stage" },
   { name: "Golden Envelope", emoji: "✉️", tier: 1, live: true, href: "/reveal/demo" },
-  { name: "Bank Vault", emoji: "🔐", tier: 1 },
+  { name: "Bank Vault", emoji: "🔐", tier: 1, live: true, href: "/reveal/cofre" },
   { name: "Hologram", emoji: "🛸", tier: 1 },
   { name: "Comment Matrix", emoji: "🟢", tier: 1 },
   { name: "Casino / Roulette", emoji: "🎰", tier: 2 },

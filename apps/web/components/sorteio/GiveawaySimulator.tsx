@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { RevealModule, RevealSpec } from "@prizegram/reveal-spec";
 import { RevealClient } from "@/components/reveal/RevealClient";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
+import { CofreReveal } from "@/components/reveal/CofreReveal";
 import { normalizeComments, applyFilters, runDraw } from "@/lib/draw/engine";
 import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
@@ -262,7 +263,7 @@ export function GiveawaySimulator() {
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             <SceneCard active={module === "oscar_envelope"} onClick={() => setModule("oscar_envelope")} emoji="✉️" name="Envelope Dourado" />
             <SceneCard active={module === "stage_host"} onClick={() => setModule("stage_host")} emoji="🎤" name="Palco (vídeo)" />
-            <SceneCard active={false} onClick={() => {}} emoji="🔐" name="Cofre" soon />
+            <SceneCard active={module === "bank_vault"} onClick={() => setModule("bank_vault")} emoji="🔐" name="Cofre (vídeo)" />
           </div>
 
           {/* ao vivo */}
@@ -369,7 +370,13 @@ export function GiveawaySimulator() {
       {showReveal && spec && (
         <div className="fixed inset-0 z-[100] bg-void">
           <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">✕ fechar</button>
-          {module === "stage_host" ? <div className="h-full w-full"><VideoReveal spec={spec} /></div> : <RevealClient spec={spec} />}
+          {module === "bank_vault" ? (
+            <CofreReveal handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle} />
+          ) : module === "stage_host" ? (
+            <div className="h-full w-full"><VideoReveal spec={spec} /></div>
+          ) : (
+            <RevealClient spec={spec} />
+          )}
         </div>
       )}
 
