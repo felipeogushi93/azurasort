@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing, isRtl } from "@/i18n/routing";
 import "../globals.css";
 
@@ -19,14 +19,41 @@ const sans = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "AzuraSort — Instagram giveaways with a cinematic finale",
-  description:
-    "The premium Instagram giveaway tool: fair, verifiable draws with a cinematic winner reveal and a video ready to share.",
-};
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "hero" });
+
+  // hreflang: cada idioma + x-default
+  const languages: Record<string, string> = {};
+  for (const l of routing.locales) languages[l] = `/${l}`;
+  languages["x-default"] = "/en";
+
+  const description = t("subtitle");
+  const title = `AzuraSort — ${t("title")} ${t("titleHighlight")}`;
+
+  return {
+    metadataBase: new URL("https://azurasort.com"),
+    title,
+    description,
+    alternates: { canonical: `/${locale}`, languages },
+    openGraph: {
+      title,
+      description,
+      url: `https://azurasort.com/${locale}`,
+      siteName: "AzuraSort",
+      locale,
+      type: "website",
+    },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 export default async function LocaleLayout({

@@ -85,7 +85,7 @@ export function CofreReveal({
           playsInline
           loop={loop}
           onTimeUpdate={(e) => setT(e.currentTarget.currentTime)}
-          className="block max-h-screen max-w-full"
+          className="block max-h-full max-w-full"
         />
 
         {/* fallback: navegador bloqueou autoplay com som */}
