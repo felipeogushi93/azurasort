@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
@@ -20,6 +21,7 @@ export function StripeCard({
   priceLabel?: string;
   currency?: string;
 }) {
+  const t = useTranslations("sim.card");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
@@ -30,15 +32,15 @@ export function StripeCard({
       body: JSON.stringify({ plan, currency }),
     })
       .then((r) => r.json())
-      .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || "Falha ao iniciar o pagamento")))
+      .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || t("failStart"))))
       .catch((e) => setErr(String(e)));
-  }, [plan, currency]);
+  }, [plan, currency, t]);
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
       <div className="w-full max-w-md rounded-3xl border border-ink/5 bg-surface p-6 shadow-lift">
         <div className="mb-4 flex items-center justify-between">
-          <h3 className="font-display text-lg font-bold text-ink">Pagar com cartão</h3>
+          <h3 className="font-display text-lg font-bold text-ink">{t("title")}</h3>
           <button onClick={onClose} className="text-inkSoft hover:text-ink">✕</button>
         </div>
 
@@ -57,7 +59,7 @@ export function StripeCard({
         )}
 
         <p className="mt-4 text-center text-[11px] text-inkSoft">
-          🔒 Pagamento seguro via Stripe
+          {t("secure")}
         </p>
       </div>
     </div>
@@ -65,6 +67,7 @@ export function StripeCard({
 }
 
 function CardForm({ onSuccess, priceLabel }: { onSuccess: (externalId: string) => void; priceLabel: string }) {
+  const t = useTranslations("sim.card");
   const stripe = useStripe();
   const elements = useElements();
   const [busy, setBusy] = useState(false);
@@ -80,7 +83,7 @@ function CardForm({ onSuccess, priceLabel }: { onSuccess: (externalId: string) =
       redirect: "if_required",
     });
     if (error) {
-      setMsg(error.message ?? "Não foi possível processar.");
+      setMsg(error.message ?? t("failProcess"));
       setBusy(false);
       return;
     }
@@ -96,7 +99,7 @@ function CardForm({ onSuccess, priceLabel }: { onSuccess: (externalId: string) =
       <PaymentElement />
       {msg && <p className="text-sm text-rose">{msg}</p>}
       <button onClick={pay} disabled={busy || !stripe} className="btn-gold w-full py-3 disabled:opacity-50">
-        {busy ? "Processando…" : `Pagar ${priceLabel}`}
+        {busy ? t("processing") : t("pay", { price: priceLabel })}
       </button>
     </div>
   );

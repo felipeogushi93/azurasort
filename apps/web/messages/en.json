@@ -27,11 +27,37 @@
     "subtitle": "Professional, fair and transparent — all you need is your post link.",
     "stepWord": "Step",
     "items": [
-      { "title": "Connect your post", "desc": "Paste the link of your giveaway post or Reel. To copy it: open the (•••) menu on the post and tap “Copy link”.", "tips": ["Open the (•••) menu on the post", "Tap “Copy link” and paste it here"] },
-      { "title": "Comments or likes", "desc": "Choose the entry source: draw from people who commented or from people who liked the post.", "tips": [] },
-      { "title": "Choose the reveal animation", "desc": "Decide how the winner is revealed — golden envelope, vault, stage and more. Turn on live broadcast to show the draw to your audience in real time.", "tips": ["Broadcast the draw live", "Get video cuts ready to post"] },
-      { "title": "Run it with a countdown", "desc": "Set the countdown and start. Entrants shuffle on screen and the winner appears at the climax.", "tips": [] },
-      { "title": "Share the results", "desc": "Download the video cuts ready for Stories, Reels and feed, and publish the results page with a verifiable certificate.", "tips": [] }
+      {
+        "title": "Connect your post",
+        "desc": "Paste the link of your giveaway post or Reel. To copy it: open the (•••) menu on the post and tap “Copy link”.",
+        "tips": [
+          "Open the (•••) menu on the post",
+          "Tap “Copy link” and paste it here"
+        ]
+      },
+      {
+        "title": "Comments or likes",
+        "desc": "Choose the entry source: draw from people who commented or from people who liked the post.",
+        "tips": []
+      },
+      {
+        "title": "Choose the reveal animation",
+        "desc": "Decide how the winner is revealed — golden envelope, vault, stage and more. Turn on live broadcast to show the draw to your audience in real time.",
+        "tips": [
+          "Broadcast the draw live",
+          "Get video cuts ready to post"
+        ]
+      },
+      {
+        "title": "Run it with a countdown",
+        "desc": "Set the countdown and start. Entrants shuffle on screen and the winner appears at the climax.",
+        "tips": []
+      },
+      {
+        "title": "Share the results",
+        "desc": "Download the video cuts ready for Stories, Reels and feed, and publish the results page with a verifiable certificate.",
+        "tips": []
+      }
     ]
   },
   "features": {
@@ -40,18 +66,54 @@
     "titleHighlight": "professional giveaway",
     "subtitle": "Create, filter and pick winners on Instagram — with the transparency and polish your brand deserves.",
     "items": [
-      { "title": "Unlimited giveaways", "desc": "Create as many giveaways as you want, whenever you want — no quota holding back your growth." },
-      { "title": "Export the list", "desc": "Download all entrants, comments and likes as a spreadsheet (XLS/CSV) to use however you like." },
-      { "title": "Redo anytime", "desc": "Didn't like a test? Run the same post again as many times as you need." },
-      { "title": "Countdown timer", "desc": "Set the duration of the suspense animation before revealing the winner." },
-      { "title": "Advanced validation", "desc": "Check whether the winner follows a profile, has a photo, bio or name — before confirming the prize." },
-      { "title": "Multiple posts", "desc": "Combine more than one post in the same giveaway to widen your campaign's reach." },
-      { "title": "Verifiable certificate", "desc": "Generate a shareable, auditable certificate of the results, with a public code." },
-      { "title": "AI rules", "desc": "AI reads your post and suggests the rules automatically — faster and error-free." },
-      { "title": "Results page", "desc": "List the winners on a dedicated page and prove to your audience it was fair." },
-      { "title": "Fair limit per person", "desc": "Set how many comments from each user count. Everyone gets the same chance." },
-      { "title": "Winners + backups", "desc": "Pick several winners and backups to replace anyone who breaks the rules." },
-      { "title": "Smart filters", "desc": "Hashtags, required mentions and duplicate removal in one click." }
+      {
+        "title": "Unlimited giveaways",
+        "desc": "Create as many giveaways as you want, whenever you want — no quota holding back your growth."
+      },
+      {
+        "title": "Export the list",
+        "desc": "Download all entrants, comments and likes as a spreadsheet (XLS/CSV) to use however you like."
+      },
+      {
+        "title": "Redo anytime",
+        "desc": "Didn't like a test? Run the same post again as many times as you need."
+      },
+      {
+        "title": "Countdown timer",
+        "desc": "Set the duration of the suspense animation before revealing the winner."
+      },
+      {
+        "title": "Advanced validation",
+        "desc": "Check whether the winner follows a profile, has a photo, bio or name — before confirming the prize."
+      },
+      {
+        "title": "Multiple posts",
+        "desc": "Combine more than one post in the same giveaway to widen your campaign's reach."
+      },
+      {
+        "title": "Verifiable certificate",
+        "desc": "Generate a shareable, auditable certificate of the results, with a public code."
+      },
+      {
+        "title": "AI rules",
+        "desc": "AI reads your post and suggests the rules automatically — faster and error-free."
+      },
+      {
+        "title": "Results page",
+        "desc": "List the winners on a dedicated page and prove to your audience it was fair."
+      },
+      {
+        "title": "Fair limit per person",
+        "desc": "Set how many comments from each user count. Everyone gets the same chance."
+      },
+      {
+        "title": "Winners + backups",
+        "desc": "Pick several winners and backups to replace anyone who breaks the rules."
+      },
+      {
+        "title": "Smart filters",
+        "desc": "Hashtags, required mentions and duplicate removal in one click."
+      }
     ]
   },
   "gallery": {
@@ -68,12 +130,30 @@
     "title": "It's not just drawing. It's a",
     "titleHighlight": "spectacle.",
     "items": [
-      { "title": "Automatic video in 3 formats", "desc": "9:16, 16:9 and 1:1 generated instantly. Competitors give you a screenshot — we deliver a ready-made Reel." },
-      { "title": "Transparency certificate", "desc": "Giveaway with a signed, publicly verifiable seed. Prove to your audience it was fair." },
-      { "title": "Provably-fair result", "desc": "We publish the hash before and reveal the seed after: anyone can re-audit the draw." },
-      { "title": "Live / stage mode", "desc": "Reveal at events and live streams, controlled from your phone. Real-time suspense for your audience." },
-      { "title": "Screen ↔ video parity", "desc": "The downloaded MP4 is identical to what you saw on screen. Same engine, zero surprises." },
-      { "title": "60fps performance", "desc": "Real 3D effects with optimized WebGL. True cinema, smooth even on mobile." }
+      {
+        "title": "Automatic video in 3 formats",
+        "desc": "9:16, 16:9 and 1:1 generated instantly. Competitors give you a screenshot — we deliver a ready-made Reel."
+      },
+      {
+        "title": "Transparency certificate",
+        "desc": "Giveaway with a signed, publicly verifiable seed. Prove to your audience it was fair."
+      },
+      {
+        "title": "Provably-fair result",
+        "desc": "We publish the hash before and reveal the seed after: anyone can re-audit the draw."
+      },
+      {
+        "title": "Live / stage mode",
+        "desc": "Reveal at events and live streams, controlled from your phone. Real-time suspense for your audience."
+      },
+      {
+        "title": "Screen ↔ video parity",
+        "desc": "The downloaded MP4 is identical to what you saw on screen. Same engine, zero surprises."
+      },
+      {
+        "title": "60fps performance",
+        "desc": "Real 3D effects with optimized WebGL. True cinema, smooth even on mobile."
+      }
     ]
   },
   "faq": {
@@ -81,18 +161,54 @@
     "title": "Frequently asked questions",
     "subtitle": "The most common questions about Instagram giveaways.",
     "items": [
-      { "q": "Why run an Instagram giveaway?", "a": "Giveaways are one of the fastest ways to grow: they boost comments, reach and followers in days, strengthen your bond with your audience, and give your brand a reason to celebrate that people love to share." },
-      { "q": "Why does collecting every comment matter?", "a": "If a tool reads only part of the comments, the draw is unfair — several people never even enter. We pull the complete list, even with thousands of entrants, so everyone has exactly the same chance." },
-      { "q": "How does the AI giveaway work?", "a": "The AI reads your post and identifies the rules automatically (mentions, hashtags, keywords) and even helps validate winning profiles. You save time and avoid setup mistakes." },
-      { "q": "Is the AzuraSort draw safe and trustworthy?", "a": "Yes. Each draw uses an auditable random algorithm with a signed seed that produces a publicly verifiable certificate. Anyone can confirm the result wasn't manipulated." },
-      { "q": "Can I draw from Reels and carousels?", "a": "Yes. It works with posts, Reels and carousels — just paste the link of the giveaway post." },
-      { "q": "Can I run a free giveaway?", "a": "You can. The free plan lets you run giveaways with the essential scenes (videos come with our watermark). Paid plans unlock more scenes, watermark-free video and advanced features." },
-      { "q": "How much does a professional giveaway cost?", "a": "You start for free. When you want to remove the watermark, use your logo, export lists or unlock all reveal scenes, there are affordable plans — with regional pricing." },
-      { "q": "How many winners can I choose?", "a": "As many as you want. You can also set backups to replace anyone who breaks the rules or doesn't claim the prize, plus enable required mentions, remove duplicates and limit entries per person." },
-      { "q": "How do I ensure the giveaway is fair and transparent?", "a": "We collect every comment, draw with a reproducible random algorithm and generate a certificate with a verification code. You share the results page and your followers confirm everything." },
-      { "q": "Does it work with private accounts?", "a": "To guarantee a fully official giveaway within Instagram's rules, we work with securely connected business or creator accounts. Private accounts don't expose comments publicly." },
-      { "q": "Can I restart the same giveaway?", "a": "Yes, as many times as you want, using the same post — handy for testing the animation before the final live draw." },
-      { "q": "What makes AzuraSort different from other tools?", "a": "Besides drawing fairly, we turn the winner announcement into a cinematic reveal and automatically generate a video ready for Stories, Reels and feed. The result becomes content your audience shares." }
+      {
+        "q": "Why run an Instagram giveaway?",
+        "a": "Giveaways are one of the fastest ways to grow: they boost comments, reach and followers in days, strengthen your bond with your audience, and give your brand a reason to celebrate that people love to share."
+      },
+      {
+        "q": "Why does collecting every comment matter?",
+        "a": "If a tool reads only part of the comments, the draw is unfair — several people never even enter. We pull the complete list, even with thousands of entrants, so everyone has exactly the same chance."
+      },
+      {
+        "q": "How does the AI giveaway work?",
+        "a": "The AI reads your post and identifies the rules automatically (mentions, hashtags, keywords) and even helps validate winning profiles. You save time and avoid setup mistakes."
+      },
+      {
+        "q": "Is the AzuraSort draw safe and trustworthy?",
+        "a": "Yes. Each draw uses an auditable random algorithm with a signed seed that produces a publicly verifiable certificate. Anyone can confirm the result wasn't manipulated."
+      },
+      {
+        "q": "Can I draw from Reels and carousels?",
+        "a": "Yes. It works with posts, Reels and carousels — just paste the link of the giveaway post."
+      },
+      {
+        "q": "Can I run a free giveaway?",
+        "a": "You can. The free plan lets you run giveaways with the essential scenes (videos come with our watermark). Paid plans unlock more scenes, watermark-free video and advanced features."
+      },
+      {
+        "q": "How much does a professional giveaway cost?",
+        "a": "You start for free. When you want to remove the watermark, use your logo, export lists or unlock all reveal scenes, there are affordable plans — with regional pricing."
+      },
+      {
+        "q": "How many winners can I choose?",
+        "a": "As many as you want. You can also set backups to replace anyone who breaks the rules or doesn't claim the prize, plus enable required mentions, remove duplicates and limit entries per person."
+      },
+      {
+        "q": "How do I ensure the giveaway is fair and transparent?",
+        "a": "We collect every comment, draw with a reproducible random algorithm and generate a certificate with a verification code. You share the results page and your followers confirm everything."
+      },
+      {
+        "q": "Does it work with private accounts?",
+        "a": "To guarantee a fully official giveaway within Instagram's rules, we work with securely connected business or creator accounts. Private accounts don't expose comments publicly."
+      },
+      {
+        "q": "Can I restart the same giveaway?",
+        "a": "Yes, as many times as you want, using the same post — handy for testing the animation before the final live draw."
+      },
+      {
+        "q": "What makes AzuraSort different from other tools?",
+        "a": "Besides drawing fairly, we turn the winner announcement into a cinematic reveal and automatically generate a video ready for Stories, Reels and feed. The result becomes content your audience shares."
+      }
     ]
   },
   "cta": {
@@ -113,5 +229,198 @@
     "ar-ma": "العربية",
     "fr-ma": "Français",
     "en": "English"
+  },
+  "sim": {
+    "steps": {
+      "link": "Post",
+      "base": "Source",
+      "scene": "Animation",
+      "unlock": "Unlock",
+      "result": "Result"
+    },
+    "common": {
+      "back": "← back",
+      "continue": "Continue →"
+    },
+    "s1": {
+      "title": "1 · Connect your post",
+      "subtitle": "Paste the link to your giveaway post or Reels.",
+      "nameLabel": "Giveaway name",
+      "namePlaceholder": "Ex: iPhone 16 Pro Giveaway",
+      "linkLabel": "Post link",
+      "howTitle": "How to copy the link",
+      "how1": "Open the ••• menu at the top of the post.",
+      "how2": "Tap “Copy link”.",
+      "how3": "Paste it above.",
+      "advShow": "+ use a test list or CSV (advanced mode)",
+      "advHide": "− hide",
+      "test200": "⚡ 200 test entries",
+      "test1000": "⚡ 1,000",
+      "csv": "📄 CSV",
+      "pastePlaceholder": "@ana.silva: I want it! #giveaway",
+      "loadedManual": "✓ {n} participants loaded",
+      "footnote": "Free preview. Full comment collection runs after payment."
+    },
+    "preview": {
+      "empty": "The post preview appears here as soon as you paste the link.",
+      "manualTitle": "Manual list",
+      "manualLoaded": "{n} participants loaded",
+      "loading": "Fetching the post…",
+      "errorTitle": "Couldn't load",
+      "errorHint": "Check that the link is complete and the profile is public.",
+      "reels": "Reels",
+      "post": "Post",
+      "loadingComments": "loading comments…",
+      "commentsLoaded": "{n} comments loaded"
+    },
+    "s2": {
+      "title": "2 · Comments or likes",
+      "subtitle": "Choose who enters.",
+      "commentsTitle": "Comments",
+      "commentsDesc": "Draws from everyone who commented on the post.",
+      "likesTitle": "Likes",
+      "likesDesc": "Draws from everyone who liked the post."
+    },
+    "s3": {
+      "title": "3 · Choose the animation",
+      "subtitle": "How the winner will be revealed — plus the giveaway extras.",
+      "chooseHint": "Choose the animation — preview it first",
+      "liveTitle": "Go live",
+      "liveDesc": "Show the draw in real time to your audience.",
+      "cuts": "At the end you get ready-made video cuts (9:16 · 16:9 · 1:1) to post.",
+      "winners": "Winners",
+      "backups": "Backups",
+      "advShow": "+ advanced filters (hashtag, mentions, exclude)",
+      "advHide": "− hide filters",
+      "hashtagsLabel": "Required hashtags",
+      "excludeLabel": "Exclude handles",
+      "minMentions": "Min. mentions",
+      "noDup": "No duplicates",
+      "participants": "Participants",
+      "example": "example"
+    },
+    "scenes": {
+      "cofreName": "Vault",
+      "cofreDesc": "A vault that opens to reveal the winner",
+      "countdownName": "Countdown",
+      "countdownDesc": "Ring of fire with a climactic reveal"
+    },
+    "unlock": {
+      "backToOptions": "← back to options"
+    },
+    "result": {
+      "title": "Result",
+      "subtitle": "Auditable draw complete. Watch the reveal and download the cuts.",
+      "winner": "winner",
+      "backup": "backup",
+      "statParticipants": "Participants",
+      "statBase": "Source",
+      "baseComments": "comments",
+      "baseLikes": "likes",
+      "statLive": "Live",
+      "yes": "yes",
+      "no": "no",
+      "statCert": "Certificate",
+      "certTitle": "Transparency certificate",
+      "verifyPublic": "Verify publicly →",
+      "cutsReady": "Video cuts ready",
+      "seeReveal": "▶ Watch reveal",
+      "redo": "↻ Redo",
+      "newDraw": "+ New giveaway"
+    },
+    "busy": "Collecting participants and drawing…",
+    "reveal": {
+      "seeResult": "see result →",
+      "opening": "Opening the vault…",
+      "enableSound": "🔊 Enable sound"
+    },
+    "live": {
+      "badge": "Live",
+      "camera": "camera",
+      "exit": "✕ exit",
+      "ready": "When your audience is ready, start the draw.",
+      "start": "▶ START LIVE DRAW",
+      "noCam": "Camera not available — you can start anyway."
+    },
+    "paywall": {
+      "sampleTitle": "Sample of who participated",
+      "unlockMore": "🔒 + {n} more unlocked when you upgrade",
+      "unlockTitle": "Unlock this giveaway",
+      "postWith": "Post with {count} comments",
+      "yourScene": "★ Your animation: {scene}",
+      "live": "● LIVE",
+      "cinematic": "Cinematic",
+      "selected": "● Selected",
+      "select": "select",
+      "badgeMostChosen": "Most chosen",
+      "badgeLuxury": "Luxury",
+      "pixSub": "No fees · Instant",
+      "pixCta": "Generate PIX",
+      "cardSub": "Credit · Google/Apple Pay",
+      "cardCta": "Pay by Card",
+      "paypalSub": "Account or card",
+      "paypalCta": "Pay with PayPal",
+      "soon": "💳 Payment being integrated — use test mode below for now.",
+      "guarantee": "One-time payment. Instant unlock. Money-back guarantee if it fails.",
+      "testMode": "Validation mode (internal)",
+      "testUnlock": "🔓 Unlock in test mode (free)"
+    },
+    "plans": {
+      "padraoName": "Standard",
+      "padraoF1": "All comments",
+      "padraoF2": "Multiple winners",
+      "padraoF3": "Basic animation",
+      "padraoF4": "Verifiable certificate",
+      "premiumName": "Cinematic Premium",
+      "premiumF1": "Everything in Standard",
+      "premiumF2": "Cinematic reveals (Vault, Countdown…)",
+      "premiumF3": "Countdown + suspense + sound",
+      "premiumF4": "Cuts 9:16 · 16:9 · 1:1",
+      "premiumF5": "Up to 5 scenes",
+      "vipName": "Premium VIP",
+      "vipF1": "Everything in Premium",
+      "vipF2": "Live broadcast + live cuts",
+      "vipF3": "Video saved in high quality",
+      "vipF4": "10 exclusive scenes",
+      "vipF5": "Priority support"
+    },
+    "card": {
+      "title": "Pay by card",
+      "secure": "🔒 Secure payment via Stripe",
+      "processing": "Processing…",
+      "pay": "Pay {price}",
+      "failStart": "Failed to start the payment",
+      "failProcess": "Couldn't process."
+    },
+    "pix": {
+      "title": "Pay with PIX",
+      "scan": "Scan the QR code in your bank app",
+      "copy": "📋 Copy PIX code (copy and paste)",
+      "copied": "✓ Copied!",
+      "waiting": "awaiting payment…",
+      "autoConfirm": "Confirmation is automatic as soon as the PIX clears.",
+      "confirmed": "Payment confirmed!",
+      "releasing": "Releasing the giveaway…",
+      "failGenerate": "Failed to generate the PIX"
+    },
+    "verify": {
+      "okTitle": "Giveaway verified",
+      "okDesc": "The result matches the seed and the participant list.",
+      "failTitle": "Not verifiable",
+      "failDesc": "This result could not be confirmed by the public algorithm.",
+      "winners": "Winners",
+      "backup": "backup",
+      "rowDraw": "Draw",
+      "rowComments": "Comments on the post",
+      "rowEligible": "Eligible participants",
+      "rowDate": "Date",
+      "rowAlgo": "Algorithm",
+      "rowHash": "Seed hash (commit)",
+      "rowSeed": "Revealed seed",
+      "checkHash": "SHA-256(seed) = hash",
+      "checkWinners": "winners reproduced",
+      "how": "How to verify: sort the participant @handles alphabetically, shuffle with Fisher-Yates using the revealed seed (SHA-256), and confirm the winners match. The hash was generated before the reveal.",
+      "tagline": "verifiable giveaways"
+    }
   }
 }

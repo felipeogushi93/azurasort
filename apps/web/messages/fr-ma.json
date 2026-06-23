@@ -27,11 +27,37 @@
     "subtitle": "Professionnel, équitable et transparent — il vous suffit du lien de votre publication.",
     "stepWord": "Étape",
     "items": [
-      { "title": "Connectez votre publication", "desc": "Collez le lien du post ou du Reel de votre tirage. Pour le copier : ouvrez le menu (•••) sur la publication et touchez « Copier le lien ».", "tips": ["Ouvrez le menu (•••) sur la publication", "Touchez « Copier le lien » et collez-le ici"] },
-      { "title": "Commentaires ou likes", "desc": "Choisissez la base du tirage : tirer parmi ceux qui ont commenté ou parmi ceux qui ont aimé la publication.", "tips": [] },
-      { "title": "Choisissez l'animation de la révélation", "desc": "Décidez comment le gagnant est révélé — enveloppe dorée, coffre-fort, scène et plus. Activez la diffusion en direct pour montrer le tirage à votre public en temps réel.", "tips": ["Diffusez le tirage en direct", "Recevez des extraits vidéo prêts à publier"] },
-      { "title": "Lancez avec un compte à rebours", "desc": "Définissez la durée du compte à rebours et démarrez. Les participants se mélangent à l'écran et le gagnant apparaît au climax.", "tips": [] },
-      { "title": "Partagez les résultats", "desc": "Téléchargez les extraits vidéo prêts pour les Stories, Reels et le feed, et publiez la page de résultats avec un certificat vérifiable.", "tips": [] }
+      {
+        "title": "Connectez votre publication",
+        "desc": "Collez le lien du post ou du Reel de votre tirage. Pour le copier : ouvrez le menu (•••) sur la publication et touchez « Copier le lien ».",
+        "tips": [
+          "Ouvrez le menu (•••) sur la publication",
+          "Touchez « Copier le lien » et collez-le ici"
+        ]
+      },
+      {
+        "title": "Commentaires ou likes",
+        "desc": "Choisissez la base du tirage : tirer parmi ceux qui ont commenté ou parmi ceux qui ont aimé la publication.",
+        "tips": []
+      },
+      {
+        "title": "Choisissez l'animation de la révélation",
+        "desc": "Décidez comment le gagnant est révélé — enveloppe dorée, coffre-fort, scène et plus. Activez la diffusion en direct pour montrer le tirage à votre public en temps réel.",
+        "tips": [
+          "Diffusez le tirage en direct",
+          "Recevez des extraits vidéo prêts à publier"
+        ]
+      },
+      {
+        "title": "Lancez avec un compte à rebours",
+        "desc": "Définissez la durée du compte à rebours et démarrez. Les participants se mélangent à l'écran et le gagnant apparaît au climax.",
+        "tips": []
+      },
+      {
+        "title": "Partagez les résultats",
+        "desc": "Téléchargez les extraits vidéo prêts pour les Stories, Reels et le feed, et publiez la page de résultats avec un certificat vérifiable.",
+        "tips": []
+      }
     ]
   },
   "features": {
@@ -40,18 +66,54 @@
     "titleHighlight": "professionnel",
     "subtitle": "Créer, filtrer et choisir les gagnants sur Instagram — avec la transparence et la finition que votre marque mérite.",
     "items": [
-      { "title": "Tirages illimités", "desc": "Créez autant de tirages que vous voulez, quand vous voulez — sans quota qui freine votre croissance." },
-      { "title": "Exporter la liste", "desc": "Téléchargez tous les participants, commentaires et likes dans un tableur (XLS/CSV) à utiliser comme vous voulez." },
-      { "title": "Refaire à volonté", "desc": "Un test ne vous a pas plu ? Relancez le même post autant de fois que nécessaire." },
-      { "title": "Compte à rebours", "desc": "Définissez la durée de l'animation de suspense avant de révéler le gagnant." },
-      { "title": "Validation avancée", "desc": "Vérifiez si le gagnant suit un profil, a une photo, une bio ou un nom — avant de confirmer le prix." },
-      { "title": "Plusieurs publications", "desc": "Combinez plusieurs posts dans le même tirage pour élargir la portée de la campagne." },
-      { "title": "Certificat vérifiable", "desc": "Générez un certificat partageable et vérifiable des résultats, avec un code public." },
-      { "title": "Règles avec IA", "desc": "L'IA lit votre post et suggère les règles automatiquement — plus rapide et sans erreur." },
-      { "title": "Page de résultats", "desc": "Listez les gagnants sur une page dédiée et prouvez à votre audience que c'était équitable." },
-      { "title": "Limite équitable par personne", "desc": "Définissez combien de commentaires de chaque utilisateur comptent. Tout le monde a la même chance." },
-      { "title": "Gagnants + suppléants", "desc": "Choisissez plusieurs gagnants et suppléants pour remplacer ceux qui ne respectent pas les règles." },
-      { "title": "Filtres intelligents", "desc": "Hashtags, mentions obligatoires et suppression des doublons en un clic." }
+      {
+        "title": "Tirages illimités",
+        "desc": "Créez autant de tirages que vous voulez, quand vous voulez — sans quota qui freine votre croissance."
+      },
+      {
+        "title": "Exporter la liste",
+        "desc": "Téléchargez tous les participants, commentaires et likes dans un tableur (XLS/CSV) à utiliser comme vous voulez."
+      },
+      {
+        "title": "Refaire à volonté",
+        "desc": "Un test ne vous a pas plu ? Relancez le même post autant de fois que nécessaire."
+      },
+      {
+        "title": "Compte à rebours",
+        "desc": "Définissez la durée de l'animation de suspense avant de révéler le gagnant."
+      },
+      {
+        "title": "Validation avancée",
+        "desc": "Vérifiez si le gagnant suit un profil, a une photo, une bio ou un nom — avant de confirmer le prix."
+      },
+      {
+        "title": "Plusieurs publications",
+        "desc": "Combinez plusieurs posts dans le même tirage pour élargir la portée de la campagne."
+      },
+      {
+        "title": "Certificat vérifiable",
+        "desc": "Générez un certificat partageable et vérifiable des résultats, avec un code public."
+      },
+      {
+        "title": "Règles avec IA",
+        "desc": "L'IA lit votre post et suggère les règles automatiquement — plus rapide et sans erreur."
+      },
+      {
+        "title": "Page de résultats",
+        "desc": "Listez les gagnants sur une page dédiée et prouvez à votre audience que c'était équitable."
+      },
+      {
+        "title": "Limite équitable par personne",
+        "desc": "Définissez combien de commentaires de chaque utilisateur comptent. Tout le monde a la même chance."
+      },
+      {
+        "title": "Gagnants + suppléants",
+        "desc": "Choisissez plusieurs gagnants et suppléants pour remplacer ceux qui ne respectent pas les règles."
+      },
+      {
+        "title": "Filtres intelligents",
+        "desc": "Hashtags, mentions obligatoires et suppression des doublons en un clic."
+      }
     ]
   },
   "gallery": {
@@ -68,12 +130,30 @@
     "title": "Ce n'est pas qu'un tirage. C'est un",
     "titleHighlight": "spectacle.",
     "items": [
-      { "title": "Vidéo automatique en 3 formats", "desc": "9:16, 16:9 et 1:1 générés instantanément. Les concurrents donnent une capture — nous livrons un Reel prêt." },
-      { "title": "Certificat de transparence", "desc": "Tirage avec une graine signée et vérifiable publiquement. Prouvez à votre audience que c'était équitable." },
-      { "title": "Résultat provably-fair", "desc": "Nous publions le hash avant et révélons la graine après : n'importe qui peut réauditer le tirage." },
-      { "title": "Mode direct / scène", "desc": "Révélez lors d'événements et de lives en contrôlant depuis votre téléphone. Suspense en temps réel pour votre public." },
-      { "title": "Parité écran ↔ vidéo", "desc": "Le MP4 téléchargé est identique à ce que vous avez vu à l'écran. Même moteur, zéro surprise." },
-      { "title": "Performance 60 ips", "desc": "Effets 3D réels avec WebGL optimisé. Du vrai cinéma, fluide même sur mobile." }
+      {
+        "title": "Vidéo automatique en 3 formats",
+        "desc": "9:16, 16:9 et 1:1 générés instantanément. Les concurrents donnent une capture — nous livrons un Reel prêt."
+      },
+      {
+        "title": "Certificat de transparence",
+        "desc": "Tirage avec une graine signée et vérifiable publiquement. Prouvez à votre audience que c'était équitable."
+      },
+      {
+        "title": "Résultat provably-fair",
+        "desc": "Nous publions le hash avant et révélons la graine après : n'importe qui peut réauditer le tirage."
+      },
+      {
+        "title": "Mode direct / scène",
+        "desc": "Révélez lors d'événements et de lives en contrôlant depuis votre téléphone. Suspense en temps réel pour votre public."
+      },
+      {
+        "title": "Parité écran ↔ vidéo",
+        "desc": "Le MP4 téléchargé est identique à ce que vous avez vu à l'écran. Même moteur, zéro surprise."
+      },
+      {
+        "title": "Performance 60 ips",
+        "desc": "Effets 3D réels avec WebGL optimisé. Du vrai cinéma, fluide même sur mobile."
+      }
     ]
   },
   "faq": {
@@ -81,18 +161,54 @@
     "title": "Questions fréquentes",
     "subtitle": "Les questions les plus courantes sur les tirages Instagram.",
     "items": [
-      { "q": "Pourquoi organiser un tirage sur Instagram ?", "a": "Les tirages sont l'un des moyens les plus rapides de grandir : ils augmentent commentaires, portée et abonnés en quelques jours, renforcent la relation avec votre audience et donnent à votre marque une raison de célébrer que les gens adorent partager." },
-      { "q": "Pourquoi est-il important de collecter tous les commentaires ?", "a": "Si un outil ne lit qu'une partie des commentaires, le tirage est injuste — plusieurs personnes n'entrent même pas. Nous récupérons la liste complète, même avec des milliers de participants, pour que chacun ait exactement la même chance." },
-      { "q": "Comment fonctionne le tirage avec intelligence artificielle ?", "a": "L'IA lit votre publication et identifie les règles automatiquement (mentions, hashtags, mots-clés) et aide à valider les profils gagnants. Vous gagnez du temps et évitez les erreurs de configuration." },
-      { "q": "Le tirage AzuraSort est-il sûr et fiable ?", "a": "Oui. Chaque tirage utilise un algorithme aléatoire vérifiable avec une graine signée qui génère un certificat vérifiable publiquement. N'importe qui peut confirmer que le résultat n'a pas été manipulé." },
-      { "q": "Puis-je tirer au sort à partir de Reels et de carrousels ?", "a": "Oui. Cela fonctionne avec les posts, Reels et carrousels — collez simplement le lien de la publication du tirage." },
-      { "q": "Peut-on faire un tirage gratuit ?", "a": "Oui. Le plan gratuit permet de réaliser des tirages avec les scènes essentielles (les vidéos comportent notre filigrane). Les plans payants débloquent plus de scènes, la vidéo sans filigrane et des fonctions avancées." },
-      { "q": "Combien coûte un tirage professionnel ?", "a": "Vous commencez gratuitement. Quand vous voulez retirer le filigrane, utiliser votre logo, exporter des listes ou débloquer toutes les scènes, il existe des plans abordables — avec un prix ajusté par région." },
-      { "q": "Combien de gagnants puis-je choisir ?", "a": "Autant que vous voulez. Vous pouvez aussi définir des suppléants pour remplacer ceux qui ne respectent pas les règles ou ne réclament pas le prix, et activer les mentions obligatoires, supprimer les doublons et limiter les participations par personne." },
-      { "q": "Comment garantir que le tirage soit équitable et transparent ?", "a": "Nous collectons tous les commentaires, tirons au sort avec un algorithme aléatoire reproductible et générons un certificat avec un code de vérification. Vous partagez la page de résultats et vos abonnés confirment tout." },
-      { "q": "Cela fonctionne-t-il avec les comptes privés ?", "a": "Pour garantir un tirage entièrement officiel et conforme aux règles d'Instagram, nous travaillons avec des comptes professionnels ou créateurs connectés en toute sécurité. Les comptes privés n'exposent pas les commentaires publiquement." },
-      { "q": "Puis-je relancer le même tirage ?", "a": "Oui, autant de fois que vous voulez, avec la même publication — pratique pour tester l'animation avant le tirage final en direct." },
-      { "q": "Qu'est-ce qui distingue AzuraSort des autres outils ?", "a": "En plus de tirer au sort équitablement, nous transformons l'annonce du gagnant en une révélation cinématographique et générons automatiquement la vidéo prête pour les Stories, Reels et le feed. Le résultat devient un contenu que votre audience partage." }
+      {
+        "q": "Pourquoi organiser un tirage sur Instagram ?",
+        "a": "Les tirages sont l'un des moyens les plus rapides de grandir : ils augmentent commentaires, portée et abonnés en quelques jours, renforcent la relation avec votre audience et donnent à votre marque une raison de célébrer que les gens adorent partager."
+      },
+      {
+        "q": "Pourquoi est-il important de collecter tous les commentaires ?",
+        "a": "Si un outil ne lit qu'une partie des commentaires, le tirage est injuste — plusieurs personnes n'entrent même pas. Nous récupérons la liste complète, même avec des milliers de participants, pour que chacun ait exactement la même chance."
+      },
+      {
+        "q": "Comment fonctionne le tirage avec intelligence artificielle ?",
+        "a": "L'IA lit votre publication et identifie les règles automatiquement (mentions, hashtags, mots-clés) et aide à valider les profils gagnants. Vous gagnez du temps et évitez les erreurs de configuration."
+      },
+      {
+        "q": "Le tirage AzuraSort est-il sûr et fiable ?",
+        "a": "Oui. Chaque tirage utilise un algorithme aléatoire vérifiable avec une graine signée qui génère un certificat vérifiable publiquement. N'importe qui peut confirmer que le résultat n'a pas été manipulé."
+      },
+      {
+        "q": "Puis-je tirer au sort à partir de Reels et de carrousels ?",
+        "a": "Oui. Cela fonctionne avec les posts, Reels et carrousels — collez simplement le lien de la publication du tirage."
+      },
+      {
+        "q": "Peut-on faire un tirage gratuit ?",
+        "a": "Oui. Le plan gratuit permet de réaliser des tirages avec les scènes essentielles (les vidéos comportent notre filigrane). Les plans payants débloquent plus de scènes, la vidéo sans filigrane et des fonctions avancées."
+      },
+      {
+        "q": "Combien coûte un tirage professionnel ?",
+        "a": "Vous commencez gratuitement. Quand vous voulez retirer le filigrane, utiliser votre logo, exporter des listes ou débloquer toutes les scènes, il existe des plans abordables — avec un prix ajusté par région."
+      },
+      {
+        "q": "Combien de gagnants puis-je choisir ?",
+        "a": "Autant que vous voulez. Vous pouvez aussi définir des suppléants pour remplacer ceux qui ne respectent pas les règles ou ne réclament pas le prix, et activer les mentions obligatoires, supprimer les doublons et limiter les participations par personne."
+      },
+      {
+        "q": "Comment garantir que le tirage soit équitable et transparent ?",
+        "a": "Nous collectons tous les commentaires, tirons au sort avec un algorithme aléatoire reproductible et générons un certificat avec un code de vérification. Vous partagez la page de résultats et vos abonnés confirment tout."
+      },
+      {
+        "q": "Cela fonctionne-t-il avec les comptes privés ?",
+        "a": "Pour garantir un tirage entièrement officiel et conforme aux règles d'Instagram, nous travaillons avec des comptes professionnels ou créateurs connectés en toute sécurité. Les comptes privés n'exposent pas les commentaires publiquement."
+      },
+      {
+        "q": "Puis-je relancer le même tirage ?",
+        "a": "Oui, autant de fois que vous voulez, avec la même publication — pratique pour tester l'animation avant le tirage final en direct."
+      },
+      {
+        "q": "Qu'est-ce qui distingue AzuraSort des autres outils ?",
+        "a": "En plus de tirer au sort équitablement, nous transformons l'annonce du gagnant en une révélation cinématographique et générons automatiquement la vidéo prête pour les Stories, Reels et le feed. Le résultat devient un contenu que votre audience partage."
+      }
     ]
   },
   "cta": {
@@ -113,5 +229,198 @@
     "ar-ma": "العربية",
     "fr-ma": "Français",
     "en": "English"
+  },
+  "sim": {
+    "steps": {
+      "link": "Publication",
+      "base": "Source",
+      "scene": "Animation",
+      "unlock": "Déverrouiller",
+      "result": "Résultat"
+    },
+    "common": {
+      "back": "← retour",
+      "continue": "Continuer →"
+    },
+    "s1": {
+      "title": "1 · Connectez votre publication",
+      "subtitle": "Collez le lien du post ou du Reels de votre tirage.",
+      "nameLabel": "Nom du tirage",
+      "namePlaceholder": "Ex : Tirage iPhone 16 Pro",
+      "linkLabel": "Lien de la publication",
+      "howTitle": "Comment copier le lien",
+      "how1": "Ouvrez le menu ••• en haut de la publication.",
+      "how2": "Appuyez sur « Copier le lien ».",
+      "how3": "Collez-le ci-dessus.",
+      "advShow": "+ utiliser une liste de test ou un CSV (mode avancé)",
+      "advHide": "− masquer",
+      "test200": "⚡ 200 de test",
+      "test1000": "⚡ 1 000",
+      "csv": "📄 CSV",
+      "pastePlaceholder": "@ana.silva : je le veux ! #tirage",
+      "loadedManual": "✓ {n} participants chargés",
+      "footnote": "Aperçu gratuit. La collecte complète des commentaires démarre après le paiement."
+    },
+    "preview": {
+      "empty": "L’aperçu de la publication apparaît ici dès que vous collez le lien.",
+      "manualTitle": "Liste manuelle",
+      "manualLoaded": "{n} participants chargés",
+      "loading": "Recherche de la publication…",
+      "errorTitle": "Impossible de charger",
+      "errorHint": "Vérifiez que le lien est complet et que le profil est public.",
+      "reels": "Reels",
+      "post": "Post",
+      "loadingComments": "chargement des commentaires…",
+      "commentsLoaded": "{n} commentaires chargés"
+    },
+    "s2": {
+      "title": "2 · Commentaires ou mentions J’aime",
+      "subtitle": "Choisissez qui participe.",
+      "commentsTitle": "Commentaires",
+      "commentsDesc": "Tire au sort parmi ceux qui ont commenté la publication.",
+      "likesTitle": "Mentions J’aime",
+      "likesDesc": "Tire au sort parmi ceux qui ont aimé la publication."
+    },
+    "s3": {
+      "title": "3 · Choisissez l’animation",
+      "subtitle": "Comment le gagnant sera révélé — et les extras du tirage.",
+      "chooseHint": "Choisissez l’animation — voyez l’exemple avant",
+      "liveTitle": "Diffuser en direct",
+      "liveDesc": "Montrez le tirage en temps réel à votre audience.",
+      "cuts": "À la fin, vous recevez des extraits vidéo prêts (9:16 · 16:9 · 1:1) à publier.",
+      "winners": "Gagnants",
+      "backups": "Suppléants",
+      "advShow": "+ filtres avancés (hashtag, mentions, exclure)",
+      "advHide": "− masquer les filtres",
+      "hashtagsLabel": "Hashtags obligatoires",
+      "excludeLabel": "Exclure des handles",
+      "minMentions": "Min. de mentions",
+      "noDup": "Sans doublons",
+      "participants": "Participants",
+      "example": "exemple"
+    },
+    "scenes": {
+      "cofreName": "Coffre-fort",
+      "cofreDesc": "Un coffre-fort qui s’ouvre pour révéler le gagnant",
+      "countdownName": "Compte à rebours",
+      "countdownDesc": "Anneau de feu avec révélation au point culminant"
+    },
+    "unlock": {
+      "backToOptions": "← retour aux options"
+    },
+    "result": {
+      "title": "Résultat",
+      "subtitle": "Tirage auditable terminé. Regardez la révélation et téléchargez les extraits.",
+      "winner": "gagnant",
+      "backup": "suppléant",
+      "statParticipants": "Participants",
+      "statBase": "Source",
+      "baseComments": "commentaires",
+      "baseLikes": "mentions J’aime",
+      "statLive": "En direct",
+      "yes": "oui",
+      "no": "non",
+      "statCert": "Certificat",
+      "certTitle": "Certificat de transparence",
+      "verifyPublic": "Vérifier publiquement →",
+      "cutsReady": "Extraits vidéo prêts",
+      "seeReveal": "▶ Voir la révélation",
+      "redo": "↻ Refaire",
+      "newDraw": "+ Nouveau tirage"
+    },
+    "busy": "Collecte des participants et tirage en cours…",
+    "reveal": {
+      "seeResult": "voir le résultat →",
+      "opening": "Ouverture du coffre-fort…",
+      "enableSound": "🔊 Activer le son"
+    },
+    "live": {
+      "badge": "En direct",
+      "camera": "caméra",
+      "exit": "✕ quitter",
+      "ready": "Quand votre audience est prête, lancez le tirage.",
+      "start": "▶ LANCER LE TIRAGE EN DIRECT",
+      "noCam": "Caméra non disponible — vous pouvez démarrer quand même."
+    },
+    "paywall": {
+      "sampleTitle": "Échantillon des participants",
+      "unlockMore": "🔒 + {n} autres débloqués au déverrouillage",
+      "unlockTitle": "Déverrouillez ce tirage",
+      "postWith": "Post avec {count} commentaires",
+      "yourScene": "★ Votre animation : {scene}",
+      "live": "● EN DIRECT",
+      "cinematic": "Cinématographique",
+      "selected": "● Sélectionné",
+      "select": "sélectionner",
+      "badgeMostChosen": "Le plus choisi",
+      "badgeLuxury": "Luxe",
+      "pixSub": "Sans frais · Instantané",
+      "pixCta": "Générer un PIX",
+      "cardSub": "Crédit · Google/Apple Pay",
+      "cardCta": "Payer par carte",
+      "paypalSub": "Compte ou carte",
+      "paypalCta": "Payer avec PayPal",
+      "soon": "💳 Paiement en cours d’intégration — utilisez le mode test ci-dessous pour l’instant.",
+      "guarantee": "Paiement unique. Déverrouillage instantané. Garantie de remboursement en cas d’échec.",
+      "testMode": "Mode de validation (interne)",
+      "testUnlock": "🔓 Déverrouiller en mode test (gratuit)"
+    },
+    "plans": {
+      "padraoName": "Standard",
+      "padraoF1": "Tous les commentaires",
+      "padraoF2": "Plusieurs gagnants",
+      "padraoF3": "Animation basique",
+      "padraoF4": "Certificat vérifiable",
+      "premiumName": "Premium Cinématographique",
+      "premiumF1": "Tout le Standard",
+      "premiumF2": "Révélations cinématographiques (Coffre-fort, Compte à rebours…)",
+      "premiumF3": "Compte à rebours + suspense + son",
+      "premiumF4": "Extraits 9:16 · 16:9 · 1:1",
+      "premiumF5": "Jusqu’à 5 scènes",
+      "vipName": "Premium VIP",
+      "vipF1": "Tout le Premium",
+      "vipF2": "Diffusion en direct + extraits du live",
+      "vipF3": "Vidéo enregistrée en haute qualité",
+      "vipF4": "10 scènes exclusives",
+      "vipF5": "Support prioritaire"
+    },
+    "card": {
+      "title": "Payer par carte",
+      "secure": "🔒 Paiement sécurisé via Stripe",
+      "processing": "Traitement…",
+      "pay": "Payer {price}",
+      "failStart": "Échec du démarrage du paiement",
+      "failProcess": "Impossible de traiter."
+    },
+    "pix": {
+      "title": "Payer avec PIX",
+      "scan": "Scannez le QR dans l’app de votre banque",
+      "copy": "📋 Copier le code PIX (copier-coller)",
+      "copied": "✓ Copié !",
+      "waiting": "en attente du paiement…",
+      "autoConfirm": "La confirmation est automatique dès que le PIX est crédité.",
+      "confirmed": "Paiement confirmé !",
+      "releasing": "Déverrouillage du tirage…",
+      "failGenerate": "Échec de la génération du PIX"
+    },
+    "verify": {
+      "okTitle": "Tirage vérifié",
+      "okDesc": "Le résultat correspond à la graine et à la liste des participants.",
+      "failTitle": "Non vérifiable",
+      "failDesc": "Ce résultat n’a pas pu être confirmé par l’algorithme public.",
+      "winners": "Gagnants",
+      "backup": "suppléant",
+      "rowDraw": "Tirage",
+      "rowComments": "Commentaires sur le post",
+      "rowEligible": "Participants éligibles",
+      "rowDate": "Date",
+      "rowAlgo": "Algorithme",
+      "rowHash": "Hash de la graine (commit)",
+      "rowSeed": "Graine révélée",
+      "checkHash": "SHA-256(graine) = hash",
+      "checkWinners": "gagnants reproduits",
+      "how": "Comment vérifier : triez les @ participants par ordre alphabétique, mélangez avec Fisher-Yates en utilisant la graine révélée (SHA-256) et vérifiez que les gagnants correspondent. Le hash a été généré avant la révélation.",
+      "tagline": "tirages vérifiables"
+    }
   }
 }

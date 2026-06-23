@@ -12,14 +12,18 @@ type ChatMsg = { handle: string; text: string };
  * carregados — sem custo extra) e um botão START. Só quando ele clica em START é
  * que a revelação (vídeo do vencedor) começa — via onStart().
  */
+type LiveLabels = { badge: string; camera: string; exit: string; ready: string; start: string; noCam: string };
+
 export function LiveStage({
   campaign,
   comments = [],
+  labels = { badge: "Ao vivo", camera: "câmera", exit: "✕ sair", ready: "Quando estiver com a audiência pronta, inicie o sorteio.", start: "▶ INICIAR SORTEIO AO VIVO", noCam: "Câmera não disponível — você pode iniciar mesmo assim." },
   onStart,
   onClose,
 }: {
   campaign?: string;
   comments?: ChatMsg[];
+  labels?: LiveLabels;
   onStart: () => void;
   onClose: () => void;
 }) {
@@ -118,7 +122,7 @@ export function LiveStage({
       <div className="absolute inset-x-0 top-0 flex items-center justify-between p-5">
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-2 rounded-full bg-red-600 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> Ao vivo
+            <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> {labels.badge}
           </span>
           <span className="flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
             👁 {viewers.toLocaleString("pt-BR")}
@@ -128,10 +132,10 @@ export function LiveStage({
           {camOk && (
             <button
               onClick={() => setFacing((f) => (f === "user" ? "environment" : "user"))}
-              title="Trocar câmera"
+              title={labels.camera}
               className="rounded-full border border-white/15 bg-black/40 px-3 py-2 text-sm text-white backdrop-blur hover:border-gold"
             >
-              🔄 câmera
+              🔄 {labels.camera}
             </button>
           )}
           <button
@@ -141,7 +145,7 @@ export function LiveStage({
             }}
             className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold"
           >
-            ✕ sair
+            {labels.exit}
           </button>
         </div>
       </div>
@@ -183,17 +187,17 @@ export function LiveStage({
         <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 p-8">
           {camOk === false && (
             <p className="rounded-lg bg-black/50 px-3 py-1.5 text-center text-xs text-white/80 backdrop-blur">
-              Câmera não disponível — você pode iniciar mesmo assim.
+              {labels.noCam}
             </p>
           )}
           <p className="text-center text-sm text-white/80 drop-shadow">
-            Quando estiver com a audiência pronta, inicie o sorteio.
+            {labels.ready}
           </p>
           <button
             onClick={start}
             className="rounded-full bg-gradient-to-r from-rose to-gold px-10 py-4 font-display text-lg font-bold text-white shadow-gold transition hover:-translate-y-0.5 hover:shadow-lift"
           >
-            ▶ INICIAR SORTEIO AO VIVO
+            {labels.start}
           </button>
         </div>
       )}

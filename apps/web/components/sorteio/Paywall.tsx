@@ -1,46 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
 import { track } from "@/lib/track";
 import { priceLabels, type Currency, type PlanId } from "@/lib/payments/pricing";
 
-const PLAN_META: {
-  id: PlanId;
-  name: string;
-  badge?: string;
-  features: string[];
-}[] = [
-  {
-    id: "padrao",
-    name: "Padrão",
-    features: ["Todos os comentários", "Múltiplos ganhadores", "Animação básica", "Certificado verificável"],
-  },
-  {
-    id: "premium",
-    name: "Premium Cinematográfico",
-    badge: "Mais escolhido",
-    features: [
-      "Tudo do Padrão",
-      "Revelações cinematográficas (Cofre, Contagem…)",
-      "Contagem + suspense + som",
-      "Cortes 9:16 · 16:9 · 1:1",
-      "Até 5 cenas",
-    ],
-  },
-  {
-    id: "vip",
-    name: "Premium VIP",
-    badge: "Luxo",
-    features: [
-      "Tudo do Premium",
-      "Transmissão ao vivo + cortes da live",
-      "Vídeo salvo em alta qualidade",
-      "10 cenas exclusivas",
-      "Suporte prioritário",
-    ],
-  },
+// estrutura dos planos; nomes/recursos vêm das traduções (sim.plans.*)
+const PLAN_META: { id: PlanId; nameKey: string; badgeKey?: string; featureKeys: string[] }[] = [
+  { id: "padrao", nameKey: "padraoName", featureKeys: ["padraoF1", "padraoF2", "padraoF3", "padraoF4"] },
+  { id: "premium", nameKey: "premiumName", badgeKey: "badgeMostChosen", featureKeys: ["premiumF1", "premiumF2", "premiumF3", "premiumF4", "premiumF5"] },
+  { id: "vip", nameKey: "vipName", badgeKey: "badgeLuxury", featureKeys: ["vipF1", "vipF2", "vipF3", "vipF4", "vipF5"] },
 ];
 
 /**
@@ -72,6 +43,7 @@ export function Paywall({
   sceneSrc?: string;
   live?: boolean;
 }) {
+  const t = useTranslations("sim");
   const [soon, setSoon] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [showPix, setShowPix] = useState(false);
@@ -89,8 +61,8 @@ export function Paywall({
       {/* amostra de participantes */}
       <div className="rounded-3xl border border-ink/5 bg-surface p-5 shadow-card sm:p-6">
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm font-medium uppercase tracking-widest text-gold-deep">Amostra de quem participou</p>
-          <span className="text-xs text-inkSoft">5 / {count.toLocaleString("pt-BR")}</span>
+          <p className="text-sm font-medium uppercase tracking-widest text-gold-deep">{t("paywall.sampleTitle")}</p>
+          <span className="text-xs text-inkSoft">5 / {count.toLocaleString()}</span>
         </div>
         <div className="space-y-2">
           {sample.slice(0, 5).map((c, i) => (
@@ -106,19 +78,19 @@ export function Paywall({
           ))}
         </div>
         <p className="mt-3 text-center text-xs text-inkSoft">
-          🔒 + {Math.max(0, count - 5).toLocaleString("pt-BR")} outros liberados ao desbloquear
+          {t("paywall.unlockMore", { n: Math.max(0, count - 5).toLocaleString() })}
         </p>
       </div>
 
       {/* desbloqueie + preview da cena escolhida */}
       <div className="text-center">
-        <h3 className="font-display text-3xl font-semibold text-ink">Desbloqueie este sorteio</h3>
-        <p className="mt-1 text-sm text-inkSoft">Post com {count.toLocaleString("pt-BR")} comentários</p>
+        <h3 className="font-display text-3xl font-semibold text-ink">{t("paywall.unlockTitle")}</h3>
+        <p className="mt-1 text-sm text-inkSoft">{t("paywall.postWith", { count: count.toLocaleString() })}</p>
       </div>
 
       <div className="relative overflow-hidden rounded-3xl border border-gold/30 bg-void shadow-gold">
         <span className="absolute left-4 top-4 z-10 rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-void">
-          ★ Sua animação: {sceneName}
+          {t("paywall.yourScene", { scene: sceneName })}
         </span>
         <video
           key={sceneSrc}
@@ -130,8 +102,8 @@ export function Paywall({
           className="mx-auto block max-h-[340px] w-full object-contain"
         />
         <span className="absolute bottom-4 right-4 z-10 flex gap-1.5">
-          {live && <span className="rounded-md bg-red-600 px-2 py-1 text-[11px] font-bold text-white">● AO VIVO</span>}
-          <span className="rounded-md bg-black/50 px-2 py-1 text-[11px] text-white backdrop-blur">Cinematográfico</span>
+          {live && <span className="rounded-md bg-red-600 px-2 py-1 text-[11px] font-bold text-white">{t("paywall.live")}</span>}
+          <span className="rounded-md bg-black/50 px-2 py-1 text-[11px] text-white backdrop-blur">{t("paywall.cinematic")}</span>
         </span>
       </div>
 
@@ -147,22 +119,22 @@ export function Paywall({
                 sel ? "border-gold bg-gradient-to-br from-gold/10 to-surface shadow-gold" : "border-ink/10 bg-surface hover:border-gold/40"
               }`}
             >
-              {p.badge && (
+              {p.badgeKey && (
                 <span className="absolute right-3 top-3 rounded-full bg-gold px-2 py-0.5 text-[9px] font-bold uppercase text-void">
-                  {p.badge}
+                  {t(`paywall.${p.badgeKey}`)}
                 </span>
               )}
-              <p className="font-bold text-ink">{p.name}</p>
+              <p className="font-bold text-ink">{t(`plans.${p.nameKey}`)}</p>
               <p className="mt-1">
                 <span className="font-display text-2xl font-bold text-ink">{labels[p.id]}</span>
               </p>
               <ul className="mt-3 space-y-1.5 text-xs text-inkSoft">
-                {p.features.map((f) => (
-                  <li key={f}>✓ {f}</li>
+                {p.featureKeys.map((f) => (
+                  <li key={f}>✓ {t(`plans.${f}`)}</li>
                 ))}
               </ul>
               <span className={`mt-3 block text-xs font-semibold ${sel ? "text-gold-deep" : "text-inkSoft/0"}`}>
-                {sel ? "● Selecionado" : "selecionar"}
+                {sel ? t("paywall.selected") : t("paywall.select")}
               </span>
             </button>
           );
@@ -173,27 +145,27 @@ export function Paywall({
       <div>
         <div className={`grid gap-3 ${isBrazil ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
           {isBrazil && (
-            <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price={priceLabel} cta="Gerar PIX" accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
+            <PayCard icon="⚡" title="PIX" sub={t("paywall.pixSub")} price={priceLabel} cta={t("paywall.pixCta")} accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
           )}
-          <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price={priceLabel} cta="Pagar com Cartão" onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
-          <PayCard icon="🅿️" title="PayPal" sub="Conta ou cartão" price={priceLabel} cta="Pagar com PayPal" onClick={ping} />
+          <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={priceLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
+          <PayCard icon="🅿️" title="PayPal" sub={t("paywall.paypalSub")} price={priceLabel} cta={t("paywall.paypalCta")} onClick={ping} />
         </div>
         {soon && (
           <p className="mt-3 text-center text-sm text-gold-deep">
-            💳 Pagamento em integração — use o modo teste abaixo por enquanto.
+            {t("paywall.soon")}
           </p>
         )}
         <p className="mt-3 text-center text-xs text-inkSoft">
-          Pagamento único. Liberação instantânea. Garantia de reembolso se falhar.
+          {t("paywall.guarantee")}
         </p>
       </div>
 
       {/* MODO TESTE — só com ?teste=1 na URL (não aparece pro público) */}
       {allowTest && (
         <div className="rounded-2xl border border-dashed border-ink/20 bg-canvasAlt/60 p-4 text-center">
-          <p className="text-xs text-inkSoft">Modo de validação (interno)</p>
+          <p className="text-xs text-inkSoft">{t("paywall.testMode")}</p>
           <button onClick={() => onUnlock()} className="btn-ghost mt-2">
-            🔓 Liberar em modo teste (grátis)
+            {t("paywall.testUnlock")}
           </button>
         </div>
       )}

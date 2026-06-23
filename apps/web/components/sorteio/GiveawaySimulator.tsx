@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { RevealModule, RevealSpec } from "@prizegram/reveal-spec";
 import { RevealClient } from "@/components/reveal/RevealClient";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
@@ -35,13 +35,14 @@ const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
 
 // Cenas disponíveis (com vídeo de exemplo). Para adicionar uma nova no futuro,
 // basta colocar o vídeo em /public e acrescentar um item aqui.
-type SceneOption = { module: RevealModule; name: string; desc: string; src: string };
+type SceneOption = { module: RevealModule; key: "cofre" | "countdown"; src: string };
 const SCENE_OPTIONS: SceneOption[] = [
-  { module: "bank_vault", name: "Cofre", desc: "Cofre que se abre revelando o vencedor", src: "/cofre.mp4" },
-  { module: "countdown", name: "Contagem regressiva", desc: "Anel de fogo com revelação no clímax", src: "/contagem.mp4" },
+  { module: "bank_vault", key: "cofre", src: "/cofre.mp4" },
+  { module: "countdown", key: "countdown", src: "/contagem.mp4" },
 ];
 
 export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency }) {
+  const t = useTranslations("sim");
   const [step, setStep] = useState<Step>("link");
 
   // passo 1 — publicacao
@@ -253,14 +254,14 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
       {/* ---------- 1 · PUBLICAÇÃO ---------- */}
       {step === "link" && (
-        <Card title="1 · Conecte sua publicação" subtitle="Cole o link do post ou Reels do seu sorteio.">
+        <Card title={t("s1.title")} subtitle={t("s1.subtitle")}>
           <div className="grid gap-6 md:grid-cols-2">
             {/* coluna esquerda: formulario */}
             <div>
-              <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Nome do sorteio</label>
-              <input value={campaign} onChange={(e) => setCampaign(e.target.value)} placeholder="Ex: Sorteio iPhone 16 Pro" className="inp mb-5" />
+              <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">{t("s1.nameLabel")}</label>
+              <input value={campaign} onChange={(e) => setCampaign(e.target.value)} placeholder={t("s1.namePlaceholder")} className="inp mb-5" />
 
-              <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Link da publicação</label>
+              <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">{t("s1.linkLabel")}</label>
               <input
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
@@ -269,26 +270,26 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               />
 
               <div className="mt-4 rounded-xl border border-gold/20 bg-gold/5 p-4">
-                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gold-deep">Como copiar o link</p>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-gold-deep">{t("s1.howTitle")}</p>
                 <ol className="space-y-1.5 text-sm text-ink/80">
-                  <li className="flex gap-2"><span className="text-gold-deep">1.</span> Abra o menu <span className="rounded bg-ink/5 px-1.5 font-semibold">•••</span> no topo da publicação.</li>
-                  <li className="flex gap-2"><span className="text-gold-deep">2.</span> Toque em <span className="font-semibold">“Copiar link”</span>.</li>
-                  <li className="flex gap-2"><span className="text-gold-deep">3.</span> Cole aqui em cima.</li>
+                  <li className="flex gap-2"><span className="text-gold-deep">1.</span> {t("s1.how1")}</li>
+                  <li className="flex gap-2"><span className="text-gold-deep">2.</span> {t("s1.how2")}</li>
+                  <li className="flex gap-2"><span className="text-gold-deep">3.</span> {t("s1.how3")}</li>
                 </ol>
               </div>
 
               <button onClick={() => setAdvancedOpen((v) => !v)} className="mt-4 text-xs text-inkSoft underline-offset-2 hover:text-ink hover:underline">
-                {advancedOpen ? "− ocultar" : "+ usar lista de teste ou CSV (modo avançado)"}
+                {advancedOpen ? t("s1.advHide") : t("s1.advShow")}
               </button>
               {advancedOpen && (
                 <div className="mt-3 space-y-3 rounded-xl border border-ink/5 bg-canvasAlt p-4">
                   <div className="flex flex-wrap gap-2">
-                    <button onClick={() => { setComments(normalizeComments(generateMockComments(200, 13))); setPreview(null); }} className="btn-ghost py-2">⚡ 200 de teste</button>
-                    <button onClick={() => { setComments(normalizeComments(generateMockComments(1000, 29))); setPreview(null); }} className="btn-ghost py-2">⚡ 1.000</button>
-                    <label className="btn-ghost cursor-pointer py-2">📄 CSV<input type="file" accept=".csv,.txt" onChange={onFile} className="hidden" /></label>
+                    <button onClick={() => { setComments(normalizeComments(generateMockComments(200, 13))); setPreview(null); }} className="btn-ghost py-2">{t("s1.test200")}</button>
+                    <button onClick={() => { setComments(normalizeComments(generateMockComments(1000, 29))); setPreview(null); }} className="btn-ghost py-2">{t("s1.test1000")}</button>
+                    <label className="btn-ghost cursor-pointer py-2">{t("s1.csv")}<input type="file" accept=".csv,.txt" onChange={onFile} className="hidden" /></label>
                   </div>
-                  <textarea value={raw} onChange={(e) => setRaw(e.target.value)} onBlur={loadPasted} rows={4} placeholder="@ana.silva: eu quero! #sorteio" className="inp font-mono text-xs" />
-                  {comments.length > 0 && !preview && <p className="text-xs text-emerald">✓ {comments.length} participantes carregados</p>}
+                  <textarea value={raw} onChange={(e) => setRaw(e.target.value)} onBlur={loadPasted} rows={4} placeholder={t("s1.pastePlaceholder")} className="inp font-mono text-xs" />
+                  {comments.length > 0 && !preview && <p className="text-xs text-emerald">{t("s1.loadedManual", { n: comments.length.toLocaleString() })}</p>}
                 </div>
               )}
             </div>
@@ -298,13 +299,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           </div>
 
           <div className="mt-6 flex items-center justify-between border-t border-ink/5 pt-5">
-            <span className="text-[11px] text-inkSoft/70">A coleta real do Instagram entra com o backend — por enquanto, prévia e participantes de exemplo.</span>
+            <span className="text-[11px] text-inkSoft/70">{t("s1.footnote")}</span>
             <button
               disabled={!(preview?.status === "loaded" || comments.length > 0)}
               onClick={() => setStep("base")}
               className="btn-gold py-2.5 disabled:opacity-40"
             >
-              Continuar →
+              {t("common.continue")}
             </button>
           </div>
         </Card>
@@ -312,78 +313,86 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
       {/* ---------- 2 · BASE ---------- */}
       {step === "base" && (
-        <Card title="2 · Comentários ou curtidas" subtitle="Escolha entre quem concorre.">
+        <Card title={t("s2.title")} subtitle={t("s2.subtitle")}>
           <div className="grid gap-3 sm:grid-cols-2">
-            <BaseCard active={base === "comments"} onClick={() => setBase("comments")} icon="💬" title="Comentários" desc="Sorteia entre quem comentou na publicação." />
-            <BaseCard active={base === "likes"} onClick={() => setBase("likes")} icon="❤️" title="Curtidas" desc="Sorteia entre quem curtiu a publicação." />
+            <BaseCard active={base === "comments"} onClick={() => setBase("comments")} icon="💬" title={t("s2.commentsTitle")} desc={t("s2.commentsDesc")} />
+            <BaseCard active={base === "likes"} onClick={() => setBase("likes")} icon="❤️" title={t("s2.likesTitle")} desc={t("s2.likesDesc")} />
           </div>
           <div className="mt-6 flex items-center justify-between">
-            <button onClick={() => setStep("link")} className="text-sm text-inkSoft hover:text-ink">← voltar</button>
-            <button onClick={() => setStep("scene")} className="btn-gold py-2.5">Continuar →</button>
+            <button onClick={() => setStep("link")} className="text-sm text-inkSoft hover:text-ink">{t("common.back")}</button>
+            <button onClick={() => setStep("scene")} className="btn-gold py-2.5">{t("common.continue")}</button>
           </div>
         </Card>
       )}
 
       {/* ---------- 3 · ANIMAÇÃO ---------- */}
       {step === "scene" && (
-        <Card title="3 · Escolha a animação" subtitle="Como o vencedor será revelado — e os extras do sorteio.">
+        <Card title={t("s3.title")} subtitle={t("s3.subtitle")}>
           <label className="mb-2 block text-xs font-medium uppercase tracking-widest text-inkSoft">
-            Escolha a animação — veja o exemplo antes
+            {t("s3.chooseHint")}
           </label>
           <div className="grid gap-3 sm:grid-cols-2">
             {SCENE_OPTIONS.map((s) => (
-              <ScenePreviewCard key={s.module} scene={s} active={module === s.module} onClick={() => setModule(s.module)} />
+              <ScenePreviewCard
+                key={s.module}
+                scene={s}
+                name={t(`scenes.${s.key}Name`)}
+                desc={t(`scenes.${s.key}Desc`)}
+                exampleLabel={t("s3.example")}
+                active={module === s.module}
+                onClick={() => setModule(s.module)}
+              />
             ))}
           </div>
 
           {/* ao vivo */}
           <div className="mt-5 flex items-center justify-between rounded-xl border border-ink/5 bg-canvasAlt px-4 py-3">
             <div>
-              <p className="flex items-center gap-2 text-sm font-medium text-ink">🔴 Transmitir ao vivo</p>
-              <p className="text-xs text-inkSoft">Mostre o sorteio em tempo real para a sua audiência.</p>
+              <p className="flex items-center gap-2 text-sm font-medium text-ink">🔴 {t("s3.liveTitle")}</p>
+              <p className="text-xs text-inkSoft">{t("s3.liveDesc")}</p>
             </div>
             <button onClick={() => setLive((v) => !v)} className={`toggle ${live ? "toggle-on" : ""}`}><span className="dot" /></button>
           </div>
 
           {/* cortes de video */}
           <div className="mt-3 flex items-center gap-2 rounded-xl border border-gold/20 bg-gold/5 px-4 py-3 text-sm text-ink/80">
-            🎬 Ao final você recebe <span className="font-semibold text-gold-deep">cortes de vídeo prontos</span> (9:16 · 16:9 · 1:1) para postar.
+            🎬 {t("s3.cuts")}
           </div>
 
           {/* nº vencedores */}
           <div className="mt-5 grid grid-cols-2 gap-4">
-            <Field label="Vencedores">
+            <Field label={t("s3.winners")}>
               <input type="number" min={1} value={filters.winnersCount} onChange={(e) => setFilters({ ...filters, winnersCount: Math.max(1, +e.target.value) })} className="inp" />
             </Field>
-            <Field label="Suplentes">
+            <Field label={t("s3.backups")}>
               <input type="number" min={0} value={filters.backupsCount} onChange={(e) => setFilters({ ...filters, backupsCount: Math.max(0, +e.target.value) })} className="inp" />
             </Field>
           </div>
 
           {/* opcoes avancadas (filtros) */}
           <button onClick={() => setAdvancedOpen((v) => !v)} className="mt-4 text-xs text-inkSoft underline-offset-2 hover:text-ink hover:underline">
-            {advancedOpen ? "− ocultar filtros" : "+ filtros avançados (hashtag, menções, excluir)"}
+            {advancedOpen ? t("s3.advHide") : t("s3.advShow")}
           </button>
           {advancedOpen && (
             <div className="mt-3 grid gap-3 rounded-xl border border-ink/5 bg-canvasAlt p-4 sm:grid-cols-2">
-              <Field label="Hashtags obrigatórias"><input value={hashtagInput} onChange={(e) => setHashtagInput(e.target.value)} placeholder="#sorteio" className="inp" /></Field>
-              <Field label="Excluir handles"><input value={excludeInput} onChange={(e) => setExcludeInput(e.target.value)} placeholder="@minhamarca" className="inp" /></Field>
-              <Field label="Mín. de menções"><input type="number" min={0} value={filters.minMentions} onChange={(e) => setFilters({ ...filters, minMentions: Math.max(0, +e.target.value) })} className="inp" /></Field>
-              <Field label="Sem duplicados">
+              <Field label={t("s3.hashtagsLabel")}><input value={hashtagInput} onChange={(e) => setHashtagInput(e.target.value)} placeholder="#sorteio" className="inp" /></Field>
+              <Field label={t("s3.excludeLabel")}><input value={excludeInput} onChange={(e) => setExcludeInput(e.target.value)} placeholder="@minhamarca" className="inp" /></Field>
+              <Field label={t("s3.minMentions")}><input type="number" min={0} value={filters.minMentions} onChange={(e) => setFilters({ ...filters, minMentions: Math.max(0, +e.target.value) })} className="inp" /></Field>
+              <Field label={t("s3.noDup")}>
                 <button onClick={() => setFilters({ ...filters, blockDuplicateUsers: !filters.blockDuplicateUsers })} className={`toggle ${filters.blockDuplicateUsers ? "toggle-on" : ""}`}><span className="dot" /></button>
               </Field>
             </div>
           )}
 
           <div className="mt-6 flex items-center justify-between rounded-xl border border-ink/5 bg-canvasAlt px-4 py-3">
-            <span className="text-sm text-inkSoft">Participantes</span>
-            <span className="font-display text-2xl font-semibold text-gold-deep">{displayCount.toLocaleString("pt-BR")}</span>
+            <span className="text-sm text-inkSoft">{t("s3.participants")}</span>
+            <span className="font-display text-2xl font-semibold text-gold-deep">{displayCount.toLocaleString()}</span>
           </div>
 
           <div className="mt-5 flex items-center justify-between">
-            <button onClick={() => setStep("base")} className="text-sm text-inkSoft hover:text-ink">← voltar</button>
+            <button onClick={() => setStep("base")} className="text-sm text-inkSoft hover:text-ink">{t("common.back")}</button>
             <button disabled={!displayCount} onClick={() => setStep("unlock")} className="btn-gold py-2.5 disabled:opacity-40">
-              Continuar →
+              {t("common.continue")}
             </button>
           </div>
         </Card>
@@ -393,7 +402,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       {step === "unlock" && (
         <div>
           <div className="mb-4">
-            <button onClick={() => setStep("scene")} className="text-sm text-inkSoft hover:text-ink">← voltar para opções</button>
+            <button onClick={() => setStep("scene")} className="text-sm text-inkSoft hover:text-ink">{t("unlock.backToOptions")}</button>
           </div>
           <Paywall
             count={displayCount}
@@ -409,7 +418,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             }
             onUnlock={doDraw}
             currency={currency}
-            sceneName={(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).name}
+            sceneName={t(`scenes.${(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).key}Name`)}
             sceneSrc={(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).src}
             live={live}
           />
@@ -418,7 +427,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
       {/* ---------- 4 · RESULTADO ---------- */}
       {step === "result" && result && spec && (
-        <Card title="5 · Resultado" subtitle="Sorteio auditável concluído. Veja a revelação e baixe os cortes.">
+        <Card title={t("result.title")} subtitle={t("result.subtitle")}>
           <div className="space-y-2">
             {result.winners.map((w) => (
               <div key={w.position} className={`flex items-center gap-3 rounded-xl border px-4 py-3 ${w.isBackup ? "border-ink/5 bg-canvasAlt" : "border-gold/40 bg-gold/5"}`}>
@@ -429,30 +438,30 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
                   <p className="truncate text-ink">@{w.handle}</p>
                   <p className="truncate text-xs text-inkSoft">{w.text || "—"}</p>
                 </div>
-                <span className="ml-auto text-[10px] uppercase tracking-widest text-inkSoft">{w.isBackup ? "suplente" : "vencedor"}</span>
+                <span className="ml-auto text-[10px] uppercase tracking-widest text-inkSoft">{w.isBackup ? t("result.backup") : t("result.winner")}</span>
               </div>
             ))}
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-            <Stat label="Participantes" value={displayCount.toLocaleString("pt-BR")} />
-            <Stat label="Base" value={base === "comments" ? "comentários" : "curtidas"} />
-            <Stat label="Ao vivo" value={live ? "sim" : "não"} />
-            <Stat label="Certificado" value={result.certificateHash.slice(0, 8) + "…"} mono />
+            <Stat label={t("result.statParticipants")} value={displayCount.toLocaleString()} />
+            <Stat label={t("result.statBase")} value={base === "comments" ? t("result.baseComments") : t("result.baseLikes")} />
+            <Stat label={t("result.statLive")} value={live ? t("result.yes") : t("result.no")} />
+            <Stat label={t("result.statCert")} value={result.certificateHash.slice(0, 8) + "…"} mono />
           </div>
 
           {certCode && (
             <div className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3">
-              <p className="text-[10px] uppercase tracking-widest text-gold-deep">Certificado de transparência</p>
+              <p className="text-[10px] uppercase tracking-widest text-gold-deep">{t("result.certTitle")}</p>
               <p className="font-mono text-sm text-ink">{certCode}</p>
               <a href={`/verify/${certCode}`} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs font-semibold text-gold-deep underline-offset-2 hover:underline">
-                Verificar publicamente →
+                {t("result.verifyPublic")}
               </a>
             </div>
           )}
 
           <div className="mt-5">
-            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-inkSoft">Cortes de vídeo prontos</p>
+            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-inkSoft">{t("result.cutsReady")}</p>
             <div className="flex gap-2">
               {["9:16", "16:9", "1:1"].map((f) => (
                 <button key={f} className="flex-1 rounded-xl border border-ink/10 bg-surface py-2.5 text-sm text-ink shadow-soft transition hover:border-gold/50">⬇ {f}</button>
@@ -461,9 +470,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <button onClick={() => setShowReveal(true)} className="btn-gold py-2.5">▶ Ver revelação</button>
-            <button onClick={redraw} className="btn-ghost py-2.5">↻ Refazer</button>
-            <button onClick={newGiveaway} className="btn-ghost py-2.5">+ Novo sorteio</button>
+            <button onClick={() => setShowReveal(true)} className="btn-gold py-2.5">{t("result.seeReveal")}</button>
+            <button onClick={redraw} className="btn-ghost py-2.5">{t("result.redo")}</button>
+            <button onClick={newGiveaway} className="btn-ghost py-2.5">{t("result.newDraw")}</button>
           </div>
         </Card>
       )}
@@ -473,7 +482,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         <div className="fixed inset-0 z-[115] grid place-items-center bg-ink/40 backdrop-blur-sm">
           <div className="rounded-2xl bg-surface px-8 py-6 text-center shadow-lift">
             <span className="mx-auto block h-7 w-7 animate-spin rounded-full border-2 border-ink/15 border-t-gold" />
-            <p className="mt-3 text-sm text-inkSoft">Coletando participantes e sorteando…</p>
+            <p className="mt-3 text-sm text-inkSoft">{t("busy")}</p>
           </div>
         </div>
       )}
@@ -484,6 +493,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           <LiveStage
             campaign={campaign}
             comments={comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : sample}
+            labels={{ badge: t("live.badge"), camera: t("live.camera"), exit: t("live.exit"), ready: t("live.ready"), start: t("live.start"), noCam: t("live.noCam") }}
             onStart={() => setLiveStarted(true)}
             onClose={() => setShowReveal(false)}
           />
@@ -492,11 +502,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
       {showReveal && spec && (!live || liveStarted) && (
         <div className="fixed inset-0 z-[100] bg-void">
-          <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">ver resultado →</button>
+          <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{t("reveal.seeResult")}</button>
           {module === "bank_vault" ? (
             <CofreReveal
               handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
               suspenseMs={live ? 900 : 2600}
+              openingLabel={t("reveal.opening")}
+              soundLabel={t("reveal.enableSound")}
             />
           ) : module === "countdown" ? (
             <CofreReveal
@@ -509,6 +521,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               textLeft={50}
               textTop={50}
               fontScale={0.04}
+              openingLabel={t("reveal.opening")}
+              soundLabel={t("reveal.enableSound")}
             />
           ) : module === "stage_host" ? (
             <div className="h-full w-full"><VideoReveal spec={spec} /></div>
@@ -518,9 +532,6 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         </div>
       )}
 
-      <p className="mt-8 text-center text-xs text-inkSoft">
-        Simulação local · <Link href="/" className="text-gold-deep hover:underline">voltar ao site</Link>
-      </p>
     </div>
   );
 }
@@ -528,12 +539,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 /* ----------------------------- subcomponentes ----------------------------- */
 
 function Stepper({ step }: { step: Step }) {
+  const t = useTranslations("sim.steps");
   const steps: { k: Step; label: string }[] = [
-    { k: "link", label: "Publicação" },
-    { k: "base", label: "Base" },
-    { k: "scene", label: "Animação" },
-    { k: "unlock", label: "Desbloquear" },
-    { k: "result", label: "Resultado" },
+    { k: "link", label: t("link") },
+    { k: "base", label: t("base") },
+    { k: "scene", label: t("scene") },
+    { k: "unlock", label: t("unlock") },
+    { k: "result", label: t("result") },
   ];
   const idx = steps.findIndex((s) => s.k === step);
   return (
@@ -594,7 +606,7 @@ function BaseCard({ active, onClick, icon, title, desc }: { active: boolean; onC
   );
 }
 
-function ScenePreviewCard({ scene, active, onClick }: { scene: SceneOption; active: boolean; onClick: () => void }) {
+function ScenePreviewCard({ scene, name, desc, exampleLabel, active, onClick }: { scene: SceneOption; name: string; desc: string; exampleLabel: string; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -608,11 +620,11 @@ function ScenePreviewCard({ scene, active, onClick }: { scene: SceneOption; acti
         {active && (
           <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-gold text-xs font-bold text-void">✓</span>
         )}
-        <span className="absolute bottom-2 left-2 rounded-md bg-black/45 px-2 py-0.5 text-[10px] text-white backdrop-blur">exemplo</span>
+        <span className="absolute bottom-2 left-2 rounded-md bg-black/45 px-2 py-0.5 text-[10px] text-white backdrop-blur">{exampleLabel}</span>
       </div>
       <div className="p-3">
-        <p className="text-sm font-bold text-ink">{scene.name}</p>
-        <p className="text-xs text-inkSoft">{scene.desc}</p>
+        <p className="text-sm font-bold text-ink">{name}</p>
+        <p className="text-xs text-inkSoft">{desc}</p>
       </div>
     </button>
   );
@@ -620,12 +632,13 @@ function ScenePreviewCard({ scene, active, onClick }: { scene: SceneOption; acti
 
 /** Previa da publicacao + carregamento dos comentarios (lado direito do passo 1). */
 function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewState | null; hasManual: boolean; manualCount: number }) {
+  const t = useTranslations("sim.preview");
   // estado vazio
   if (!preview && !hasManual) {
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-dashed border-ink/15 bg-canvasAlt/50 p-6 text-center">
         <span className="text-3xl opacity-40">🔗</span>
-        <p className="mt-3 text-sm text-inkSoft">A prévia da publicação aparece aqui assim que você colar o link.</p>
+        <p className="mt-3 text-sm text-inkSoft">{t("empty")}</p>
       </div>
     );
   }
@@ -635,8 +648,8 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border border-emerald/20 bg-emerald/5 p-6 text-center">
         <span className="text-3xl">📄</span>
-        <p className="mt-3 font-display text-lg font-semibold text-ink">Lista manual</p>
-        <p className="text-sm text-inkSoft">{manualCount.toLocaleString("pt-BR")} participantes carregados</p>
+        <p className="mt-3 font-display text-lg font-semibold text-ink">{t("manualTitle")}</p>
+        <p className="text-sm text-inkSoft">{t("manualLoaded", { n: manualCount.toLocaleString() })}</p>
       </div>
     );
   }
@@ -647,7 +660,7 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center gap-3 rounded-2xl border border-ink/5 bg-surface p-6 text-center shadow-soft">
         <span className="h-7 w-7 animate-spin rounded-full border-2 border-ink/15 border-t-gold" />
-        <p className="text-sm text-inkSoft">Buscando a publicação…</p>
+        <p className="text-sm text-inkSoft">{t("loading")}</p>
       </div>
     );
   }
@@ -657,9 +670,9 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center gap-2 rounded-2xl border border-rose/30 bg-rose/5 p-6 text-center">
         <span className="text-3xl">⚠️</span>
-        <p className="text-sm font-medium text-ink">Não consegui carregar</p>
+        <p className="text-sm font-medium text-ink">{t("errorTitle")}</p>
         <p className="text-xs text-inkSoft">{preview.error}</p>
-        <p className="mt-1 text-[11px] text-inkSoft/70">Confira se o link está completo e o perfil é público.</p>
+        <p className="mt-1 text-[11px] text-inkSoft/70">{t("errorHint")}</p>
       </div>
     );
   }
@@ -675,7 +688,7 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
           <div className="h-7 w-7 rounded-full bg-gradient-to-br from-violet to-rose" />
           <span className="truncate text-sm font-medium text-ink">@{preview.username}</span>
           <span className="ml-auto rounded-full bg-ink/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-inkSoft">
-            {preview.isReel ? "Reels" : "Post"}
+            {preview.isReel ? t("reels") : t("post")}
           </span>
         </div>
         <div className="relative h-44 bg-gradient-to-br from-[#fce8c9] via-[#f3d7e2] to-[#dfe6ff]">
@@ -692,8 +705,8 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
           )}
         </div>
         <div className="flex items-center gap-3 px-3 py-2 text-xs text-inkSoft">
-          <span>❤️ {(preview.likesCount ?? 0).toLocaleString("pt-BR")}</span>
-          <span>💬 {preview.total.toLocaleString("pt-BR")}</span>
+          <span>❤️ {(preview.likesCount ?? 0).toLocaleString()}</span>
+          <span>💬 {preview.total.toLocaleString()}</span>
         </div>
       </div>
 
@@ -702,10 +715,10 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
           <>
             <div className="mb-1.5 flex items-center justify-between text-xs">
               <span className="flex items-center gap-1.5 text-inkSoft">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-gold" /> carregando comentários…
+                <span className="h-2 w-2 animate-pulse rounded-full bg-gold" /> {t("loadingComments")}
               </span>
               <span className="font-mono text-ink">
-                {preview.loaded.toLocaleString("pt-BR")} / {preview.total.toLocaleString("pt-BR")}
+                {preview.loaded.toLocaleString()} / {preview.total.toLocaleString()}
               </span>
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-ink/10">
@@ -714,7 +727,7 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
           </>
         ) : (
           <div className="flex items-center justify-center gap-2 rounded-lg bg-emerald/10 py-2 text-xs text-emerald">
-            <span className="h-2 w-2 rounded-full bg-emerald" /> {preview.total.toLocaleString("pt-BR")} comentários carregados
+            <span className="h-2 w-2 rounded-full bg-emerald" /> {t("commentsLoaded", { n: preview.total.toLocaleString() })}
           </div>
         )}
       </div>

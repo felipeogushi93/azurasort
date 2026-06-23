@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { sha256, verifyFromParticipants } from "@/lib/draw/server";
 import { Link } from "@/i18n/navigation";
@@ -10,7 +11,8 @@ export default async function VerifyPage({
 }: {
   params: Promise<{ locale: string; code: string }>;
 }) {
-  const { code } = await params;
+  const { locale, code } = await params;
+  const t = await getTranslations({ locale, namespace: "sim.verify" });
   const draw = await db.draw.findUnique({
     where: { certificateCode: code.toUpperCase() },
     include: { giveaway: true, winners: { orderBy: { position: "asc" } } },
@@ -44,19 +46,17 @@ export default async function VerifyPage({
               {valid ? "✓" : "⚠"}
             </div>
             <h1 className="mt-4 font-display text-2xl font-bold text-ink">
-              {valid ? "Sorteio verificado" : "Não verificável"}
+              {valid ? t("okTitle") : t("failTitle")}
             </h1>
             <p className="mt-1 text-sm text-inkSoft">
-              {valid
-                ? "O resultado confere com a semente e a lista de participantes."
-                : "Este resultado não pôde ser confirmado pelo algoritmo público."}
+              {valid ? t("okDesc") : t("failDesc")}
             </p>
             <p className="mt-3 font-mono text-sm text-gold-deep">{draw.certificateCode}</p>
           </div>
 
           {/* vencedores */}
           <div className="mt-8">
-            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-inkSoft">Vencedores</p>
+            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-inkSoft">{t("winners")}</p>
             <div className="space-y-2">
               {winnersMain.map((w) => (
                 <div key={w.id} className="flex items-center gap-3 rounded-xl border border-gold/40 bg-gold/5 px-4 py-3">
@@ -67,7 +67,7 @@ export default async function VerifyPage({
               {backups.map((w) => (
                 <div key={w.id} className="flex items-center gap-3 rounded-xl border border-ink/5 bg-canvasAlt px-4 py-3">
                   <span className="font-display font-bold text-inkSoft">S{w.position - winnersMain.length}</span>
-                  <span className="text-inkSoft">@{w.handle} · suplente</span>
+                  <span className="text-inkSoft">@{w.handle} · {t("backup")}</span>
                 </div>
               ))}
             </div>
@@ -75,27 +75,26 @@ export default async function VerifyPage({
 
           {/* prova técnica */}
           <div className="mt-8 space-y-3 rounded-2xl border border-ink/5 bg-canvasAlt p-4 text-sm">
-            <Row label="Sorteio" value={draw.giveaway.campaign} />
-            <Row label="Comentários no post" value={`${Math.max(draw.totalCount, participants.length).toLocaleString("pt-BR")}`} />
-            <Row label="Participantes elegíveis" value={`${participants.length.toLocaleString("pt-BR")}`} />
-            <Row label="Data" value={new Date(draw.createdAt).toLocaleString("pt-BR")} />
-            <Row label="Algoritmo" value={draw.algorithm} mono />
-            <Row label="Hash da semente (commit)" value={draw.seedHash} mono break />
-            <Row label="Semente revelada" value={draw.seed ?? "—"} mono break />
+            <Row label={t("rowDraw")} value={draw.giveaway.campaign} />
+            <Row label={t("rowComments")} value={`${Math.max(draw.totalCount, participants.length).toLocaleString()}`} />
+            <Row label={t("rowEligible")} value={`${participants.length.toLocaleString()}`} />
+            <Row label={t("rowDate")} value={new Date(draw.createdAt).toLocaleString(locale)} />
+            <Row label={t("rowAlgo")} value={draw.algorithm} mono />
+            <Row label={t("rowHash")} value={draw.seedHash} mono break />
+            <Row label={t("rowSeed")} value={draw.seed ?? "—"} mono break />
             <div className="flex items-center gap-2 pt-1 text-xs">
-              <span className={seedOk ? "text-emerald" : "text-rose"}>{seedOk ? "✓" : "✗"} SHA-256(semente) = hash</span>
-              <span className={winnersMatch ? "text-emerald" : "text-rose"}>{winnersMatch ? "✓" : "✗"} vencedores reproduzidos</span>
+              <span className={seedOk ? "text-emerald" : "text-rose"}>{seedOk ? "✓" : "✗"} {t("checkHash")}</span>
+              <span className={winnersMatch ? "text-emerald" : "text-rose"}>{winnersMatch ? "✓" : "✗"} {t("checkWinners")}</span>
             </div>
           </div>
 
           <p className="mt-6 text-center text-xs leading-relaxed text-inkSoft">
-            Como verificar: ordene os @ participantes em ordem alfabética, embaralhe com Fisher-Yates usando a
-            semente revelada (SHA-256) e confira que os vencedores batem. O hash foi gerado antes da revelação.
+            {t("how")}
           </p>
         </div>
 
         <p className="mt-6 text-center text-xs text-inkSoft">
-          <Link href="/" className="text-gold-deep hover:underline">azurasort.com</Link> · sorteios verificáveis
+          <Link href="/" className="text-gold-deep hover:underline">azurasort.com</Link> · {t("tagline")}
         </p>
       </div>
     </main>

@@ -27,11 +27,37 @@
     "subtitle": "Profesional, justo y transparente — solo necesitas el enlace de tu publicación.",
     "stepWord": "Paso",
     "items": [
-      { "title": "Conecta tu publicación", "desc": "Pega el enlace del post o Reel de tu sorteo. Para copiarlo: abre el menú (•••) en la publicación y toca “Copiar enlace”.", "tips": ["Abre el menú (•••) en la publicación", "Toca “Copiar enlace” y pégalo aquí"] },
-      { "title": "Comentarios o likes", "desc": "Elige la base del sorteo: sortear entre quienes comentaron o entre quienes dieron like a la publicación.", "tips": [] },
-      { "title": "Elige la animación de la revelación", "desc": "Define cómo se revela al ganador — sobre dorado, caja fuerte, escenario y más. Activa la transmisión en vivo para mostrar el sorteo a tu público en tiempo real.", "tips": ["Transmite el sorteo en vivo", "Recibe cortes de vídeo listos para publicar"] },
-      { "title": "Ejecuta con cuenta regresiva", "desc": "Define el tiempo de la cuenta regresiva e inicia. Los participantes se mezclan en pantalla y el ganador aparece en el clímax.", "tips": [] },
-      { "title": "Comparte los resultados", "desc": "Descarga los cortes de vídeo listos para Stories, Reels y feed, y publica la página de resultados con certificado verificable.", "tips": [] }
+      {
+        "title": "Conecta tu publicación",
+        "desc": "Pega el enlace del post o Reel de tu sorteo. Para copiarlo: abre el menú (•••) en la publicación y toca “Copiar enlace”.",
+        "tips": [
+          "Abre el menú (•••) en la publicación",
+          "Toca “Copiar enlace” y pégalo aquí"
+        ]
+      },
+      {
+        "title": "Comentarios o likes",
+        "desc": "Elige la base del sorteo: sortear entre quienes comentaron o entre quienes dieron like a la publicación.",
+        "tips": []
+      },
+      {
+        "title": "Elige la animación de la revelación",
+        "desc": "Define cómo se revela al ganador — sobre dorado, caja fuerte, escenario y más. Activa la transmisión en vivo para mostrar el sorteo a tu público en tiempo real.",
+        "tips": [
+          "Transmite el sorteo en vivo",
+          "Recibe cortes de vídeo listos para publicar"
+        ]
+      },
+      {
+        "title": "Ejecuta con cuenta regresiva",
+        "desc": "Define el tiempo de la cuenta regresiva e inicia. Los participantes se mezclan en pantalla y el ganador aparece en el clímax.",
+        "tips": []
+      },
+      {
+        "title": "Comparte los resultados",
+        "desc": "Descarga los cortes de vídeo listos para Stories, Reels y feed, y publica la página de resultados con certificado verificable.",
+        "tips": []
+      }
     ]
   },
   "features": {
@@ -40,18 +66,54 @@
     "titleHighlight": "profesional",
     "subtitle": "Crear, filtrar y elegir ganadores en Instagram — con la transparencia y el acabado que tu marca merece.",
     "items": [
-      { "title": "Sorteos sin límite", "desc": "Crea todos los sorteos que quieras, cuando quieras — sin cuota que frene tu crecimiento." },
-      { "title": "Exportar la lista", "desc": "Descarga todos los participantes, comentarios y likes en una hoja de cálculo (XLS/CSV) para usarla como quieras." },
-      { "title": "Rehacer cuando quieras", "desc": "¿No te gustó una prueba? Ejecuta el mismo post otra vez las veces que necesites." },
-      { "title": "Cuenta regresiva", "desc": "Define la duración de la animación de suspenso antes de revelar al ganador." },
-      { "title": "Validación avanzada", "desc": "Comprueba si el ganador sigue un perfil, tiene foto, bio o nombre — antes de confirmar el premio." },
-      { "title": "Varias publicaciones", "desc": "Combina más de un post en el mismo sorteo para ampliar el alcance de la campaña." },
-      { "title": "Certificado verificable", "desc": "Genera un certificado compartible y auditable de los resultados, con código público." },
-      { "title": "Reglas con IA", "desc": "La IA lee tu post y sugiere las reglas automáticamente — más rápido y sin errores." },
-      { "title": "Página de resultados", "desc": "Lista a los ganadores en una página propia y demuestra a tu audiencia que fue justo." },
-      { "title": "Límite justo por persona", "desc": "Define cuántos comentarios de cada usuario cuentan. Todos con la misma oportunidad." },
-      { "title": "Ganadores + suplentes", "desc": "Elige varios ganadores y suplentes para reemplazar a quien no cumpla las reglas." },
-      { "title": "Filtros inteligentes", "desc": "Hashtags, menciones obligatorias y eliminación de duplicados en un clic." }
+      {
+        "title": "Sorteos sin límite",
+        "desc": "Crea todos los sorteos que quieras, cuando quieras — sin cuota que frene tu crecimiento."
+      },
+      {
+        "title": "Exportar la lista",
+        "desc": "Descarga todos los participantes, comentarios y likes en una hoja de cálculo (XLS/CSV) para usarla como quieras."
+      },
+      {
+        "title": "Rehacer cuando quieras",
+        "desc": "¿No te gustó una prueba? Ejecuta el mismo post otra vez las veces que necesites."
+      },
+      {
+        "title": "Cuenta regresiva",
+        "desc": "Define la duración de la animación de suspenso antes de revelar al ganador."
+      },
+      {
+        "title": "Validación avanzada",
+        "desc": "Comprueba si el ganador sigue un perfil, tiene foto, bio o nombre — antes de confirmar el premio."
+      },
+      {
+        "title": "Varias publicaciones",
+        "desc": "Combina más de un post en el mismo sorteo para ampliar el alcance de la campaña."
+      },
+      {
+        "title": "Certificado verificable",
+        "desc": "Genera un certificado compartible y auditable de los resultados, con código público."
+      },
+      {
+        "title": "Reglas con IA",
+        "desc": "La IA lee tu post y sugiere las reglas automáticamente — más rápido y sin errores."
+      },
+      {
+        "title": "Página de resultados",
+        "desc": "Lista a los ganadores en una página propia y demuestra a tu audiencia que fue justo."
+      },
+      {
+        "title": "Límite justo por persona",
+        "desc": "Define cuántos comentarios de cada usuario cuentan. Todos con la misma oportunidad."
+      },
+      {
+        "title": "Ganadores + suplentes",
+        "desc": "Elige varios ganadores y suplentes para reemplazar a quien no cumpla las reglas."
+      },
+      {
+        "title": "Filtros inteligentes",
+        "desc": "Hashtags, menciones obligatorias y eliminación de duplicados en un clic."
+      }
     ]
   },
   "gallery": {
@@ -68,12 +130,30 @@
     "title": "No es solo sortear. Es un",
     "titleHighlight": "espectáculo.",
     "items": [
-      { "title": "Vídeo automático en 3 formatos", "desc": "9:16, 16:9 y 1:1 generados al instante. La competencia te da una captura — nosotros un Reel listo." },
-      { "title": "Certificado de transparencia", "desc": "Sorteo con semilla firmada y verificable públicamente. Demuestra a tu audiencia que fue justo." },
-      { "title": "Resultado provably-fair", "desc": "Publicamos el hash antes y revelamos la semilla después: cualquiera puede reauditar el sorteo." },
-      { "title": "Modo en vivo / escenario", "desc": "Revela en eventos y directos controlando desde el móvil. Suspenso en tiempo real para tu público." },
-      { "title": "Paridad pantalla ↔ vídeo", "desc": "El MP4 descargado es idéntico a lo que viste en pantalla. Mismo motor, cero sorpresas." },
-      { "title": "Rendimiento 60fps", "desc": "Efectos 3D reales con WebGL optimizado. Cine de verdad, fluido incluso en el móvil." }
+      {
+        "title": "Vídeo automático en 3 formatos",
+        "desc": "9:16, 16:9 y 1:1 generados al instante. La competencia te da una captura — nosotros un Reel listo."
+      },
+      {
+        "title": "Certificado de transparencia",
+        "desc": "Sorteo con semilla firmada y verificable públicamente. Demuestra a tu audiencia que fue justo."
+      },
+      {
+        "title": "Resultado provably-fair",
+        "desc": "Publicamos el hash antes y revelamos la semilla después: cualquiera puede reauditar el sorteo."
+      },
+      {
+        "title": "Modo en vivo / escenario",
+        "desc": "Revela en eventos y directos controlando desde el móvil. Suspenso en tiempo real para tu público."
+      },
+      {
+        "title": "Paridad pantalla ↔ vídeo",
+        "desc": "El MP4 descargado es idéntico a lo que viste en pantalla. Mismo motor, cero sorpresas."
+      },
+      {
+        "title": "Rendimiento 60fps",
+        "desc": "Efectos 3D reales con WebGL optimizado. Cine de verdad, fluido incluso en el móvil."
+      }
     ]
   },
   "faq": {
@@ -81,18 +161,54 @@
     "title": "Preguntas frecuentes",
     "subtitle": "Las dudas más comunes sobre sorteos en Instagram.",
     "items": [
-      { "q": "¿Por qué hacer un sorteo en Instagram?", "a": "Los sorteos son una de las formas más rápidas de crecer: aumentan comentarios, alcance y seguidores en días, fortalecen la relación con tu audiencia y dan a tu marca un motivo de celebración que la gente adora compartir." },
-      { "q": "¿Por qué es importante recopilar todos los comentarios?", "a": "Si una herramienta lee solo parte de los comentarios, el sorteo es injusto — varias personas ni siquiera entran. Recuperamos la lista completa, aunque sean miles, para que todos tengan exactamente la misma oportunidad." },
-      { "q": "¿Cómo funciona el sorteo con inteligencia artificial?", "a": "La IA lee tu publicación e identifica las reglas automáticamente (menciones, hashtags, palabras clave) y ayuda a validar perfiles ganadores. Ahorras tiempo y evitas errores de configuración." },
-      { "q": "¿El sorteo de AzuraSort es seguro y confiable?", "a": "Sí. Cada sorteo usa un algoritmo aleatorio auditable con semilla firmada que genera un certificado verificable públicamente. Cualquiera puede confirmar que el resultado no fue manipulado." },
-      { "q": "¿Puedo sortear desde Reels y carruseles?", "a": "Sí. Funciona con posts, Reels y carruseles — solo pega el enlace de la publicación del sorteo." },
-      { "q": "¿Se puede hacer un sorteo gratis?", "a": "Sí. El plan gratuito permite realizar sorteos con las escenas esenciales (los vídeos llevan nuestra marca de agua). Los planes de pago desbloquean más escenas, vídeo sin marca y funciones avanzadas." },
-      { "q": "¿Cuánto cuesta un sorteo profesional?", "a": "Empiezas sin pagar nada. Cuando quieras quitar la marca de agua, usar tu logo, exportar listas o desbloquear todas las escenas, hay planes accesibles — con precio ajustado por región." },
-      { "q": "¿Cuántos ganadores puedo elegir?", "a": "Los que quieras. También puedes definir suplentes para reemplazar a quien no cumpla las reglas o no reclame el premio, además de activar menciones obligatorias, eliminar duplicados y limitar participaciones por persona." },
-      { "q": "¿Cómo garantizo que el sorteo sea justo y transparente?", "a": "Recopilamos todos los comentarios, sorteamos con un algoritmo aleatorio reproducible y generamos un certificado con código de verificación. Compartes la página de resultados y tus seguidores lo confirman todo." },
-      { "q": "¿Funciona con cuentas privadas?", "a": "Para garantizar un sorteo totalmente oficial y dentro de las reglas de Instagram, trabajamos con cuentas de empresa o creador conectadas de forma segura. Las cuentas privadas no exponen los comentarios públicamente." },
-      { "q": "¿Puedo reiniciar el mismo sorteo?", "a": "Sí, las veces que quieras, usando la misma publicación — útil para probar la animación antes del sorteo definitivo en vivo." },
-      { "q": "¿Qué hace a AzuraSort diferente de otras herramientas?", "a": "Además de sortear de forma justa, convertimos el anuncio del ganador en una revelación cinematográfica y generamos automáticamente el vídeo listo para Stories, Reels y feed. El resultado se vuelve contenido que tu audiencia comparte." }
+      {
+        "q": "¿Por qué hacer un sorteo en Instagram?",
+        "a": "Los sorteos son una de las formas más rápidas de crecer: aumentan comentarios, alcance y seguidores en días, fortalecen la relación con tu audiencia y dan a tu marca un motivo de celebración que la gente adora compartir."
+      },
+      {
+        "q": "¿Por qué es importante recopilar todos los comentarios?",
+        "a": "Si una herramienta lee solo parte de los comentarios, el sorteo es injusto — varias personas ni siquiera entran. Recuperamos la lista completa, aunque sean miles, para que todos tengan exactamente la misma oportunidad."
+      },
+      {
+        "q": "¿Cómo funciona el sorteo con inteligencia artificial?",
+        "a": "La IA lee tu publicación e identifica las reglas automáticamente (menciones, hashtags, palabras clave) y ayuda a validar perfiles ganadores. Ahorras tiempo y evitas errores de configuración."
+      },
+      {
+        "q": "¿El sorteo de AzuraSort es seguro y confiable?",
+        "a": "Sí. Cada sorteo usa un algoritmo aleatorio auditable con semilla firmada que genera un certificado verificable públicamente. Cualquiera puede confirmar que el resultado no fue manipulado."
+      },
+      {
+        "q": "¿Puedo sortear desde Reels y carruseles?",
+        "a": "Sí. Funciona con posts, Reels y carruseles — solo pega el enlace de la publicación del sorteo."
+      },
+      {
+        "q": "¿Se puede hacer un sorteo gratis?",
+        "a": "Sí. El plan gratuito permite realizar sorteos con las escenas esenciales (los vídeos llevan nuestra marca de agua). Los planes de pago desbloquean más escenas, vídeo sin marca y funciones avanzadas."
+      },
+      {
+        "q": "¿Cuánto cuesta un sorteo profesional?",
+        "a": "Empiezas sin pagar nada. Cuando quieras quitar la marca de agua, usar tu logo, exportar listas o desbloquear todas las escenas, hay planes accesibles — con precio ajustado por región."
+      },
+      {
+        "q": "¿Cuántos ganadores puedo elegir?",
+        "a": "Los que quieras. También puedes definir suplentes para reemplazar a quien no cumpla las reglas o no reclame el premio, además de activar menciones obligatorias, eliminar duplicados y limitar participaciones por persona."
+      },
+      {
+        "q": "¿Cómo garantizo que el sorteo sea justo y transparente?",
+        "a": "Recopilamos todos los comentarios, sorteamos con un algoritmo aleatorio reproducible y generamos un certificado con código de verificación. Compartes la página de resultados y tus seguidores lo confirman todo."
+      },
+      {
+        "q": "¿Funciona con cuentas privadas?",
+        "a": "Para garantizar un sorteo totalmente oficial y dentro de las reglas de Instagram, trabajamos con cuentas de empresa o creador conectadas de forma segura. Las cuentas privadas no exponen los comentarios públicamente."
+      },
+      {
+        "q": "¿Puedo reiniciar el mismo sorteo?",
+        "a": "Sí, las veces que quieras, usando la misma publicación — útil para probar la animación antes del sorteo definitivo en vivo."
+      },
+      {
+        "q": "¿Qué hace a AzuraSort diferente de otras herramientas?",
+        "a": "Además de sortear de forma justa, convertimos el anuncio del ganador en una revelación cinematográfica y generamos automáticamente el vídeo listo para Stories, Reels y feed. El resultado se vuelve contenido que tu audiencia comparte."
+      }
     ]
   },
   "cta": {
@@ -113,5 +229,198 @@
     "ar-ma": "العربية",
     "fr-ma": "Français",
     "en": "English"
+  },
+  "sim": {
+    "steps": {
+      "link": "Publicación",
+      "base": "Base",
+      "scene": "Animación",
+      "unlock": "Desbloquear",
+      "result": "Resultado"
+    },
+    "common": {
+      "back": "← volver",
+      "continue": "Continuar →"
+    },
+    "s1": {
+      "title": "1 · Conecta tu publicación",
+      "subtitle": "Pega el enlace del post o Reels de tu sorteo.",
+      "nameLabel": "Nombre del sorteo",
+      "namePlaceholder": "Ej: Sorteo iPhone 16 Pro",
+      "linkLabel": "Enlace de la publicación",
+      "howTitle": "Cómo copiar el enlace",
+      "how1": "Abre el menú ••• en la parte superior de la publicación.",
+      "how2": "Toca “Copiar enlace”.",
+      "how3": "Pégalo aquí arriba.",
+      "advShow": "+ usar lista de prueba o CSV (modo avanzado)",
+      "advHide": "− ocultar",
+      "test200": "⚡ 200 de prueba",
+      "test1000": "⚡ 1.000",
+      "csv": "📄 CSV",
+      "pastePlaceholder": "@ana.silva: ¡lo quiero! #sorteo",
+      "loadedManual": "✓ {n} participantes cargados",
+      "footnote": "Vista previa gratuita. La recopilación completa de comentarios se ejecuta tras el pago."
+    },
+    "preview": {
+      "empty": "La vista previa de la publicación aparece aquí en cuanto pegues el enlace.",
+      "manualTitle": "Lista manual",
+      "manualLoaded": "{n} participantes cargados",
+      "loading": "Buscando la publicación…",
+      "errorTitle": "No pude cargar",
+      "errorHint": "Comprueba que el enlace esté completo y que el perfil sea público.",
+      "reels": "Reels",
+      "post": "Post",
+      "loadingComments": "cargando comentarios…",
+      "commentsLoaded": "{n} comentarios cargados"
+    },
+    "s2": {
+      "title": "2 · Comentarios o me gusta",
+      "subtitle": "Elige quién participa.",
+      "commentsTitle": "Comentarios",
+      "commentsDesc": "Sortea entre quienes comentaron la publicación.",
+      "likesTitle": "Me gusta",
+      "likesDesc": "Sortea entre quienes dieron me gusta a la publicación."
+    },
+    "s3": {
+      "title": "3 · Elige la animación",
+      "subtitle": "Cómo se revelará el ganador — y los extras del sorteo.",
+      "chooseHint": "Elige la animación — mira el ejemplo antes",
+      "liveTitle": "Transmitir en directo",
+      "liveDesc": "Muestra el sorteo en tiempo real a tu audiencia.",
+      "cuts": "Al final recibes cortes de vídeo listos (9:16 · 16:9 · 1:1) para publicar.",
+      "winners": "Ganadores",
+      "backups": "Suplentes",
+      "advShow": "+ filtros avanzados (hashtag, menciones, excluir)",
+      "advHide": "− ocultar filtros",
+      "hashtagsLabel": "Hashtags obligatorios",
+      "excludeLabel": "Excluir handles",
+      "minMentions": "Mín. de menciones",
+      "noDup": "Sin duplicados",
+      "participants": "Participantes",
+      "example": "ejemplo"
+    },
+    "scenes": {
+      "cofreName": "Caja fuerte",
+      "cofreDesc": "Caja fuerte que se abre revelando al ganador",
+      "countdownName": "Cuenta atrás",
+      "countdownDesc": "Anillo de fuego con revelación en el clímax"
+    },
+    "unlock": {
+      "backToOptions": "← volver a las opciones"
+    },
+    "result": {
+      "title": "Resultado",
+      "subtitle": "Sorteo auditable completado. Mira la revelación y descarga los cortes.",
+      "winner": "ganador",
+      "backup": "suplente",
+      "statParticipants": "Participantes",
+      "statBase": "Base",
+      "baseComments": "comentarios",
+      "baseLikes": "me gusta",
+      "statLive": "En directo",
+      "yes": "sí",
+      "no": "no",
+      "statCert": "Certificado",
+      "certTitle": "Certificado de transparencia",
+      "verifyPublic": "Verificar públicamente →",
+      "cutsReady": "Cortes de vídeo listos",
+      "seeReveal": "▶ Ver revelación",
+      "redo": "↻ Rehacer",
+      "newDraw": "+ Nuevo sorteo"
+    },
+    "busy": "Recopilando participantes y sorteando…",
+    "reveal": {
+      "seeResult": "ver resultado →",
+      "opening": "Abriendo la caja fuerte…",
+      "enableSound": "🔊 Activar sonido"
+    },
+    "live": {
+      "badge": "En directo",
+      "camera": "cámara",
+      "exit": "✕ salir",
+      "ready": "Cuando tu audiencia esté lista, inicia el sorteo.",
+      "start": "▶ INICIAR SORTEO EN DIRECTO",
+      "noCam": "Cámara no disponible — puedes iniciar de todos modos."
+    },
+    "paywall": {
+      "sampleTitle": "Muestra de quién participó",
+      "unlockMore": "🔒 + {n} más liberados al desbloquear",
+      "unlockTitle": "Desbloquea este sorteo",
+      "postWith": "Post con {count} comentarios",
+      "yourScene": "★ Tu animación: {scene}",
+      "live": "● EN DIRECTO",
+      "cinematic": "Cinematográfico",
+      "selected": "● Seleccionado",
+      "select": "seleccionar",
+      "badgeMostChosen": "Más elegido",
+      "badgeLuxury": "Lujo",
+      "pixSub": "Sin comisiones · Instantáneo",
+      "pixCta": "Generar PIX",
+      "cardSub": "Crédito · Google/Apple Pay",
+      "cardCta": "Pagar con tarjeta",
+      "paypalSub": "Cuenta o tarjeta",
+      "paypalCta": "Pagar con PayPal",
+      "soon": "💳 Pago en integración — usa el modo de prueba de abajo por ahora.",
+      "guarantee": "Pago único. Desbloqueo instantáneo. Garantía de reembolso si falla.",
+      "testMode": "Modo de validación (interno)",
+      "testUnlock": "🔓 Desbloquear en modo de prueba (gratis)"
+    },
+    "plans": {
+      "padraoName": "Estándar",
+      "padraoF1": "Todos los comentarios",
+      "padraoF2": "Múltiples ganadores",
+      "padraoF3": "Animación básica",
+      "padraoF4": "Certificado verificable",
+      "premiumName": "Premium Cinematográfico",
+      "premiumF1": "Todo lo del Estándar",
+      "premiumF2": "Revelaciones cinematográficas (Caja fuerte, Cuenta atrás…)",
+      "premiumF3": "Cuenta atrás + suspense + sonido",
+      "premiumF4": "Cortes 9:16 · 16:9 · 1:1",
+      "premiumF5": "Hasta 5 escenas",
+      "vipName": "Premium VIP",
+      "vipF1": "Todo lo del Premium",
+      "vipF2": "Transmisión en directo + cortes del directo",
+      "vipF3": "Vídeo guardado en alta calidad",
+      "vipF4": "10 escenas exclusivas",
+      "vipF5": "Soporte prioritario"
+    },
+    "card": {
+      "title": "Pagar con tarjeta",
+      "secure": "🔒 Pago seguro a través de Stripe",
+      "processing": "Procesando…",
+      "pay": "Pagar {price}",
+      "failStart": "Error al iniciar el pago",
+      "failProcess": "No se pudo procesar."
+    },
+    "pix": {
+      "title": "Pagar con PIX",
+      "scan": "Escanea el QR en la app de tu banco",
+      "copy": "📋 Copiar código PIX (copiar y pegar)",
+      "copied": "✓ ¡Copiado!",
+      "waiting": "esperando el pago…",
+      "autoConfirm": "La confirmación es automática en cuanto se acredite el PIX.",
+      "confirmed": "¡Pago confirmado!",
+      "releasing": "Liberando el sorteo…",
+      "failGenerate": "Error al generar el PIX"
+    },
+    "verify": {
+      "okTitle": "Sorteo verificado",
+      "okDesc": "El resultado coincide con la semilla y la lista de participantes.",
+      "failTitle": "No verificable",
+      "failDesc": "Este resultado no pudo ser confirmado por el algoritmo público.",
+      "winners": "Ganadores",
+      "backup": "suplente",
+      "rowDraw": "Sorteo",
+      "rowComments": "Comentarios en el post",
+      "rowEligible": "Participantes elegibles",
+      "rowDate": "Fecha",
+      "rowAlgo": "Algoritmo",
+      "rowHash": "Hash de la semilla (commit)",
+      "rowSeed": "Semilla revelada",
+      "checkHash": "SHA-256(semilla) = hash",
+      "checkWinners": "ganadores reproducidos",
+      "how": "Cómo verificar: ordena los @ participantes en orden alfabético, baraja con Fisher-Yates usando la semilla revelada (SHA-256) y comprueba que los ganadores coinciden. El hash se generó antes de la revelación.",
+      "tagline": "sorteos verificables"
+    }
   }
 }

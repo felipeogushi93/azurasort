@@ -26,6 +26,8 @@ export function CofreReveal({
   suspenseMs = 2600,
   playbackRate = 0.85,
   gain = 1.8,
+  openingLabel = "Abrindo o cofre…",
+  soundLabel = "🔊 Ativar som",
 }: {
   handle: string;
   src?: string;
@@ -40,6 +42,8 @@ export function CofreReveal({
   suspenseMs?: number;
   playbackRate?: number;
   gain?: number;
+  openingLabel?: string;
+  soundLabel?: string;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -170,7 +174,7 @@ export function CofreReveal({
         {suspense && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4 bg-void/90 backdrop-blur-sm">
             <span className="animate-[pulse-slow_1.4s_ease-in-out_infinite] text-6xl">🔒</span>
-            <p className="font-display text-xl font-bold tracking-wide text-white sm:text-2xl">Abrindo o cofre…</p>
+            <p className="font-display text-xl font-bold tracking-wide text-white sm:text-2xl">{openingLabel}</p>
             <div className="h-1.5 w-44 overflow-hidden rounded-full bg-white/15">
               <div className="h-full rounded-full bg-gradient-to-r from-rose to-gold" style={{ animation: `loadbar ${suspenseMs}ms linear forwards` }} />
             </div>
@@ -183,7 +187,7 @@ export function CofreReveal({
             onClick={enableSound}
             className="absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur transition hover:bg-black/80"
           >
-            🔊 Ativar som
+            {soundLabel}
           </button>
         )}
 
