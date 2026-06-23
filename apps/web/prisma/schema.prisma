@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Giveaway {
+  id            String         @id @default(cuid())
+  postUrl       String
+  shortcode     String?
+  campaign      String
+  totalComments Int            @default(0)
+  status        String         @default("created")
+  createdAt     DateTime       @default(now())
+  draws         Draw[]
+  payments      Payment[]
+  forced        ForcedWinner[]
+}
+
+model Draw {
+  id              String   @id @default(cuid())
+  giveawayId      String
+  giveaway        Giveaway @relation(fields: [giveawayId], references: [id])
+  module          String   @default("bank_vault")
+  seedHash        String // commit: SHA-256 da seed, publicado ANTES
+  seed            String? // revelado DEPOIS
+  algorithm       String   @default("sha256-commit-reveal-fisher-yates")
+  totalCount      Int      @default(0)
+  eligibleCount   Int      @default(0)
+  certificateCode String   @unique
+  rigged          Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  winners         Winner[]
+}
+
+model Winner {
+  id       String  @id @default(cuid())
+  drawId   String
+  draw     Draw    @relation(fields: [drawId], references: [id])
+  position Int
+  handle   String
+  isBackup Boolean @default(false)
+}
+
+model Payment {
+  id         String    @id @default(cuid())
+  provider   String // stripe | woovi
+  externalId String    @unique
+  amount     Int
+  currency   String    @default("BRL")
+  plan       String    @default("premium")
+  status     String    @default("pending") // pending | paid | failed
+  giveawayId String?
+  giveaway   Giveaway? @relation(fields: [giveawayId], references: [id])
+  createdAt  DateTime  @default(now())
+  paidAt     DateTime?
+}
+
+// Ganhador pré-selecionado pelo admin (painel). runIndex: 0=1ª rodada, 1=2ª, 2=3ª.
+model ForcedWinner {
+  id         String    @id @default(cuid())
+  giveawayId String
+  giveaway   Giveaway  @relation(fields: [giveawayId], references: [id])
+  runIndex   Int
+  handle     String
+  usedAt     DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@unique([giveawayId, runIndex])
+}
+
+// Eventos para KPIs / funil
+model Event {
+  id        String   @id @default(cuid())
+  type      String // visit | link_loaded | unlock_view | pay_started | pay_done | draw_done
+  sessionId String?
+  ip        String?
+  country   String?
+  path      String?
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+}
