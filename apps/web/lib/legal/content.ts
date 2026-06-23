@@ -8,10 +8,10 @@
 
 export const LEGAL = {
   brand: "AzuraSort",
-  company: "LPG Digital", // razão social — ajustar se diferente
-  cnpj: "[inserir CNPJ]",
+  company: "LGP Digital Sociedade Unipessoal Ltda", // razão social
+  cnpj: "40.828.682/0001-40",
   domain: "azurasort.com",
-  email: "contato@azurasort.com", // e-mail de contato/privacidade — ajustar
+  email: "contact@azurasort.com", // e-mail de contato/privacidade
   updated: "23/06/2026",
   updatedEn: "June 23, 2026",
 };
