@@ -16,6 +16,13 @@ export function getStripe(): Stripe {
 export const PRICES_BRL = {
   padrao: 1990,
   premium: 3490,
+  vip: 5990,
 } as const;
+
+export const PRICE_LABELS: Record<keyof typeof PRICES_BRL, string> = {
+  padrao: "R$ 19,90",
+  premium: "R$ 34,90",
+  vip: "R$ 59,90",
+};
 
 export type PlanId = keyof typeof PRICES_BRL;

@@ -4,6 +4,57 @@ import { useState } from "react";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
 
+type PlanId = "padrao" | "premium" | "vip";
+
+const PRICE_LABEL: Record<PlanId, string> = {
+  padrao: "R$ 19,90",
+  premium: "R$ 34,90",
+  vip: "R$ 59,90",
+};
+
+const PLANS: {
+  id: PlanId;
+  name: string;
+  price: string;
+  old?: string;
+  badge?: string;
+  features: string[];
+}[] = [
+  {
+    id: "padrao",
+    name: "Padrão",
+    price: "R$ 19,90",
+    features: ["Todos os comentários", "Múltiplos ganhadores", "Animação básica", "Certificado verificável"],
+  },
+  {
+    id: "premium",
+    name: "Premium Cinematográfico",
+    price: "R$ 34,90",
+    old: "R$ 44,90",
+    badge: "Mais escolhido",
+    features: [
+      "Tudo do Padrão",
+      "Revelações cinematográficas (Cofre, Contagem…)",
+      "Contagem + suspense + som",
+      "Cortes 9:16 · 16:9 · 1:1",
+      "Até 5 cenas",
+    ],
+  },
+  {
+    id: "vip",
+    name: "Premium VIP",
+    price: "R$ 59,90",
+    badge: "Luxo",
+    features: [
+      "Tudo do Premium",
+      "Transmissão ao vivo + cortes da live",
+      "Vídeo salvo em alta qualidade",
+      "10 cenas exclusivas",
+      "Suporte prioritário",
+    ],
+  },
+];
+
 /**
  * Paywall / Chooser (modelo SorteiGram) na paleta light premium do AzuraSort.
  *
@@ -26,6 +77,8 @@ export function Paywall({
   const [soon, setSoon] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [showPix, setShowPix] = useState(false);
+  const [plan, setPlan] = useState<PlanId>("premium");
+  const priceLabel = PRICE_LABEL[plan];
   const ping = () => {
     setSoon(true);
     setTimeout(() => setSoon(false), 2500);
@@ -80,43 +133,47 @@ export function Paywall({
         </span>
       </div>
 
-      {/* planos */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="rounded-2xl border border-ink/10 bg-surface p-6 shadow-soft">
-          <p className="font-display text-lg font-semibold text-ink">Padrão</p>
-          <p className="mt-1 font-display text-3xl font-bold text-ink">R$ 19,90</p>
-          <ul className="mt-4 space-y-2 text-sm text-inkSoft">
-            <li>✓ Todos os comentários</li>
-            <li>✓ Múltiplos ganhadores</li>
-            <li>✓ Animação básica</li>
-            <li>✓ Certificado verificável</li>
-          </ul>
-        </div>
-        <div className="relative rounded-2xl border-2 border-gold bg-gradient-to-br from-gold/10 to-surface p-6 shadow-gold">
-          <span className="absolute right-4 top-4 rounded-full bg-gold px-2.5 py-0.5 text-[10px] font-bold uppercase text-void">
-            Mais escolhido
-          </span>
-          <p className="font-display text-lg font-semibold text-gold-deep">Premium Cinematográfico</p>
-          <p className="mt-1">
-            <span className="text-sm text-inkSoft line-through">R$ 44,90</span>{" "}
-            <span className="font-display text-3xl font-bold text-ink">R$ 34,90</span>
-          </p>
-          <ul className="mt-4 space-y-2 text-sm text-ink/80">
-            <li>★ Tudo do Padrão</li>
-            <li>★ Revelações cinematográficas (Cofre, Palco…)</li>
-            <li>★ Contagem + suspense + som</li>
-            <li>★ Cortes de vídeo prontos (9:16 · 16:9 · 1:1)</li>
-            <li>★ Certificado premium · ideal para lives</li>
-          </ul>
-        </div>
+      {/* planos (selecionáveis) */}
+      <div className="grid gap-3 md:grid-cols-3">
+        {PLANS.map((p) => {
+          const sel = plan === p.id;
+          return (
+            <button
+              key={p.id}
+              onClick={() => setPlan(p.id)}
+              className={`relative rounded-2xl border-2 p-5 text-left transition ${
+                sel ? "border-gold bg-gradient-to-br from-gold/10 to-surface shadow-gold" : "border-ink/10 bg-surface hover:border-gold/40"
+              }`}
+            >
+              {p.badge && (
+                <span className="absolute right-3 top-3 rounded-full bg-gold px-2 py-0.5 text-[9px] font-bold uppercase text-void">
+                  {p.badge}
+                </span>
+              )}
+              <p className="font-bold text-ink">{p.name}</p>
+              <p className="mt-1">
+                {p.old && <span className="mr-1 text-xs text-inkSoft line-through">{p.old}</span>}
+                <span className="font-display text-2xl font-bold text-ink">{p.price}</span>
+              </p>
+              <ul className="mt-3 space-y-1.5 text-xs text-inkSoft">
+                {p.features.map((f) => (
+                  <li key={f}>✓ {f}</li>
+                ))}
+              </ul>
+              <span className={`mt-3 block text-xs font-semibold ${sel ? "text-gold-deep" : "text-inkSoft/0"}`}>
+                {sel ? "● Selecionado" : "selecionar"}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* pagamento (visual — em breve) */}
       <div>
         <div className="grid gap-3 sm:grid-cols-3">
-          <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price="R$ 34,90" cta="Gerar PIX" accent onClick={() => setShowPix(true)} />
-          <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price="R$ 34,90" cta="Pagar com Cartão" onClick={() => setShowCard(true)} />
-          <PayCard icon="🅿️" title="PayPal" sub="Conta ou cartão" price="R$ 34,90" cta="Pagar com PayPal" onClick={ping} />
+          <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price={priceLabel} cta="Gerar PIX" accent onClick={() => setShowPix(true)} />
+          <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price={priceLabel} cta="Pagar com Cartão" onClick={() => setShowCard(true)} />
+          <PayCard icon="🅿️" title="PayPal" sub="Conta ou cartão" price={priceLabel} cta="Pagar com PayPal" onClick={ping} />
         </div>
         {soon && (
           <p className="mt-3 text-center text-sm text-gold-deep">
@@ -138,6 +195,8 @@ export function Paywall({
 
       {showCard && (
         <StripeCard
+          plan={plan}
+          priceLabel={priceLabel}
           onSuccess={() => {
             setShowCard(false);
             onTest();
@@ -148,6 +207,8 @@ export function Paywall({
 
       {showPix && (
         <WooviPix
+          plan={plan}
+          priceLabel={priceLabel}
           onSuccess={() => {
             setShowPix(false);
             onTest();

@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   try {
     const body = (await req.json().catch(() => ({}))) as { plan?: PlanId };
-    const plan: PlanId = body.plan === "padrao" ? "padrao" : "premium";
+    const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";
     const charge = await createWooviCharge(PRICES_BRL[plan], `AzuraSort sorteio ${plan}`);
     return NextResponse.json(charge);
   } catch (e) {

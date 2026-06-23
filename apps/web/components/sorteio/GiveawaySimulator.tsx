@@ -162,6 +162,8 @@ export function GiveawaySimulator() {
     () => (comments.length ? applyFilters(comments, liveFilters).filter((c) => c.eligible).length : 0),
     [comments, liveFilters]
   );
+  // exibido ao cliente = total de comentários do post (esconde a filtragem interna)
+  const displayCount = preview?.total ?? comments.length;
 
   /* ----- sorteio ----- */
   async function doDraw() {
@@ -318,8 +320,8 @@ export function GiveawaySimulator() {
           )}
 
           <div className="mt-6 flex items-center justify-between rounded-xl border border-ink/5 bg-canvasAlt px-4 py-3">
-            <span className="text-sm text-inkSoft">Participantes elegíveis</span>
-            <span className="font-display text-2xl font-semibold text-gold-deep">{eligibleCount.toLocaleString("pt-BR")}</span>
+            <span className="text-sm text-inkSoft">Participantes</span>
+            <span className="font-display text-2xl font-semibold text-gold-deep">{displayCount.toLocaleString("pt-BR")}</span>
           </div>
 
           <div className="mt-5 flex items-center justify-between">
@@ -338,7 +340,7 @@ export function GiveawaySimulator() {
             <button onClick={() => setStep("scene")} className="text-sm text-inkSoft hover:text-ink">← voltar para opções</button>
           </div>
           <Paywall
-            count={eligibleCount}
+            count={displayCount}
             campaign={campaign}
             sample={applyFilters(comments, liveFilters)
               .filter((c) => c.eligible)
@@ -368,7 +370,7 @@ export function GiveawaySimulator() {
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-            <Stat label="Elegíveis" value={result.eligibleCount.toLocaleString("pt-BR")} />
+            <Stat label="Participantes" value={displayCount.toLocaleString("pt-BR")} />
             <Stat label="Base" value={base === "comments" ? "comentários" : "curtidas"} />
             <Stat label="Ao vivo" value={live ? "sim" : "não"} />
             <Stat label="Certificado" value={result.certificateHash.slice(0, 8) + "…"} mono />
@@ -504,9 +506,9 @@ function ScenePreviewCard({ scene, active, onClick }: { scene: SceneOption; acti
         active ? "border-gold bg-gold/5 shadow-gold" : "border-ink/10 bg-surface hover:border-gold/40 shadow-soft"
       }`}
     >
-      <div className="relative aspect-video overflow-hidden bg-void">
+      <div className="relative aspect-[4/5] overflow-hidden bg-void">
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video src={scene.src} autoPlay muted loop playsInline className="h-full w-full object-cover" />
+        <video src={scene.src} autoPlay muted loop playsInline className="h-full w-full object-contain" />
         {active && (
           <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-gold text-xs font-bold text-void">✓</span>
         )}

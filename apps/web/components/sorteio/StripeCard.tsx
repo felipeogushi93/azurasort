@@ -7,7 +7,17 @@ import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "");
 
 /** Modal de pagamento por cartão (Stripe Payment Element — sem sair da página). */
-export function StripeCard({ onSuccess, onClose }: { onSuccess: () => void; onClose: () => void }) {
+export function StripeCard({
+  onSuccess,
+  onClose,
+  plan = "premium",
+  priceLabel = "R$ 34,90",
+}: {
+  onSuccess: () => void;
+  onClose: () => void;
+  plan?: string;
+  priceLabel?: string;
+}) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
 
@@ -15,12 +25,12 @@ export function StripeCard({ onSuccess, onClose }: { onSuccess: () => void; onCl
     fetch("/api/pay/stripe/intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan: "premium" }),
+      body: JSON.stringify({ plan }),
     })
       .then((r) => r.json())
       .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || "Falha ao iniciar o pagamento")))
       .catch((e) => setErr(String(e)));
-  }, []);
+  }, [plan]);
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
@@ -40,7 +50,7 @@ export function StripeCard({ onSuccess, onClose }: { onSuccess: () => void; onCl
 
         {clientSecret && (
           <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: "stripe", variables: { colorPrimary: "#C2922E" } } }}>
-            <CardForm onSuccess={onSuccess} />
+            <CardForm onSuccess={onSuccess} priceLabel={priceLabel} />
           </Elements>
         )}
 
@@ -52,7 +62,7 @@ export function StripeCard({ onSuccess, onClose }: { onSuccess: () => void; onCl
   );
 }
 
-function CardForm({ onSuccess }: { onSuccess: () => void }) {
+function CardForm({ onSuccess, priceLabel }: { onSuccess: () => void; priceLabel: string }) {
   const stripe = useStripe();
   const elements = useElements();
   const [busy, setBusy] = useState(false);
@@ -84,7 +94,7 @@ function CardForm({ onSuccess }: { onSuccess: () => void }) {
       <PaymentElement />
       {msg && <p className="text-sm text-rose">{msg}</p>}
       <button onClick={pay} disabled={busy || !stripe} className="btn-gold w-full py-3 disabled:opacity-50">
-        {busy ? "Processando…" : "Pagar R$ 34,90"}
+        {busy ? "Processando…" : `Pagar ${priceLabel}`}
       </button>
     </div>
   );

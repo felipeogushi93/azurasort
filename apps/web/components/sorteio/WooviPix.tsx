@@ -3,7 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 
 /** Modal de pagamento PIX (Woovi): QR + copia-e-cola + confirmação automática. */
-export function WooviPix({ onSuccess, onClose }: { onSuccess: () => void; onClose: () => void }) {
+export function WooviPix({
+  onSuccess,
+  onClose,
+  plan = "premium",
+  priceLabel = "R$ 34,90",
+}: {
+  onSuccess: () => void;
+  onClose: () => void;
+  plan?: string;
+  priceLabel?: string;
+}) {
   const [charge, setCharge] = useState<{ correlationID: string; brCode: string; qrCodeImage: string } | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -15,12 +25,12 @@ export function WooviPix({ onSuccess, onClose }: { onSuccess: () => void; onClos
     fetch("/api/pay/woovi/charge", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan: "premium" }),
+      body: JSON.stringify({ plan }),
     })
       .then((r) => r.json())
       .then((d) => (d.brCode ? setCharge(d) : setErr(d.error || "Falha ao gerar o PIX")))
       .catch((e) => setErr(String(e)));
-  }, []);
+  }, [plan]);
 
   // poll de status
   useEffect(() => {
@@ -76,7 +86,7 @@ export function WooviPix({ onSuccess, onClose }: { onSuccess: () => void; onClos
 
         {charge && !paid && (
           <>
-            <p className="mb-3 text-sm text-inkSoft">Escaneie o QR no app do seu banco · <span className="font-semibold text-ink">R$ 34,90</span></p>
+            <p className="mb-3 text-sm text-inkSoft">Escaneie o QR no app do seu banco · <span className="font-semibold text-ink">{priceLabel}</span></p>
             {charge.qrCodeImage && (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={charge.qrCodeImage} alt="QR Code PIX" className="mx-auto h-52 w-52 rounded-xl border border-ink/5" />
