@@ -9,6 +9,6 @@ import { routing } from "./i18n/routing";
 export default createMiddleware(routing);
 
 export const config = {
-  // roda em tudo, menos arquivos estaticos, rotas internas e /api
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+  // roda em tudo, menos arquivos estaticos, rotas internas, /api e /adminlkgat
+  matcher: ["/((?!api|adminlkgat|_next|_vercel|.*\\..*).*)"],
 };
