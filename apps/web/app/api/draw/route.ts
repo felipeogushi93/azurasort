@@ -6,6 +6,7 @@ import { drawFromHandles, generateSeed, makeCertificateCode } from "@/lib/draw/s
 import { verifyStripePayment } from "@/lib/payments/stripe";
 import { getWooviStatus } from "@/lib/payments/woovi";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
+import { notifyTelegram, saleMessage } from "@/lib/notify/telegram";
 import type { DrawFilters, RawComment } from "@/lib/draw/types";
 
 export const maxDuration = 60;
@@ -129,6 +130,19 @@ export async function POST(req: Request) {
           update: { status: "paid", giveawayId: giveaway.id, paidAt: new Date() },
         })
         .catch(() => {});
+
+      // notificação de venda no Telegram (fire-and-forget)
+      notifyTelegram(
+        saleMessage({
+          provider: body.payment.provider,
+          plan: body.plan ?? "premium",
+          amountCents: paidAmount,
+          campaign: giveaway.campaign,
+          winners: winners.filter((w) => !w.isBackup).map((w) => w.handle),
+          eligibleCount: eligibleHandles.length,
+          certificateCode,
+        })
+      );
     }
     db.event.create({ data: { type: "draw_done", meta: { giveawayId: giveaway.id, eligible: eligibleHandles.length } } }).catch(() => {});
 
