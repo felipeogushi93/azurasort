@@ -42,15 +42,15 @@
       },
       {
         "title": "Escolha a animação da revelação",
-        "desc": "Defina como o vencedor será revelado — envelope dourado, cofre, palco e mais. Ative a transmissão ao vivo para mostrar o sorteio em tempo real à sua audiência.",
+        "desc": "Defina como o vencedor será revelado — cofre que se abre ou contagem regressiva (mais cenas chegando). Ative a transmissão ao vivo para mostrar o sorteio em tempo real à sua audiência.",
         "tips": [
           "Transmita o sorteio ao vivo",
           "Receba cortes de vídeo prontos para postar"
         ]
       },
       {
-        "title": "Rode com contagem regressiva",
-        "desc": "Defina o tempo da contagem e inicie. Os participantes embaralham na tela e o vencedor surge no clímax.",
+        "title": "Desbloqueie e sorteie",
+        "desc": "Faça o pagamento único e o sorteio roda na hora: os participantes embaralham na tela e o vencedor surge no clímax, com resultado auditável.",
         "tips": []
       },
       {
@@ -118,7 +118,7 @@
   },
   "gallery": {
     "label": "A galeria",
-    "titleNum": "24",
+    "titleNum": "10",
     "titleRest": "formas de revelar um vencedor",
     "subtitle": "Cada cena tem roteiro, câmera, iluminação e som próprios. Escolha o clima do seu sorteio — do Oscar ao cassino, do futuro ao tesouro.",
     "live": "ao vivo",

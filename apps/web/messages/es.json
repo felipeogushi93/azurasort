@@ -42,15 +42,15 @@
       },
       {
         "title": "Elige la animación de la revelación",
-        "desc": "Define cómo se revela al ganador — sobre dorado, caja fuerte, escenario y más. Activa la transmisión en vivo para mostrar el sorteo a tu público en tiempo real.",
+        "desc": "Define cómo se revela el ganador — una caja fuerte que se abre o una cuenta regresiva (más escenas en camino). Activa la transmisión en vivo para mostrar el sorteo a tu audiencia en tiempo real.",
         "tips": [
           "Transmite el sorteo en vivo",
           "Recibe cortes de vídeo listos para publicar"
         ]
       },
       {
-        "title": "Ejecuta con cuenta regresiva",
-        "desc": "Define el tiempo de la cuenta regresiva e inicia. Los participantes se mezclan en pantalla y el ganador aparece en el clímax.",
+        "title": "Desbloquea y sortea",
+        "desc": "Haz el pago único y el sorteo se ejecuta al instante: los participantes se mezclan en pantalla y el ganador aparece en el clímax, con un resultado auditable.",
         "tips": []
       },
       {
@@ -118,7 +118,7 @@
   },
   "gallery": {
     "label": "La galería",
-    "titleNum": "24",
+    "titleNum": "10",
     "titleRest": "formas de revelar a un ganador",
     "subtitle": "Cada escena tiene su propio guion, cámara, iluminación y sonido. Elige el ambiente de tu sorteo — del Óscar al casino, del futuro al tesoro.",
     "live": "en vivo",

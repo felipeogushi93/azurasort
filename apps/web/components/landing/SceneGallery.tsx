@@ -7,30 +7,16 @@ import { Link } from "@/i18n/navigation";
 type Scene = { name: string; emoji: string; tier: 1 | 2 | 3; live?: boolean; href?: string };
 
 const SCENES: Scene[] = [
-  { name: "Stage Host", emoji: "🎤", tier: 1, live: true, href: "/reveal/stage" },
-  { name: "Golden Envelope", emoji: "✉️", tier: 1, live: true, href: "/reveal/demo" },
-  { name: "Bank Vault", emoji: "🔐", tier: 1, live: true, href: "/reveal/cofre" },
-  { name: "Hologram", emoji: "🛸", tier: 1 },
-  { name: "Comment Matrix", emoji: "🟢", tier: 1 },
+  { name: "Bank Vault", emoji: "🔐", tier: 1, live: true, href: "/sorteio" },
+  { name: "Countdown", emoji: "⏱️", tier: 1, live: true, href: "/sorteio" },
   { name: "Casino / Roulette", emoji: "🎰", tier: 2 },
-  { name: "Loot Box", emoji: "📦", tier: 2 },
-  { name: "Red Carpet", emoji: "🎭", tier: 2 },
-  { name: "AI Oracle", emoji: "🤖", tier: 2 },
-  { name: "Stadium Jumbotron", emoji: "🏟️", tier: 2 },
-  { name: "Dimensional Portal", emoji: "🌀", tier: 3 },
-  { name: "Galaxy", emoji: "🌌", tier: 3 },
-  { name: "Lightning Storm", emoji: "⚡", tier: 3 },
-  { name: "Fireworks", emoji: "🎆", tier: 3 },
-  { name: "Lottery Machine", emoji: "🎱", tier: 3 },
-  { name: "Slot Machine", emoji: "🎟️", tier: 3 },
-  { name: "Glass Shatter", emoji: "💥", tier: 3 },
-  { name: "Gift Box", emoji: "🎁", tier: 3 },
-  { name: "Neon Cyberpunk", emoji: "🌃", tier: 3 },
+  { name: "Comment Matrix", emoji: "🟢", tier: 2 },
+  { name: "Dimensional Portal", emoji: "🌀", tier: 2 },
+  { name: "Horse Race", emoji: "🐎", tier: 3 },
   { name: "Treasure Cave", emoji: "💰", tier: 3 },
-  { name: "Names Speedrun", emoji: "📜", tier: 3 },
-  { name: "Origami", emoji: "🦢", tier: 3 },
-  { name: "Message in a Bottle", emoji: "🍾", tier: 3 },
-  { name: "Rocket Launch", emoji: "🚀", tier: 3 },
+  { name: "Neon Cyberpunk", emoji: "🌃", tier: 3 },
+  { name: "AI Oracle", emoji: "🤖", tier: 3 },
+  { name: "Fireworks", emoji: "🎆", tier: 3 },
 ];
 
 export function SceneGallery() {

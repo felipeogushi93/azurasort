@@ -33,6 +33,8 @@ export function RevealShowcase() {
             textTop={50}
             fontScale={0.06}
             loop
+            silent
+            suspenseMs={0}
           />
           <div className="pointer-events-none absolute right-3 top-3 z-20 rounded-md bg-black/35 px-2 py-1 text-[10px] tracking-widest text-white backdrop-blur">
             9:16

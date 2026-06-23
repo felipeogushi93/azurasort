@@ -42,15 +42,15 @@
       },
       {
         "title": "Choose the reveal animation",
-        "desc": "Decide how the winner is revealed — golden envelope, vault, stage and more. Turn on live broadcast to show the draw to your audience in real time.",
+        "desc": "Decide how the winner is revealed — an opening vault or a countdown (more scenes coming). Turn on live streaming to show the draw to your audience in real time.",
         "tips": [
-          "Broadcast the draw live",
-          "Get video cuts ready to post"
+          "Stream the draw live",
+          "Get ready-to-post video cuts"
         ]
       },
       {
-        "title": "Run it with a countdown",
-        "desc": "Set the countdown and start. Entrants shuffle on screen and the winner appears at the climax.",
+        "title": "Unlock and draw",
+        "desc": "Make the one-time payment and the draw runs instantly: participants shuffle on screen and the winner appears at the climax, with an auditable result.",
         "tips": []
       },
       {
@@ -118,7 +118,7 @@
   },
   "gallery": {
     "label": "The gallery",
-    "titleNum": "24",
+    "titleNum": "10",
     "titleRest": "ways to reveal a winner",
     "subtitle": "Each scene has its own script, camera, lighting and sound. Choose the mood of your giveaway — from the Oscars to the casino, from the future to treasure.",
     "live": "live",

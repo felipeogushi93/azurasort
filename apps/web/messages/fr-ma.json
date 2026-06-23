@@ -41,16 +41,16 @@
         "tips": []
       },
       {
-        "title": "Choisissez l'animation de la révélation",
-        "desc": "Décidez comment le gagnant est révélé — enveloppe dorée, coffre-fort, scène et plus. Activez la diffusion en direct pour montrer le tirage à votre public en temps réel.",
+        "title": "Choisissez l’animation de révélation",
+        "desc": "Décidez comment le gagnant est révélé — un coffre-fort qui s’ouvre ou un compte à rebours (d’autres scènes arrivent). Activez le direct pour montrer le tirage à votre audience en temps réel.",
         "tips": [
           "Diffusez le tirage en direct",
-          "Recevez des extraits vidéo prêts à publier"
+          "Recevez des clips vidéo prêts à publier"
         ]
       },
       {
-        "title": "Lancez avec un compte à rebours",
-        "desc": "Définissez la durée du compte à rebours et démarrez. Les participants se mélangent à l'écran et le gagnant apparaît au climax.",
+        "title": "Débloquez et tirez au sort",
+        "desc": "Effectuez le paiement unique et le tirage démarre aussitôt : les participants se mélangent à l’écran et le gagnant apparaît à l’apogée, avec un résultat vérifiable.",
         "tips": []
       },
       {
@@ -118,7 +118,7 @@
   },
   "gallery": {
     "label": "La galerie",
-    "titleNum": "24",
+    "titleNum": "10",
     "titleRest": "façons de révéler un gagnant",
     "subtitle": "Chaque scène a son propre scénario, sa caméra, son éclairage et son son. Choisissez l'ambiance de votre tirage — des Oscars au casino, du futur au trésor.",
     "live": "en direct",
