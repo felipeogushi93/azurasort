@@ -64,6 +64,11 @@ export function GiveawaySimulator() {
   const [spec, setSpec] = useState<RevealSpec | null>(null);
   const [showReveal, setShowReveal] = useState(false);
   const [busy, setBusy] = useState(false);
+  // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
+  const [allowTest, setAllowTest] = useState(false);
+  useEffect(() => {
+    setAllowTest(new URLSearchParams(window.location.search).get("teste") === "1");
+  }, []);
 
   /* ----- passo 1: ao colar o link, busca a publicacao e carrega os comentarios
      (modo demonstracao — quando o backend existir, troca por coleta real) ----- */
@@ -342,6 +347,7 @@ export function GiveawaySimulator() {
           <Paywall
             count={displayCount}
             campaign={campaign}
+            allowTest={allowTest}
             sample={applyFilters(comments, liveFilters)
               .filter((c) => c.eligible)
               .slice(0, 5)

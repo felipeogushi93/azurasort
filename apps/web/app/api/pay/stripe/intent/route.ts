@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import { getStripe, PRICES_BRL, type PlanId } from "@/lib/payments/stripe";
+import { rateLimit, clientIp } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
+  if (!rateLimit(`pay-stripe:${clientIp(req)}`, 20, 60_000)) {
+    return NextResponse.json({ error: "Muitas tentativas. Aguarde." }, { status: 429 });
+  }
   try {
     const body = (await req.json().catch(() => ({}))) as { plan?: PlanId };
     const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";

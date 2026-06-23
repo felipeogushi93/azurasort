@@ -68,11 +68,13 @@ export function Paywall({
   campaign,
   sample,
   onTest,
+  allowTest = false,
 }: {
   count: number;
   campaign: string;
   sample: { handle: string; text: string }[];
   onTest: () => void;
+  allowTest?: boolean;
 }) {
   const [soon, setSoon] = useState(false);
   const [showCard, setShowCard] = useState(false);
@@ -185,13 +187,15 @@ export function Paywall({
         </p>
       </div>
 
-      {/* MODO TESTE (pré-lançamento) */}
-      <div className="rounded-2xl border border-dashed border-ink/20 bg-canvasAlt/60 p-4 text-center">
-        <p className="text-xs text-inkSoft">Modo de validação (interno) — será fechado antes de divulgar</p>
-        <button onClick={onTest} className="btn-ghost mt-2">
-          🔓 Liberar em modo teste (grátis)
-        </button>
-      </div>
+      {/* MODO TESTE — só com ?teste=1 na URL (não aparece pro público) */}
+      {allowTest && (
+        <div className="rounded-2xl border border-dashed border-ink/20 bg-canvasAlt/60 p-4 text-center">
+          <p className="text-xs text-inkSoft">Modo de validação (interno)</p>
+          <button onClick={onTest} className="btn-ghost mt-2">
+            🔓 Liberar em modo teste (grátis)
+          </button>
+        </div>
+      )}
 
       {showCard && (
         <StripeCard
