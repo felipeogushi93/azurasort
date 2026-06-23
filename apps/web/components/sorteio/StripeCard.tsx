@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "");
+const stripePromise = loadStripe((process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "").trim());
 
 /** Modal de pagamento por cartão (Stripe Payment Element — sem sair da página). */
 export function StripeCard({

@@ -2,7 +2,7 @@
 const BASE = "https://api.woovi.com/api/v1";
 
 function appId(): string {
-  const k = process.env.WOOVI_APP_ID;
+  const k = process.env.WOOVI_APP_ID?.trim();
   if (!k) throw new Error("WOOVI_APP_ID ausente (configure em .env.local / Vercel)");
   return k;
 }

@@ -5,7 +5,8 @@ let _stripe: Stripe | null = null;
 /** Cliente Stripe (servidor). Lê a chave secreta do ambiente. */
 export function getStripe(): Stripe {
   if (!_stripe) {
-    const key = process.env.STRIPE_SECRET_KEY;
+    // .trim() blinda contra espaço/quebra de linha colado no valor da env (Vercel)
+    const key = process.env.STRIPE_SECRET_KEY?.trim();
     if (!key) throw new Error("STRIPE_SECRET_KEY ausente (configure em .env.local / Vercel)");
     _stripe = new Stripe(key);
   }
