@@ -4,34 +4,22 @@ import { useState } from "react";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
 import { track } from "@/lib/track";
+import { priceLabels, type Currency, type PlanId } from "@/lib/payments/pricing";
 
-type PlanId = "padrao" | "premium" | "vip";
-
-const PRICE_LABEL: Record<PlanId, string> = {
-  padrao: "R$ 19,90",
-  premium: "R$ 34,90",
-  vip: "R$ 59,90",
-};
-
-const PLANS: {
+const PLAN_META: {
   id: PlanId;
   name: string;
-  price: string;
-  old?: string;
   badge?: string;
   features: string[];
 }[] = [
   {
     id: "padrao",
     name: "Padrão",
-    price: "R$ 19,90",
     features: ["Todos os comentários", "Múltiplos ganhadores", "Animação básica", "Certificado verificável"],
   },
   {
     id: "premium",
     name: "Premium Cinematográfico",
-    price: "R$ 34,90",
-    old: "R$ 44,90",
     badge: "Mais escolhido",
     features: [
       "Tudo do Padrão",
@@ -44,7 +32,6 @@ const PLANS: {
   {
     id: "vip",
     name: "Premium VIP",
-    price: "R$ 59,90",
     badge: "Luxo",
     features: [
       "Tudo do Premium",
@@ -70,18 +57,22 @@ export function Paywall({
   sample,
   onUnlock,
   allowTest = false,
+  currency = "BRL",
 }: {
   count: number;
   campaign: string;
   sample: { handle: string; text: string }[];
   onUnlock: (payment?: { provider: string; externalId: string; plan?: string }) => void;
   allowTest?: boolean;
+  currency?: Currency;
 }) {
   const [soon, setSoon] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [showPix, setShowPix] = useState(false);
   const [plan, setPlan] = useState<PlanId>("premium");
-  const priceLabel = PRICE_LABEL[plan];
+  const labels = priceLabels(currency);
+  const priceLabel = labels[plan];
+  const isBrazil = currency === "BRL"; // PIX só no Brasil
   const ping = () => {
     setSoon(true);
     setTimeout(() => setSoon(false), 2500);
@@ -138,7 +129,7 @@ export function Paywall({
 
       {/* planos (selecionáveis) */}
       <div className="grid gap-3 md:grid-cols-3">
-        {PLANS.map((p) => {
+        {PLAN_META.map((p) => {
           const sel = plan === p.id;
           return (
             <button
@@ -155,8 +146,7 @@ export function Paywall({
               )}
               <p className="font-bold text-ink">{p.name}</p>
               <p className="mt-1">
-                {p.old && <span className="mr-1 text-xs text-inkSoft line-through">{p.old}</span>}
-                <span className="font-display text-2xl font-bold text-ink">{p.price}</span>
+                <span className="font-display text-2xl font-bold text-ink">{labels[p.id]}</span>
               </p>
               <ul className="mt-3 space-y-1.5 text-xs text-inkSoft">
                 {p.features.map((f) => (
@@ -171,10 +161,12 @@ export function Paywall({
         })}
       </div>
 
-      {/* pagamento (visual — em breve) */}
+      {/* pagamento */}
       <div>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price={priceLabel} cta="Gerar PIX" accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
+        <div className={`grid gap-3 ${isBrazil ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+          {isBrazil && (
+            <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price={priceLabel} cta="Gerar PIX" accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
+          )}
           <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price={priceLabel} cta="Pagar com Cartão" onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
           <PayCard icon="🅿️" title="PayPal" sub="Conta ou cartão" price={priceLabel} cta="Pagar com PayPal" onClick={ping} />
         </div>

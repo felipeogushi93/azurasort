@@ -55,7 +55,7 @@ export function StripeCard({
         )}
 
         <p className="mt-4 text-center text-[11px] text-inkSoft">
-          🔒 Pagamento seguro via Stripe · cartão de teste: 4242 4242 4242 4242
+          🔒 Pagamento seguro via Stripe
         </p>
       </div>
     </div>

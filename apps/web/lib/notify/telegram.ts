@@ -28,18 +28,22 @@ export async function notifyTelegram(text: string): Promise<void> {
   }
 }
 
+const INTL_LOCALE: Record<string, string> = { BRL: "pt-BR", EUR: "de-DE", USD: "en-US" };
+
 /** Mensagem formatada de uma venda + sorteio concluído. */
 export function saleMessage(opts: {
   provider: string;
   plan: string;
   amountCents: number;
+  currency?: string;
   campaign?: string;
   winners: string[];
   eligibleCount: number;
   certificateCode: string;
 }): string {
   const plan = PLAN_LABEL[opts.plan] ?? opts.plan;
-  const valor = (opts.amountCents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  const cur = (opts.currency || "BRL").toUpperCase();
+  const valor = (opts.amountCents / 100).toLocaleString(INTL_LOCALE[cur] ?? "en-US", { style: "currency", currency: cur });
   const metodo = opts.provider === "woovi" ? "PIX" : opts.provider === "stripe" ? "Cartão" : opts.provider;
   const ganhadores = opts.winners.length ? opts.winners.map((w) => `@${escapeHtml(w)}`).join(", ") : "—";
   return [

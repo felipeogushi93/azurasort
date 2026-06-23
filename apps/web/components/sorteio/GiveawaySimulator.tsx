@@ -13,6 +13,7 @@ import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { track } from "@/lib/track";
+import type { Currency } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
 type Step = "link" | "base" | "scene" | "unlock" | "result";
@@ -40,7 +41,7 @@ const SCENE_OPTIONS: SceneOption[] = [
   { module: "countdown", name: "Contagem regressiva", desc: "Anel de fogo com revelação no clímax", src: "/contagem.mp4" },
 ];
 
-export function GiveawaySimulator() {
+export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency }) {
   const [step, setStep] = useState<Step>("link");
 
   // passo 1 — publicacao
@@ -407,6 +408,7 @@ export function GiveawaySimulator() {
                 : sample
             }
             onUnlock={doDraw}
+            currency={currency}
           />
         </div>
       )}

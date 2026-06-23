@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getStripe, PRICES_BRL, type PlanId } from "@/lib/payments/stripe";
+import { getStripe } from "@/lib/payments/stripe";
+import { PRICES, currencyForCountry, countryFromRequest, stripeCurrency, type PlanId } from "@/lib/payments/pricing";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
@@ -11,16 +12,19 @@ export async function POST(req: Request) {
   try {
     const body = (await req.json().catch(() => ({}))) as { plan?: PlanId };
     const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";
-    const amount = PRICES_BRL[plan];
+
+    // moeda decidida no SERVIDOR pelo país do visitante (não confia no cliente)
+    const currency = currencyForCountry(countryFromRequest(req));
+    const amount = PRICES[currency][plan];
 
     const intent = await getStripe().paymentIntents.create({
       amount,
-      currency: "brl",
+      currency: stripeCurrency(currency),
       automatic_payment_methods: { enabled: true },
-      metadata: { product: "azurasort-sorteio", plan },
+      metadata: { product: "azurasort-sorteio", plan, currency },
     });
 
-    return NextResponse.json({ clientSecret: intent.client_secret, amount, plan });
+    return NextResponse.json({ clientSecret: intent.client_secret, amount, plan, currency });
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Falha no pagamento" }, { status: 502 });
   }

@@ -31,14 +31,17 @@ export async function POST(req: Request) {
     // GATE: pagamento confirmado no SERVIDOR (antes de coletar — economia)
     let paid = false;
     let paidAmount = 0;
+    let paidCurrency = "BRL";
     if (body.payment?.externalId) {
       if (body.payment.provider === "stripe") {
         const v = await verifyStripePayment(body.payment.externalId);
         paid = v.paid;
         paidAmount = v.amount;
+        paidCurrency = v.currency;
       } else if (body.payment.provider === "woovi") {
         const v = await getWooviStatus(body.payment.externalId);
         paid = v.paid;
+        paidCurrency = "BRL"; // PIX é sempre BRL
       }
     }
     if (!paid && process.env.ALLOW_FREE_DRAWS !== "1") {
@@ -122,12 +125,13 @@ export async function POST(req: Request) {
             provider: body.payment.provider,
             externalId: body.payment.externalId,
             amount: paidAmount,
+            currency: paidCurrency,
             plan: body.plan ?? "premium",
             status: "paid",
             giveawayId: giveaway.id,
             paidAt: new Date(),
           },
-          update: { status: "paid", giveawayId: giveaway.id, paidAt: new Date() },
+          update: { status: "paid", currency: paidCurrency, giveawayId: giveaway.id, paidAt: new Date() },
         })
         .catch(() => {});
 
@@ -137,6 +141,7 @@ export async function POST(req: Request) {
           provider: body.payment.provider,
           plan: body.plan ?? "premium",
           amountCents: paidAmount,
+          currency: paidCurrency,
           campaign: giveaway.campaign,
           winners: winners.filter((w) => !w.isBackup).map((w) => w.handle),
           eligibleCount: eligibleHandles.length,
