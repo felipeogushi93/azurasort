@@ -1,0 +1,91 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "");
+
+/** Modal de pagamento por cartão (Stripe Payment Element — sem sair da página). */
+export function StripeCard({ onSuccess, onClose }: { onSuccess: () => void; onClose: () => void }) {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/pay/stripe/intent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan: "premium" }),
+    })
+      .then((r) => r.json())
+      .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || "Falha ao iniciar o pagamento")))
+      .catch((e) => setErr(String(e)));
+  }, []);
+
+  return (
+    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-3xl border border-ink/5 bg-surface p-6 shadow-lift">
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-display text-lg font-bold text-ink">Pagar com cartão</h3>
+          <button onClick={onClose} className="text-inkSoft hover:text-ink">✕</button>
+        </div>
+
+        {err && <p className="rounded-lg bg-rose/10 px-3 py-2 text-sm text-rose">{err}</p>}
+
+        {!clientSecret && !err && (
+          <div className="flex items-center justify-center py-10">
+            <span className="h-6 w-6 animate-spin rounded-full border-2 border-ink/15 border-t-gold" />
+          </div>
+        )}
+
+        {clientSecret && (
+          <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: "stripe", variables: { colorPrimary: "#C2922E" } } }}>
+            <CardForm onSuccess={onSuccess} />
+          </Elements>
+        )}
+
+        <p className="mt-4 text-center text-[11px] text-inkSoft">
+          🔒 Pagamento seguro via Stripe · cartão de teste: 4242 4242 4242 4242
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function CardForm({ onSuccess }: { onSuccess: () => void }) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  async function pay() {
+    if (!stripe || !elements) return;
+    setBusy(true);
+    setMsg("");
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: { return_url: window.location.href },
+      redirect: "if_required",
+    });
+    if (error) {
+      setMsg(error.message ?? "Não foi possível processar.");
+      setBusy(false);
+      return;
+    }
+    if (paymentIntent && paymentIntent.status === "succeeded") {
+      onSuccess();
+      return;
+    }
+    setBusy(false);
+  }
+
+  return (
+    <div className="space-y-4">
+      <PaymentElement />
+      {msg && <p className="text-sm text-rose">{msg}</p>}
+      <button onClick={pay} disabled={busy || !stripe} className="btn-gold w-full py-3 disabled:opacity-50">
+        {busy ? "Processando…" : "Pagar R$ 34,90"}
+      </button>
+    </div>
+  );
+}

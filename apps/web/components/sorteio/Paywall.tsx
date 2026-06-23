@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { StripeCard } from "./StripeCard";
 
 /**
  * Paywall / Chooser (modelo SorteiGram) na paleta light premium do AzuraSort.
@@ -22,6 +23,7 @@ export function Paywall({
   onTest: () => void;
 }) {
   const [soon, setSoon] = useState(false);
+  const [showCard, setShowCard] = useState(false);
   const ping = () => {
     setSoon(true);
     setTimeout(() => setSoon(false), 2500);
@@ -111,7 +113,7 @@ export function Paywall({
       <div>
         <div className="grid gap-3 sm:grid-cols-3">
           <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price="R$ 34,90" cta="Gerar PIX" accent onClick={ping} />
-          <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price="R$ 34,90" cta="Pagar com Cartão" onClick={ping} />
+          <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price="R$ 34,90" cta="Pagar com Cartão" onClick={() => setShowCard(true)} />
           <PayCard icon="🅿️" title="PayPal" sub="Conta ou cartão" price="R$ 34,90" cta="Pagar com PayPal" onClick={ping} />
         </div>
         {soon && (
@@ -131,6 +133,16 @@ export function Paywall({
           🔓 Liberar em modo teste (grátis)
         </button>
       </div>
+
+      {showCard && (
+        <StripeCard
+          onSuccess={() => {
+            setShowCard(false);
+            onTest();
+          }}
+          onClose={() => setShowCard(false)}
+        />
+      )}
     </div>
   );
 }
