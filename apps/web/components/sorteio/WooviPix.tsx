@@ -9,7 +9,7 @@ export function WooviPix({
   plan = "premium",
   priceLabel = "R$ 34,90",
 }: {
-  onSuccess: () => void;
+  onSuccess: (externalId: string) => void;
   onClose: () => void;
   plan?: string;
   priceLabel?: string;
@@ -42,7 +42,7 @@ export function WooviPix({
         if (d.paid) {
           if (pollRef.current) clearInterval(pollRef.current);
           setPaid(true);
-          setTimeout(onSuccess, 900);
+          setTimeout(() => onSuccess(charge.correlationID), 900);
         }
       } catch {
         /* ignora erro transitório */

@@ -13,7 +13,7 @@ export function StripeCard({
   plan = "premium",
   priceLabel = "R$ 34,90",
 }: {
-  onSuccess: () => void;
+  onSuccess: (externalId: string) => void;
   onClose: () => void;
   plan?: string;
   priceLabel?: string;
@@ -62,7 +62,7 @@ export function StripeCard({
   );
 }
 
-function CardForm({ onSuccess, priceLabel }: { onSuccess: () => void; priceLabel: string }) {
+function CardForm({ onSuccess, priceLabel }: { onSuccess: (externalId: string) => void; priceLabel: string }) {
   const stripe = useStripe();
   const elements = useElements();
   const [busy, setBusy] = useState(false);
@@ -83,7 +83,7 @@ function CardForm({ onSuccess, priceLabel }: { onSuccess: () => void; priceLabel
       return;
     }
     if (paymentIntent && paymentIntent.status === "succeeded") {
-      onSuccess();
+      onSuccess(paymentIntent.id);
       return;
     }
     setBusy(false);

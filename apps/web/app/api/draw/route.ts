@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { normalizeComments, applyFilters } from "@/lib/draw/engine";
 import { fetchComments, shortcodeFromUrl } from "@/lib/providers/apify";
 import { drawFromHandles, generateSeed, makeCertificateCode } from "@/lib/draw/server";
+import { verifyStripePayment } from "@/lib/payments/stripe";
+import { getWooviStatus } from "@/lib/payments/woovi";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 import type { DrawFilters, RawComment } from "@/lib/draw/types";
 
@@ -21,7 +23,26 @@ export async function POST(req: Request) {
       module?: string;
       filters?: Partial<DrawFilters>;
       totalComments?: number;
+      plan?: string;
+      payment?: { provider: string; externalId: string };
     };
+
+    // GATE: pagamento confirmado no SERVIDOR (antes de coletar — economia)
+    let paid = false;
+    let paidAmount = 0;
+    if (body.payment?.externalId) {
+      if (body.payment.provider === "stripe") {
+        const v = await verifyStripePayment(body.payment.externalId);
+        paid = v.paid;
+        paidAmount = v.amount;
+      } else if (body.payment.provider === "woovi") {
+        const v = await getWooviStatus(body.payment.externalId);
+        paid = v.paid;
+      }
+    }
+    if (!paid && process.env.ALLOW_FREE_DRAWS !== "1") {
+      return NextResponse.json({ error: "Pagamento necessário para sortear." }, { status: 402 });
+    }
 
     const f: DrawFilters = {
       mustHaveHashtags: [],
@@ -91,6 +112,23 @@ export async function POST(req: Request) {
         where: { giveawayId_runIndex: { giveawayId: giveaway.id, runIndex } },
         data: { usedAt: new Date() },
       });
+    }
+    if (paid && body.payment) {
+      db.payment
+        .upsert({
+          where: { externalId: body.payment.externalId },
+          create: {
+            provider: body.payment.provider,
+            externalId: body.payment.externalId,
+            amount: paidAmount,
+            plan: body.plan ?? "premium",
+            status: "paid",
+            giveawayId: giveaway.id,
+            paidAt: new Date(),
+          },
+          update: { status: "paid", giveawayId: giveaway.id, paidAt: new Date() },
+        })
+        .catch(() => {});
     }
     db.event.create({ data: { type: "draw_done", meta: { giveawayId: giveaway.id, eligible: eligibleHandles.length } } }).catch(() => {});
 

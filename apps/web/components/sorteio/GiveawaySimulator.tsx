@@ -50,6 +50,7 @@ export function GiveawaySimulator() {
   const [preview, setPreview] = useState<PreviewState | null>(null);
   const [sample, setSample] = useState<{ handle: string; text: string }[]>([]);
   const [certCode, setCertCode] = useState<string | null>(null);
+  const [lastPayment, setLastPayment] = useState<{ provider: string; externalId: string; plan?: string } | undefined>(undefined);
 
   // passo 2 — base
   const [base, setBase] = useState<Base>("comments");
@@ -163,7 +164,9 @@ export function GiveawaySimulator() {
   const displayCount = preview?.total ?? comments.length;
 
   /* ----- sorteio ----- */
-  async function doDraw() {
+  async function doDraw(payment?: { provider: string; externalId: string; plan?: string }) {
+    const pay = payment ?? lastPayment;
+    if (payment) setLastPayment(payment);
     setBusy(true);
     try {
       const res = await fetch("/api/draw", {
@@ -176,6 +179,8 @@ export function GiveawaySimulator() {
           module,
           filters: liveFilters,
           totalComments: displayCount,
+          plan: pay?.plan ?? "premium",
+          payment: pay ? { provider: pay.provider, externalId: pay.externalId } : undefined,
         }),
       });
       const data = await res.json();
@@ -384,7 +389,7 @@ export function GiveawaySimulator() {
                     .map((c) => ({ handle: c.handle, text: c.text }))
                 : sample
             }
-            onTest={doDraw}
+            onUnlock={doDraw}
           />
         </div>
       )}

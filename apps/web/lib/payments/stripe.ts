@@ -26,3 +26,9 @@ export const PRICE_LABELS: Record<keyof typeof PRICES_BRL, string> = {
 };
 
 export type PlanId = keyof typeof PRICES_BRL;
+
+/** Verifica no Stripe se um PaymentIntent foi realmente pago. */
+export async function verifyStripePayment(paymentIntentId: string): Promise<{ paid: boolean; amount: number }> {
+  const pi = await getStripe().paymentIntents.retrieve(paymentIntentId);
+  return { paid: pi.status === "succeeded", amount: pi.amount ?? 0 };
+}

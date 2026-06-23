@@ -67,13 +67,13 @@ export function Paywall({
   count,
   campaign,
   sample,
-  onTest,
+  onUnlock,
   allowTest = false,
 }: {
   count: number;
   campaign: string;
   sample: { handle: string; text: string }[];
-  onTest: () => void;
+  onUnlock: (payment?: { provider: string; externalId: string; plan?: string }) => void;
   allowTest?: boolean;
 }) {
   const [soon, setSoon] = useState(false);
@@ -191,7 +191,7 @@ export function Paywall({
       {allowTest && (
         <div className="rounded-2xl border border-dashed border-ink/20 bg-canvasAlt/60 p-4 text-center">
           <p className="text-xs text-inkSoft">Modo de validação (interno)</p>
-          <button onClick={onTest} className="btn-ghost mt-2">
+          <button onClick={() => onUnlock()} className="btn-ghost mt-2">
             🔓 Liberar em modo teste (grátis)
           </button>
         </div>
@@ -201,9 +201,9 @@ export function Paywall({
         <StripeCard
           plan={plan}
           priceLabel={priceLabel}
-          onSuccess={() => {
+          onSuccess={(externalId) => {
             setShowCard(false);
-            onTest();
+            onUnlock({ provider: "stripe", externalId, plan });
           }}
           onClose={() => setShowCard(false)}
         />
@@ -213,9 +213,9 @@ export function Paywall({
         <WooviPix
           plan={plan}
           priceLabel={priceLabel}
-          onSuccess={() => {
+          onSuccess={(externalId) => {
             setShowPix(false);
-            onTest();
+            onUnlock({ provider: "woovi", externalId, plan });
           }}
           onClose={() => setShowPix(false)}
         />
