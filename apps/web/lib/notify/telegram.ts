@@ -14,8 +14,9 @@ function escapeHtml(s: string) {
 }
 
 export async function notifyTelegram(text: string): Promise<void> {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
+  // .trim() blinda contra espaço/quebra de linha colado no valor da env (Vercel)
+  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
+  const chatId = process.env.TELEGRAM_CHAT_ID?.trim();
   if (!token || !chatId) return; // não configurado → ignora silenciosamente
   try {
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

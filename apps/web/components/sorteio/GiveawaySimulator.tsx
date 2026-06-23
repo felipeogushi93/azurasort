@@ -493,7 +493,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           <LiveStage
             campaign={campaign}
             comments={comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : sample}
-            labels={{ badge: t("live.badge"), camera: t("live.camera"), exit: t("live.exit"), ready: t("live.ready"), start: t("live.start"), noCam: t("live.noCam") }}
+            labels={{ badge: t("live.badge"), camera: t("live.camera"), exit: t("live.exit"), ready: t("live.ready"), start: t("live.start"), noCam: t("live.noCam"), goLive: t("live.goLive"), goLiveHint: t("live.goLiveHint") }}
             onStart={() => setLiveStarted(true)}
             onClose={() => setShowReveal(false)}
           />

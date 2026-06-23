@@ -12,12 +12,12 @@ type ChatMsg = { handle: string; text: string };
  * carregados — sem custo extra) e um botão START. Só quando ele clica em START é
  * que a revelação (vídeo do vencedor) começa — via onStart().
  */
-type LiveLabels = { badge: string; camera: string; exit: string; ready: string; start: string; noCam: string };
+type LiveLabels = { badge: string; camera: string; exit: string; ready: string; start: string; noCam: string; goLive: string; goLiveHint: string };
 
 export function LiveStage({
   campaign,
   comments = [],
-  labels = { badge: "Ao vivo", camera: "câmera", exit: "✕ sair", ready: "Quando estiver com a audiência pronta, inicie o sorteio.", start: "▶ INICIAR SORTEIO AO VIVO", noCam: "Câmera não disponível — você pode iniciar mesmo assim." },
+  labels = { badge: "Ao vivo", camera: "câmera", exit: "✕ sair", ready: "Quando estiver com a audiência pronta, inicie o sorteio.", start: "▶ Iniciar sorteio", noCam: "Câmera não disponível — você pode iniciar mesmo assim.", goLive: "🔴 Iniciar transmissão", goLiveHint: "Comece a live e fale com a sua audiência. Quando quiser, inicie o sorteio." },
   onStart,
   onClose,
 }: {
@@ -35,6 +35,7 @@ export function LiveStage({
   const [counting, setCounting] = useState(false);
   const [count, setCount] = useState(3);
   const [chat, setChat] = useState<ChatMsg[]>([]);
+  const [liveOn, setLiveOn] = useState(false); // 1º "Start live", depois "Iniciar sorteio"
 
   // (re)liga a câmera no facingMode atual
   const startCamera = useCallback(async (mode: "user" | "environment") => {
@@ -121,12 +122,16 @@ export function LiveStage({
       {/* topo: AO VIVO + espectadores + (trocar câmera) + fechar */}
       <div className="absolute inset-x-0 top-0 flex items-center justify-between p-5">
         <div className="flex items-center gap-3">
-          <span className="flex items-center gap-2 rounded-full bg-red-600 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> {labels.badge}
-          </span>
-          <span className="flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
-            👁 {viewers.toLocaleString("pt-BR")}
-          </span>
+          {liveOn && (
+            <>
+              <span className="flex items-center gap-2 rounded-full bg-red-600 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
+                <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> {labels.badge}
+              </span>
+              <span className="flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
+                👁 {viewers.toLocaleString("pt-BR")}
+              </span>
+            </>
+          )}
         </div>
         <div className="flex items-center gap-2">
           {camOk && (
@@ -158,7 +163,7 @@ export function LiveStage({
       )}
 
       {/* CHAT ao vivo (comentários rolando) */}
-      {chat.length > 0 && !counting && (
+      {liveOn && chat.length > 0 && !counting && (
         <div className="pointer-events-none absolute bottom-32 left-5 z-10 flex max-w-[78%] flex-col gap-1.5 sm:max-w-sm">
           {chat.map((c, i) => (
             <div
@@ -182,7 +187,7 @@ export function LiveStage({
         </div>
       )}
 
-      {/* rodapé: instrução + START */}
+      {/* rodapé: 1º "Start live"; depois "Iniciar sorteio" */}
       {!counting && (
         <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-3 p-8">
           {camOk === false && (
@@ -190,15 +195,27 @@ export function LiveStage({
               {labels.noCam}
             </p>
           )}
-          <p className="text-center text-sm text-white/80 drop-shadow">
-            {labels.ready}
-          </p>
-          <button
-            onClick={start}
-            className="rounded-full bg-gradient-to-r from-rose to-gold px-10 py-4 font-display text-lg font-bold text-white shadow-gold transition hover:-translate-y-0.5 hover:shadow-lift"
-          >
-            {labels.start}
-          </button>
+          {!liveOn ? (
+            <>
+              <p className="text-center text-sm text-white/80 drop-shadow">{labels.goLiveHint}</p>
+              <button
+                onClick={() => setLiveOn(true)}
+                className="rounded-full bg-red-600 px-10 py-4 font-display text-lg font-bold text-white shadow-lift transition hover:-translate-y-0.5"
+              >
+                {labels.goLive}
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="text-center text-sm text-white/80 drop-shadow">{labels.ready}</p>
+              <button
+                onClick={start}
+                className="rounded-full bg-gradient-to-r from-rose to-gold px-10 py-4 font-display text-lg font-bold text-white shadow-gold transition hover:-translate-y-0.5 hover:shadow-lift"
+              >
+                {labels.start}
+              </button>
+            </>
+          )}
         </div>
       )}
     </div>

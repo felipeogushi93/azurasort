@@ -66,7 +66,7 @@ export interface DrawResult {
 export const DEFAULT_FILTERS: DrawFilters = {
   mustHaveHashtags: [],
   minMentions: 0,
-  blockDuplicateUsers: true,
+  blockDuplicateUsers: false, // cada comentário conta como uma entrada (participantes = comentários)
   excludeHandles: [],
   winnersCount: 1,
   backupsCount: 0,

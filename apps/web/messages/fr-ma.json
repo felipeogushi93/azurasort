@@ -339,8 +339,10 @@
       "camera": "caméra",
       "exit": "✕ quitter",
       "ready": "Quand votre audience est prête, lancez le tirage.",
-      "start": "▶ LANCER LE TIRAGE EN DIRECT",
-      "noCam": "Caméra non disponible — vous pouvez démarrer quand même."
+      "start": "▶ Lancer le tirage",
+      "noCam": "Caméra non disponible — vous pouvez démarrer quand même.",
+      "goLive": "🔴 Démarrer le direct",
+      "goLiveHint": "Lancez le direct et parlez à votre audience. Quand vous voulez, démarrez le tirage."
     },
     "paywall": {
       "sampleTitle": "Échantillon des participants",

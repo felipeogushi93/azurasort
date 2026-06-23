@@ -339,8 +339,10 @@
       "camera": "câmera",
       "exit": "✕ sair",
       "ready": "Quando estiver com a audiência pronta, inicie o sorteio.",
-      "start": "▶ INICIAR SORTEIO AO VIVO",
-      "noCam": "Câmera não disponível — você pode iniciar mesmo assim."
+      "start": "▶ Iniciar sorteio",
+      "noCam": "Câmera não disponível — você pode iniciar mesmo assim.",
+      "goLive": "🔴 Iniciar transmissão",
+      "goLiveHint": "Comece a live e fale com a sua audiência. Quando quiser, inicie o sorteio."
     },
     "paywall": {
       "sampleTitle": "Amostra de quem participou",

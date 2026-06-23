@@ -76,7 +76,6 @@ export default async function VerifyPage({
           {/* prova técnica */}
           <div className="mt-8 space-y-3 rounded-2xl border border-ink/5 bg-canvasAlt p-4 text-sm">
             <Row label={t("rowDraw")} value={draw.giveaway.campaign} />
-            <Row label={t("rowComments")} value={`${Math.max(draw.totalCount, participants.length).toLocaleString()}`} />
             <Row label={t("rowEligible")} value={`${participants.length.toLocaleString()}`} />
             <Row label={t("rowDate")} value={new Date(draw.createdAt).toLocaleString(locale)} />
             <Row label={t("rowAlgo")} value={draw.algorithm} mono />

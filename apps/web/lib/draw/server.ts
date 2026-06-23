@@ -39,9 +39,27 @@ export interface DrawWinner {
   isBackup: boolean;
 }
 
-/** Lista canônica (única + ordenada) de handles elegíveis. */
+/**
+ * Lista canônica de PARTICIPANTES (entradas), ordenada deterministicamente.
+ * NÃO remove duplicados: cada comentário conta como uma entrada — assim o total
+ * de participantes bate com o total de comentários. (Strings iguais são
+ * intercambiáveis, então a ordenação é determinística para a verificação.)
+ */
 export function canonicalParticipants(handles: string[]): string[] {
-  return [...new Set(handles)].sort((a, b) => a.localeCompare(b));
+  return [...handles].sort((a, b) => a.localeCompare(b));
+}
+
+/** Caminha a ordem embaralhada e pega os primeiros N handles DISTINTOS (sem repetir vencedor). */
+function pickDistinct(order: string[], count: number): string[] {
+  const picked: string[] = [];
+  const seen = new Set<string>();
+  for (const h of order) {
+    if (seen.has(h)) continue;
+    seen.add(h);
+    picked.push(h);
+    if (picked.length >= count) break;
+  }
+  return picked;
 }
 
 /**
@@ -63,8 +81,9 @@ export function drawFromHandles(
     order = [forcedHandle, ...order.filter((h) => h !== forcedHandle)];
   }
 
-  const total = Math.min(winnersCount + backupsCount, order.length);
-  const winners: DrawWinner[] = order.slice(0, total).map((handle, i) => ({
+  // vencedores são pessoas DISTINTAS (um @ não vence duas vezes), mesmo com entradas repetidas
+  const distinct = pickDistinct(order, winnersCount + backupsCount);
+  const winners: DrawWinner[] = distinct.map((handle, i) => ({
     position: i + 1,
     handle,
     isBackup: i >= winnersCount,
@@ -76,7 +95,7 @@ export function drawFromHandles(
 /** Reproduz o resultado (para a página /verify). Ignora suplentes/forçados. */
 export function verifyFromParticipants(participants: string[], seed: string, winnersCount: number): string[] {
   const order = shuffle(canonicalParticipants(participants), seed);
-  return order.slice(0, winnersCount).map((h) => h);
+  return pickDistinct(order, winnersCount);
 }
 
 /** Código público curto do certificado (ex.: AZS-7K2A-9X4Q). */

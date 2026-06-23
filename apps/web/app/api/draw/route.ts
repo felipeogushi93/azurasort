@@ -51,7 +51,7 @@ export async function POST(req: Request) {
     const f: DrawFilters = {
       mustHaveHashtags: [],
       minMentions: 0,
-      blockDuplicateUsers: true,
+      blockDuplicateUsers: false, // cada comentário conta como uma entrada (participantes = comentários)
       excludeHandles: [],
       winnersCount: 1,
       backupsCount: 0,
