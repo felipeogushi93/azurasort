@@ -297,7 +297,8 @@
       "minMentions": "Mín. de menções",
       "noDup": "Sem duplicados",
       "participants": "Participantes",
-      "example": "exemplo"
+      "example": "exemplo",
+      "liveVip": "Exclusivo do plano VIP."
     },
     "scenes": {
       "cofreName": "Cofre",
@@ -326,13 +327,16 @@
       "cutsReady": "Cortes de vídeo prontos",
       "seeReveal": "▶ Ver revelação",
       "redo": "↻ Refazer",
-      "newDraw": "+ Novo sorteio"
+      "newDraw": "+ Novo sorteio",
+      "cutsSoon": "em breve"
     },
     "busy": "Coletando participantes e sorteando…",
     "reveal": {
       "seeResult": "ver resultado →",
       "opening": "Abrindo o cofre…",
-      "enableSound": "🔊 Ativar som"
+      "enableSound": "🔊 Ativar som",
+      "backToLive": "↩ Voltar à live",
+      "results": "Ver resultados →"
     },
     "live": {
       "badge": "Ao vivo",

@@ -297,7 +297,8 @@
       "minMentions": "Mín. de menciones",
       "noDup": "Sin duplicados",
       "participants": "Participantes",
-      "example": "ejemplo"
+      "example": "ejemplo",
+      "liveVip": "Exclusivo del plan VIP."
     },
     "scenes": {
       "cofreName": "Caja fuerte",
@@ -326,13 +327,16 @@
       "cutsReady": "Cortes de vídeo listos",
       "seeReveal": "▶ Ver revelación",
       "redo": "↻ Rehacer",
-      "newDraw": "+ Nuevo sorteo"
+      "newDraw": "+ Nuevo sorteo",
+      "cutsSoon": "pronto"
     },
     "busy": "Recopilando participantes y sorteando…",
     "reveal": {
       "seeResult": "ver resultado →",
       "opening": "Abriendo la caja fuerte…",
-      "enableSound": "🔊 Activar sonido"
+      "enableSound": "🔊 Activar sonido",
+      "backToLive": "↩ Volver al directo",
+      "results": "Ver resultados →"
     },
     "live": {
       "badge": "En directo",

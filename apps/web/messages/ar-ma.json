@@ -297,7 +297,8 @@
       "minMentions": "الحد الأدنى للإشارات",
       "noDup": "بدون تكرار",
       "participants": "المشاركون",
-      "example": "مثال"
+      "example": "مثال",
+      "liveVip": "حصري لباقة VIP."
     },
     "scenes": {
       "cofreName": "الخزنة",
@@ -326,13 +327,16 @@
       "cutsReady": "مقاطع الفيديو جاهزة",
       "seeReveal": "▶ مشاهدة الكشف",
       "redo": "↻ إعادة",
-      "newDraw": "+ سحب جديد"
+      "newDraw": "+ سحب جديد",
+      "cutsSoon": "قريباً"
     },
     "busy": "جارٍ جمع المشاركين وإجراء السحب…",
     "reveal": {
       "seeResult": "عرض النتيجة →",
       "opening": "جارٍ فتح الخزنة…",
-      "enableSound": "🔊 تفعيل الصوت"
+      "enableSound": "🔊 تفعيل الصوت",
+      "backToLive": "↩ العودة للبث",
+      "results": "عرض النتائج →"
     },
     "live": {
       "badge": "مباشر",

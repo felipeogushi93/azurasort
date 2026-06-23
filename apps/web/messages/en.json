@@ -297,7 +297,8 @@
       "minMentions": "Min. mentions",
       "noDup": "No duplicates",
       "participants": "Participants",
-      "example": "example"
+      "example": "example",
+      "liveVip": "VIP plan only."
     },
     "scenes": {
       "cofreName": "Vault",
@@ -326,13 +327,16 @@
       "cutsReady": "Video cuts ready",
       "seeReveal": "▶ Watch reveal",
       "redo": "↻ Redo",
-      "newDraw": "+ New giveaway"
+      "newDraw": "+ New giveaway",
+      "cutsSoon": "soon"
     },
     "busy": "Collecting participants and drawing…",
     "reveal": {
       "seeResult": "see result →",
       "opening": "Opening the vault…",
-      "enableSound": "🔊 Enable sound"
+      "enableSound": "🔊 Enable sound",
+      "backToLive": "↩ Back to live",
+      "results": "See results →"
     },
     "live": {
       "badge": "Live",

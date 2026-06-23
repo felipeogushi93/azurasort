@@ -71,6 +71,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [spec, setSpec] = useState<RevealSpec | null>(null);
   const [showReveal, setShowReveal] = useState(false);
   const [liveStarted, setLiveStarted] = useState(false); // na live: vira true quando dá START
+  const [liveActive, setLiveActive] = useState(false); // live só vale no VIP (ou modo teste)
   const [busy, setBusy] = useState(false);
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
   const [allowTest, setAllowTest] = useState(false);
@@ -184,6 +185,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       setLastPayment(payment);
       track("pay_done", { provider: payment.provider, plan: payment.plan });
     }
+    // live só ativa no plano VIP (ou em modo teste, quando não há pagamento)
+    setLiveActive(live && (!pay || pay.plan === "vip"));
     setBusy(true);
     try {
       const res = await fetch("/api/draw", {
@@ -348,8 +351,11 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           {/* ao vivo */}
           <div className="mt-5 flex items-center justify-between rounded-xl border border-ink/5 bg-canvasAlt px-4 py-3">
             <div>
-              <p className="flex items-center gap-2 text-sm font-medium text-ink">🔴 {t("s3.liveTitle")}</p>
-              <p className="text-xs text-inkSoft">{t("s3.liveDesc")}</p>
+              <p className="flex items-center gap-2 text-sm font-medium text-ink">
+                🔴 {t("s3.liveTitle")}
+                <span className="rounded-full bg-gold/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-gold-deep">VIP</span>
+              </p>
+              <p className="text-xs text-inkSoft">{t("s3.liveDesc")} {t("s3.liveVip")}</p>
             </div>
             <button onClick={() => setLive((v) => !v)} className={`toggle ${live ? "toggle-on" : ""}`}><span className="dot" /></button>
           </div>
@@ -444,9 +450,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-            <Stat label={t("result.statParticipants")} value={displayCount.toLocaleString()} />
+            <Stat label={t("result.statParticipants")} value={(result.eligibleCount || displayCount).toLocaleString()} />
             <Stat label={t("result.statBase")} value={base === "comments" ? t("result.baseComments") : t("result.baseLikes")} />
-            <Stat label={t("result.statLive")} value={live ? t("result.yes") : t("result.no")} />
+            <Stat label={t("result.statLive")} value={liveActive ? t("result.yes") : t("result.no")} />
             <Stat label={t("result.statCert")} value={result.certificateHash.slice(0, 8) + "…"} mono />
           </div>
 
@@ -461,10 +467,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           )}
 
           <div className="mt-5">
-            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-inkSoft">{t("result.cutsReady")}</p>
+            <p className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-inkSoft">
+              {t("result.cutsReady")}
+              <span className="rounded-full bg-ink/10 px-2 py-0.5 text-[9px] font-bold normal-case tracking-normal text-inkSoft">{t("result.cutsSoon")}</span>
+            </p>
             <div className="flex gap-2">
               {["9:16", "16:9", "1:1"].map((f) => (
-                <button key={f} className="flex-1 rounded-xl border border-ink/10 bg-surface py-2.5 text-sm text-ink shadow-soft transition hover:border-gold/50">⬇ {f}</button>
+                <button key={f} disabled title={t("result.cutsSoon")} className="flex-1 cursor-not-allowed rounded-xl border border-ink/10 bg-surface py-2.5 text-sm text-inkSoft/50 shadow-soft">⬇ {f}</button>
               ))}
             </div>
           </div>
@@ -488,7 +497,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       )}
 
       {/* ---------- REVEAL OVERLAY ---------- */}
-      {showReveal && spec && live && !liveStarted && (
+      {showReveal && spec && liveActive && !liveStarted && (
         <div className="fixed inset-0 z-[100] bg-void">
           <LiveStage
             campaign={campaign}
@@ -500,9 +509,14 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         </div>
       )}
 
-      {showReveal && spec && (!live || liveStarted) && (
+      {showReveal && spec && (!liveActive || liveStarted) && (
         <div className="fixed inset-0 z-[100] bg-void">
-          <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{t("reveal.seeResult")}</button>
+          <div className="absolute right-5 top-5 z-[110] flex gap-2">
+            {liveActive && (
+              <button onClick={() => setLiveStarted(false)} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{t("reveal.backToLive")}</button>
+            )}
+            <button onClick={() => setShowReveal(false)} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{liveActive ? t("reveal.results") : t("reveal.seeResult")}</button>
+          </div>
           {module === "bank_vault" ? (
             <CofreReveal
               handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}

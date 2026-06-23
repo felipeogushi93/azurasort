@@ -297,7 +297,8 @@
       "minMentions": "Min. de mentions",
       "noDup": "Sans doublons",
       "participants": "Participants",
-      "example": "exemple"
+      "example": "exemple",
+      "liveVip": "Réservé au plan VIP."
     },
     "scenes": {
       "cofreName": "Coffre-fort",
@@ -326,13 +327,16 @@
       "cutsReady": "Extraits vidéo prêts",
       "seeReveal": "▶ Voir la révélation",
       "redo": "↻ Refaire",
-      "newDraw": "+ Nouveau tirage"
+      "newDraw": "+ Nouveau tirage",
+      "cutsSoon": "bientôt"
     },
     "busy": "Collecte des participants et tirage en cours…",
     "reveal": {
       "seeResult": "voir le résultat →",
       "opening": "Ouverture du coffre-fort…",
-      "enableSound": "🔊 Activer le son"
+      "enableSound": "🔊 Activer le son",
+      "backToLive": "↩ Retour au direct",
+      "results": "Voir les résultats →"
     },
     "live": {
       "badge": "En direct",
