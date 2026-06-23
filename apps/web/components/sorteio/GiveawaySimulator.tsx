@@ -6,6 +6,7 @@ import type { RevealModule, RevealSpec } from "@prizegram/reveal-spec";
 import { RevealClient } from "@/components/reveal/RevealClient";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
 import { CofreReveal } from "@/components/reveal/CofreReveal";
+import { LiveStage } from "./LiveStage";
 import { Paywall } from "./Paywall";
 import { normalizeComments, applyFilters } from "@/lib/draw/engine";
 import { generateMockComments } from "@/lib/draw/mock";
@@ -67,6 +68,7 @@ export function GiveawaySimulator() {
   const [result, setResult] = useState<DrawResult | null>(null);
   const [spec, setSpec] = useState<RevealSpec | null>(null);
   const [showReveal, setShowReveal] = useState(false);
+  const [liveStarted, setLiveStarted] = useState(false); // na live: vira true quando dá START
   const [busy, setBusy] = useState(false);
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
   const [allowTest, setAllowTest] = useState(false);
@@ -221,6 +223,7 @@ export function GiveawaySimulator() {
       setSpec(s);
       setCertCode(data.certificateCode ?? null);
       setStep("result");
+      setLiveStarted(false); // na live, primeiro a tela ao vivo; só dá START depois
       setShowReveal(true); // abre a revelacao automaticamente (suspense antes do vencedor)
     } catch (e) {
       alert(e instanceof Error ? e.message : "Falha no sorteio.");
@@ -229,6 +232,7 @@ export function GiveawaySimulator() {
   }
   async function redraw() {
     setShowReveal(false);
+    setLiveStarted(false);
     await doDraw();
   }
 
@@ -470,7 +474,13 @@ export function GiveawaySimulator() {
       )}
 
       {/* ---------- REVEAL OVERLAY ---------- */}
-      {showReveal && spec && (
+      {showReveal && spec && live && !liveStarted && (
+        <div className="fixed inset-0 z-[100] bg-void">
+          <LiveStage campaign={campaign} onStart={() => setLiveStarted(true)} onClose={() => setShowReveal(false)} />
+        </div>
+      )}
+
+      {showReveal && spec && (!live || liveStarted) && (
         <div className="fixed inset-0 z-[100] bg-void">
           <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">ver resultado →</button>
           {module === "bank_vault" ? (
