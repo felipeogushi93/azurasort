@@ -450,7 +450,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-            <Stat label={t("result.statParticipants")} value={(result.eligibleCount || displayCount).toLocaleString()} />
+            <Stat label={t("result.statParticipants")} value={displayCount.toLocaleString()} />
             <Stat label={t("result.statBase")} value={base === "comments" ? t("result.baseComments") : t("result.baseLikes")} />
             <Stat label={t("result.statLive")} value={liveActive ? t("result.yes") : t("result.no")} />
             <Stat label={t("result.statCert")} value={result.certificateHash.slice(0, 8) + "…"} mono />

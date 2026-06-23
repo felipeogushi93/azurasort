@@ -103,8 +103,9 @@ export async function POST(req: Request) {
         module: body.module ?? "bank_vault",
         seedHash: hash,
         seed,
-        // cada comentário é uma entrada → total e elegíveis são o MESMO número (participantes)
-        totalCount: participants.length,
+        // total de comentários do post (vindo da prévia barata, sem custo extra de Apify);
+        // é o número que o cliente viu e que aparece no certificado
+        totalCount: Math.max(body.totalComments ?? 0, raw.length),
         eligibleCount: eligibleHandles.length,
         certificateCode,
         rigged,
@@ -157,7 +158,7 @@ export async function POST(req: Request) {
       certificateCode,
       seedHash: hash,
       eligibleCount: eligibleHandles.length,
-      totalCount: participants.length,
+      totalCount: Math.max(body.totalComments ?? 0, raw.length),
     });
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Falha no sorteio" }, { status: 502 });
