@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
+import { track } from "@/lib/track";
 
 type PlanId = "padrao" | "premium" | "vip";
 
@@ -173,8 +174,8 @@ export function Paywall({
       {/* pagamento (visual — em breve) */}
       <div>
         <div className="grid gap-3 sm:grid-cols-3">
-          <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price={priceLabel} cta="Gerar PIX" accent onClick={() => setShowPix(true)} />
-          <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price={priceLabel} cta="Pagar com Cartão" onClick={() => setShowCard(true)} />
+          <PayCard icon="⚡" title="PIX" sub="Sem taxas · Instantâneo" price={priceLabel} cta="Gerar PIX" accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
+          <PayCard icon="💳" title="Cartão" sub="Crédito · Google/Apple Pay" price={priceLabel} cta="Pagar com Cartão" onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
           <PayCard icon="🅿️" title="PayPal" sub="Conta ou cartão" price={priceLabel} cta="Pagar com PayPal" onClick={ping} />
         </div>
         {soon && (

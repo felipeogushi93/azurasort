@@ -11,6 +11,7 @@ import { normalizeComments, applyFilters } from "@/lib/draw/engine";
 import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
+import { track } from "@/lib/track";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
 type Step = "link" | "base" | "scene" | "unlock" | "result";
@@ -71,7 +72,13 @@ export function GiveawaySimulator() {
   const [allowTest, setAllowTest] = useState(false);
   useEffect(() => {
     setAllowTest(new URLSearchParams(window.location.search).get("teste") === "1");
+    track("visit");
   }, []);
+
+  // funil: registra quando o cliente chega no paywall (uma vez por entrada no passo)
+  useEffect(() => {
+    if (step === "unlock") track("unlock_view");
+  }, [step]);
 
   /* ----- passo 1: ao colar o link, busca a publicacao e carrega os comentarios
      (modo demonstracao — quando o backend existir, troca por coleta real) ----- */
@@ -115,7 +122,10 @@ export function GiveawaySimulator() {
           if (cur >= total) {
             cur = total;
             if (progress) clearInterval(progress);
-            if (!cancelled) setPreview((s) => (s ? { ...s, status: "loaded", loaded: total } : s));
+            if (!cancelled) {
+              setPreview((s) => (s ? { ...s, status: "loaded", loaded: total } : s));
+              track("link_loaded", { total });
+            }
           } else if (!cancelled) {
             setPreview((s) => (s ? { ...s, loaded: cur } : s));
           }
@@ -166,7 +176,10 @@ export function GiveawaySimulator() {
   /* ----- sorteio ----- */
   async function doDraw(payment?: { provider: string; externalId: string; plan?: string }) {
     const pay = payment ?? lastPayment;
-    if (payment) setLastPayment(payment);
+    if (payment) {
+      setLastPayment(payment);
+      track("pay_done", { provider: payment.provider, plan: payment.plan });
+    }
     setBusy(true);
     try {
       const res = await fetch("/api/draw", {
