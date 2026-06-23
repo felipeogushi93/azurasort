@@ -94,8 +94,18 @@ export default async function Home({
             Azura<span className="text-gold-deep">sort</span>
           </span>
           <span>{footer("tagline")}</span>
-          <span className="text-xs text-inkSoft/70">{footer("proto")}</span>
+          <nav className="flex items-center gap-4 text-xs">
+            <Link href="/termos" className="hover:text-ink hover:underline">
+              {locale === "pt-br" ? "Termos de Uso" : "Terms"}
+            </Link>
+            <Link href="/privacidade" className="hover:text-ink hover:underline">
+              {locale === "pt-br" ? "Privacidade" : "Privacy"}
+            </Link>
+          </nav>
         </div>
+        <p className="mx-auto mt-6 max-w-6xl text-center text-xs text-inkSoft/60">
+          © 2026 AzuraSort · LPG Digital. {locale === "pt-br" ? "Não afiliado à Meta/Instagram." : "Not affiliated with Meta/Instagram."}
+        </p>
       </footer>
     </main>
   );
