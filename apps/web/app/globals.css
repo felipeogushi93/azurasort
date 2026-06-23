@@ -99,6 +99,10 @@ body {
   10% { opacity: 1; }
   100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
 }
+@keyframes fadeInUp {
+  0% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
 .confetti-piece {
   position: absolute;
   top: 0;

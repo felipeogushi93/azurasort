@@ -476,7 +476,12 @@ export function GiveawaySimulator() {
       {/* ---------- REVEAL OVERLAY ---------- */}
       {showReveal && spec && live && !liveStarted && (
         <div className="fixed inset-0 z-[100] bg-void">
-          <LiveStage campaign={campaign} onStart={() => setLiveStarted(true)} onClose={() => setShowReveal(false)} />
+          <LiveStage
+            campaign={campaign}
+            comments={comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : sample}
+            onStart={() => setLiveStarted(true)}
+            onClose={() => setShowReveal(false)}
+          />
         </div>
       )}
 
