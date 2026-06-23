@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/payments/stripe";
-import { PRICES, currencyForCountry, countryFromRequest, stripeCurrency, type PlanId } from "@/lib/payments/pricing";
+import { PRICES, currencyForCountry, countryFromRequest, stripeCurrency, type PlanId, type Currency } from "@/lib/payments/pricing";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
@@ -10,11 +10,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Muitas tentativas. Aguarde." }, { status: 429 });
   }
   try {
-    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId };
+    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; currency?: Currency };
     const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";
 
-    // moeda decidida no SERVIDOR pelo país do visitante (não confia no cliente)
-    const currency = currencyForCountry(countryFromRequest(req));
+    // moeda da localização escolhida (validada); fallback pelo país do visitante
+    const currency: Currency =
+      body.currency === "BRL" || body.currency === "EUR" || body.currency === "USD"
+        ? body.currency
+        : currencyForCountry(countryFromRequest(req));
     const amount = PRICES[currency][plan];
 
     const intent = await getStripe().paymentIntents.create({

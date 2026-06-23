@@ -3,16 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Revelação por VÍDEO + nome do vencedor.
+ * Revelação por VÍDEO + nome do vencedor, com SUSPENSE.
  *
- * Toca um vídeo (com som) e, no momento em que o vídeo mostra o lugar do nome,
- * sobrepõe o @ do vencedor em DOURADO — e o mantém fixo até o fim.
+ * 1. Mostra uma tela de suspense ("Abrindo o cofre…") por `suspenseMs`.
+ * 2. Toca o vídeo mais devagar (`playbackRate`) e com som AMPLIFICADO (Web Audio).
+ * 3. No momento do nome, sobrepõe o @ do vencedor em DOURADO + toca um "clank" de cofre.
  *
- * - `showBand`: desenha uma faixa preta para cobrir um nome já gravado (ex: cofre
- *   tem "WINNER_USERNAME" gravado). Quando o vídeo já tem um cartão preto (ex:
- *   contagem regressiva), use showBand=false e só o @ aparece sobre o cartão.
- *
- * Posições em % do VÍDEO (não da tela) — alinhamento mantém em qualquer tamanho.
+ * `showBand`: faixa preta para cobrir um nome já gravado no vídeo (ex.: cofre).
+ * Posições em % do VÍDEO (não da tela).
  */
 export function CofreReveal({
   handle,
@@ -25,6 +23,9 @@ export function CofreReveal({
   textTop = 54,
   rotation = 0,
   fontScale = 0.045,
+  suspenseMs = 2600,
+  playbackRate = 0.85,
+  gain = 1.8,
 }: {
   handle: string;
   src?: string;
@@ -36,12 +37,18 @@ export function CofreReveal({
   textTop?: number;
   rotation?: number;
   fontScale?: number;
+  suspenseMs?: number;
+  playbackRate?: number;
+  gain?: number;
 }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const clankedRef = useRef(false);
   const [t, setT] = useState(0);
   const [w, setW] = useState(0);
   const [muted, setMuted] = useState(false);
+  const [suspense, setSuspense] = useState(true);
   const show = t >= revealAtSec;
 
   useEffect(() => {
@@ -53,21 +60,92 @@ export function CofreReveal({
     return () => ro.disconnect();
   }, []);
 
-  // tenta tocar COM SOM; se o navegador bloquear, cai pra mudo + botao de ativar
+  // amplifica o áudio do vídeo via Web Audio (mais alto que o volume nativo)
+  function ensureAudioBoost() {
+    const v = videoRef.current;
+    if (!v || audioCtxRef.current) return;
+    try {
+      const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const ctx = new Ctx();
+      const sourceNode = ctx.createMediaElementSource(v);
+      const g = ctx.createGain();
+      g.gain.value = gain;
+      sourceNode.connect(g).connect(ctx.destination);
+      audioCtxRef.current = ctx;
+    } catch {
+      /* sem boost (navegador antigo) — segue no volume nativo */
+    }
+  }
+
+  // "clank" de cofre abrindo (sintetizado) — metal + thud grave
+  function playVaultClank() {
+    const ctx = audioCtxRef.current;
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    // thud grave
+    const thud = ctx.createOscillator();
+    const thudGain = ctx.createGain();
+    thud.type = "sine";
+    thud.frequency.setValueAtTime(120, now);
+    thud.frequency.exponentialRampToValueAtTime(40, now + 0.35);
+    thudGain.gain.setValueAtTime(0.0001, now);
+    thudGain.gain.exponentialRampToValueAtTime(1.1, now + 0.02);
+    thudGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+    thud.connect(thudGain).connect(ctx.destination);
+    thud.start(now);
+    thud.stop(now + 0.5);
+    // clank metálico (ruído filtrado)
+    const dur = 0.4;
+    const buffer = ctx.createBuffer(1, ctx.sampleRate * dur, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = 2200;
+    bp.Q.value = 1.2;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.6, now + 0.04);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+    noise.connect(bp).connect(noiseGain).connect(ctx.destination);
+    noise.start(now + 0.04);
+  }
+
+  // SUSPENSE: segura o vídeo, depois toca (devagar + com som)
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.muted = false;
-    v.play().catch(() => {
-      v.muted = true;
-      setMuted(true);
-      v.play().catch(() => {});
-    });
+    v.playbackRate = playbackRate;
+    v.pause();
+    const id = setTimeout(() => {
+      setSuspense(false);
+      ensureAudioBoost();
+      v.muted = false;
+      v.play().catch(() => {
+        v.muted = true;
+        setMuted(true);
+        v.play().catch(() => {});
+      });
+    }, suspenseMs);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // toca o clank quando o nome aparece
+  useEffect(() => {
+    if (show && !clankedRef.current) {
+      clankedRef.current = true;
+      playVaultClank();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show]);
 
   function enableSound() {
     const v = videoRef.current;
     if (!v) return;
+    ensureAudioBoost();
+    void audioCtxRef.current?.resume();
     v.muted = false;
     setMuted(false);
     void v.play();
@@ -88,8 +166,19 @@ export function CofreReveal({
           className="block max-h-full max-w-full"
         />
 
+        {/* SUSPENSE: tela de tensão antes de abrir */}
+        {suspense && (
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-4 bg-void/90 backdrop-blur-sm">
+            <span className="animate-[pulse-slow_1.4s_ease-in-out_infinite] text-6xl">🔒</span>
+            <p className="font-display text-xl font-bold tracking-wide text-white sm:text-2xl">Abrindo o cofre…</p>
+            <div className="h-1.5 w-44 overflow-hidden rounded-full bg-white/15">
+              <div className="h-full rounded-full bg-gradient-to-r from-rose to-gold" style={{ animation: `loadbar ${suspenseMs}ms linear forwards` }} />
+            </div>
+          </div>
+        )}
+
         {/* fallback: navegador bloqueou autoplay com som */}
-        {muted && (
+        {muted && !suspense && (
           <button
             onClick={enableSound}
             className="absolute left-1/2 top-4 z-20 -translate-x-1/2 rounded-full bg-black/60 px-4 py-2 text-sm text-white backdrop-blur transition hover:bg-black/80"

@@ -58,6 +58,9 @@ export function Paywall({
   onUnlock,
   allowTest = false,
   currency = "BRL",
+  sceneName = "Cofre",
+  sceneSrc = "/cofre.mp4",
+  live = false,
 }: {
   count: number;
   campaign: string;
@@ -65,6 +68,9 @@ export function Paywall({
   onUnlock: (payment?: { provider: string; externalId: string; plan?: string }) => void;
   allowTest?: boolean;
   currency?: Currency;
+  sceneName?: string;
+  sceneSrc?: string;
+  live?: boolean;
 }) {
   const [soon, setSoon] = useState(false);
   const [showCard, setShowCard] = useState(false);
@@ -104,7 +110,7 @@ export function Paywall({
         </p>
       </div>
 
-      {/* desbloqueie + preview premium */}
+      {/* desbloqueie + preview da cena escolhida */}
       <div className="text-center">
         <h3 className="font-display text-3xl font-semibold text-ink">Desbloqueie este sorteio</h3>
         <p className="mt-1 text-sm text-inkSoft">Post com {count.toLocaleString("pt-BR")} comentários</p>
@@ -112,18 +118,20 @@ export function Paywall({
 
       <div className="relative overflow-hidden rounded-3xl border border-gold/30 bg-void shadow-gold">
         <span className="absolute left-4 top-4 z-10 rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-void">
-          ★ Preview Premium
+          ★ Sua animação: {sceneName}
         </span>
         <video
-          src="/contagem.mp4"
+          key={sceneSrc}
+          src={sceneSrc}
           autoPlay
           muted
           loop
           playsInline
           className="mx-auto block max-h-[340px] w-full object-contain"
         />
-        <span className="absolute bottom-4 right-4 z-10 rounded-md bg-black/50 px-2 py-1 text-[11px] text-white backdrop-blur">
-          Cinematográfico
+        <span className="absolute bottom-4 right-4 z-10 flex gap-1.5">
+          {live && <span className="rounded-md bg-red-600 px-2 py-1 text-[11px] font-bold text-white">● AO VIVO</span>}
+          <span className="rounded-md bg-black/50 px-2 py-1 text-[11px] text-white backdrop-blur">Cinematográfico</span>
         </span>
       </div>
 
@@ -194,6 +202,7 @@ export function Paywall({
         <StripeCard
           plan={plan}
           priceLabel={priceLabel}
+          currency={currency}
           onSuccess={(externalId) => {
             setShowCard(false);
             onUnlock({ provider: "stripe", externalId, plan });

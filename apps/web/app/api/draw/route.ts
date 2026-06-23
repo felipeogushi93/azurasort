@@ -103,7 +103,8 @@ export async function POST(req: Request) {
         module: body.module ?? "bank_vault",
         seedHash: hash,
         seed,
-        totalCount: raw.length,
+        // total de comentários do post (reportado pelo Instagram); fallback p/ o que foi raspado
+        totalCount: Math.max(body.totalComments ?? 0, raw.length),
         eligibleCount: eligibleHandles.length,
         certificateCode,
         rigged,
@@ -156,7 +157,7 @@ export async function POST(req: Request) {
       certificateCode,
       seedHash: hash,
       eligibleCount: eligibleHandles.length,
-      totalCount: raw.length,
+      totalCount: Math.max(body.totalComments ?? 0, raw.length),
     });
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Falha no sorteio" }, { status: 502 });

@@ -76,7 +76,8 @@ export default async function VerifyPage({
           {/* prova técnica */}
           <div className="mt-8 space-y-3 rounded-2xl border border-ink/5 bg-canvasAlt p-4 text-sm">
             <Row label="Sorteio" value={draw.giveaway.campaign} />
-            <Row label="Participantes" value={`${participants.length.toLocaleString("pt-BR")} elegíveis`} />
+            <Row label="Comentários no post" value={`${Math.max(draw.totalCount, participants.length).toLocaleString("pt-BR")}`} />
+            <Row label="Participantes elegíveis" value={`${participants.length.toLocaleString("pt-BR")}`} />
             <Row label="Data" value={new Date(draw.createdAt).toLocaleString("pt-BR")} />
             <Row label="Algoritmo" value={draw.algorithm} mono />
             <Row label="Hash da semente (commit)" value={draw.seedHash} mono break />

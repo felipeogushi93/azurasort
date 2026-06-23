@@ -45,7 +45,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [step, setStep] = useState<Step>("link");
 
   // passo 1 — publicacao
-  const [campaign, setCampaign] = useState("Sorteio iPhone 16 Pro");
+  const [campaign, setCampaign] = useState("");
   const [link, setLink] = useState("");
   const [comments, setComments] = useState<Comment[]>([]);
   const [advancedOpen, setAdvancedOpen] = useState(false);
@@ -191,7 +191,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         body: JSON.stringify({
           postUrl: link || undefined,
           comments: comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : undefined,
-          campaign,
+          campaign: campaign.trim() || undefined,
           module,
           filters: liveFilters,
           totalComments: displayCount,
@@ -258,7 +258,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             {/* coluna esquerda: formulario */}
             <div>
               <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Nome do sorteio</label>
-              <input value={campaign} onChange={(e) => setCampaign(e.target.value)} className="inp mb-5" />
+              <input value={campaign} onChange={(e) => setCampaign(e.target.value)} placeholder="Ex: Sorteio iPhone 16 Pro" className="inp mb-5" />
 
               <label className="mb-1 block text-xs font-medium uppercase tracking-widest text-inkSoft">Link da publicação</label>
               <input
@@ -409,6 +409,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             }
             onUnlock={doDraw}
             currency={currency}
+            sceneName={(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).name}
+            sceneSrc={(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).src}
+            live={live}
           />
         </div>
       )}
@@ -491,12 +494,17 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         <div className="fixed inset-0 z-[100] bg-void">
           <button onClick={() => setShowReveal(false)} className="absolute right-5 top-5 z-[110] rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">ver resultado →</button>
           {module === "bank_vault" ? (
-            <CofreReveal handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle} />
+            <CofreReveal
+              handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
+              suspenseMs={live ? 900 : 2600}
+            />
           ) : module === "countdown" ? (
             <CofreReveal
               handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
               src="/contagem.mp4"
               revealAtSec={15.9}
+              suspenseMs={0}
+              playbackRate={1}
               showBand={false}
               textLeft={50}
               textTop={50}

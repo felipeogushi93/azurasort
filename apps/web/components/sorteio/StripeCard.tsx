@@ -12,11 +12,13 @@ export function StripeCard({
   onClose,
   plan = "premium",
   priceLabel = "R$ 34,90",
+  currency = "BRL",
 }: {
   onSuccess: (externalId: string) => void;
   onClose: () => void;
   plan?: string;
   priceLabel?: string;
+  currency?: string;
 }) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -25,12 +27,12 @@ export function StripeCard({
     fetch("/api/pay/stripe/intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan }),
+      body: JSON.stringify({ plan, currency }),
     })
       .then((r) => r.json())
       .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || "Falha ao iniciar o pagamento")))
       .catch((e) => setErr(String(e)));
-  }, [plan]);
+  }, [plan, currency]);
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
