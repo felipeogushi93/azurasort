@@ -11,10 +11,15 @@ export type Currency = "BRL" | "EUR" | "USD";
 export type PlanId = "padrao" | "premium" | "vip";
 
 /** Preços na MENOR unidade da moeda (centavos). Ajuste aqui se quiser. */
+// ⚠️⚠️ MODO TESTE TEMPORÁRIO: todos os planos a 1,00 para teste de pagamento real.
+// REVERTER para os valores reais abaixo quando o teste terminar:
+//   BRL: { padrao: 1990, premium: 3490, vip: 5990 }
+//   EUR: { padrao: 490, premium: 790, vip: 1190 }
+//   USD: { padrao: 490, premium: 790, vip: 1290 }
 export const PRICES: Record<Currency, Record<PlanId, number>> = {
-  BRL: { padrao: 1990, premium: 3490, vip: 5990 },
-  EUR: { padrao: 490, premium: 790, vip: 1190 },
-  USD: { padrao: 490, premium: 790, vip: 1290 },
+  BRL: { padrao: 100, premium: 100, vip: 100 },
+  EUR: { padrao: 100, premium: 100, vip: 100 },
+  USD: { padrao: 100, premium: 100, vip: 100 },
 };
 
 /** Países da Europa (UE/EEE + próximos) → EUR. */
