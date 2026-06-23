@@ -25,6 +25,7 @@ export interface PostPreview {
   commentsCount: number;
   likesCount: number;
   caption: string;
+  sampleComments: RawCommentDTO[]; // amostra (latestComments) — para o paywall, sem custo extra
 }
 
 export interface RawCommentDTO {
@@ -71,6 +72,13 @@ export async function fetchPostPreview(url: string): Promise<PostPreview> {
   const x = items?.[0];
   if (!x) throw new Error("Publicação não encontrada ou privada");
 
+  const sampleComments: RawCommentDTO[] = Array.isArray(x.latestComments)
+    ? x.latestComments
+        .filter((c: { ownerUsername?: string }) => c?.ownerUsername)
+        .slice(0, 5)
+        .map((c: { ownerUsername: string; text?: string }) => ({ handle: c.ownerUsername, text: c.text ?? "" }))
+    : [];
+
   const preview: PostPreview = {
     shortCode: x.shortCode ?? code,
     imageUrl: x.displayUrl ?? x.images?.[0] ?? "",
@@ -81,13 +89,14 @@ export async function fetchPostPreview(url: string): Promise<PostPreview> {
     commentsCount: x.commentsCount ?? 0,
     likesCount: x.likesCount ?? 0,
     caption: x.caption ?? "",
+    sampleComments,
   };
   previewCache.set(code, { data: preview, ts: Date.now() });
   return preview;
 }
 
-/** Lista de comentários (pesada). `limit` protege custo/tempo. */
-export async function fetchComments(url: string, limit = 2000): Promise<RawCommentDTO[]> {
+/** Lista de comentários (pesada). Roda só no sorteio PAGO (o pagamento cobre o custo). */
+export async function fetchComments(url: string, limit = 100000): Promise<RawCommentDTO[]> {
   const code = shortcodeFromUrl(url);
   if (!code) throw new Error("Link do Instagram inválido");
 

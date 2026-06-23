@@ -33,6 +33,7 @@ model Draw {
   eligibleCount   Int      @default(0)
   certificateCode String   @unique
   rigged          Boolean  @default(false)
+  participants    Json? // lista ordenada de @handles elegíveis (auditoria/verify)
   createdAt       DateTime @default(now())
   winners         Winner[]
 }

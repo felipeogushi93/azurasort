@@ -7,7 +7,7 @@ import { RevealClient } from "@/components/reveal/RevealClient";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
 import { CofreReveal } from "@/components/reveal/CofreReveal";
 import { Paywall } from "./Paywall";
-import { normalizeComments, applyFilters, runDraw } from "@/lib/draw/engine";
+import { normalizeComments, applyFilters } from "@/lib/draw/engine";
 import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
@@ -48,6 +48,8 @@ export function GiveawaySimulator() {
   const [advancedOpen, setAdvancedOpen] = useState(false);
   const [raw, setRaw] = useState("");
   const [preview, setPreview] = useState<PreviewState | null>(null);
+  const [sample, setSample] = useState<{ handle: string; text: string }[]>([]);
+  const [certCode, setCertCode] = useState<string | null>(null);
 
   // passo 2 — base
   const [base, setBase] = useState<Base>("comments");
@@ -83,7 +85,7 @@ export function GiveawaySimulator() {
     const debounce = setTimeout(async () => {
       setPreview({ status: "loading", total: 0, loaded: 0, isReel: /\/reels?\//i.test(link) });
       try {
-        // 1) prévia barata: imagem + contagem
+        // prévia barata: imagem + contagem + amostra (a coleta completa só roda no sorteio pago)
         const pr = await fetch(`/api/instagram/preview?url=${encodeURIComponent(link)}`);
         const p = await pr.json();
         if (cancelled) return;
@@ -91,6 +93,7 @@ export function GiveawaySimulator() {
           setPreview({ status: "error", total: 0, loaded: 0, isReel: false, error: p.error || "Falha ao buscar a publicação" });
           return;
         }
+        setSample((p.sampleComments ?? []).map((c: { handle: string; text: string }) => ({ handle: c.handle, text: c.text })));
         const total: number = p.commentsCount ?? 0;
         setPreview({
           status: "loadingComments",
@@ -104,29 +107,18 @@ export function GiveawaySimulator() {
           caption: p.caption,
         });
 
-        // anima a barra enquanto os comentários carregam (Apify entrega de uma vez)
+        // barra de "preparando" (cosmética — não gasta Apify; a coleta real é no sorteio)
         let cur = 0;
         progress = setInterval(() => {
-          cur += Math.max(1, Math.ceil((total || 100) / 40));
-          if (cur < total * 0.92 && !cancelled) {
+          cur += Math.max(1, Math.ceil((total || 100) / 30));
+          if (cur >= total) {
+            cur = total;
+            if (progress) clearInterval(progress);
+            if (!cancelled) setPreview((s) => (s ? { ...s, status: "loaded", loaded: total } : s));
+          } else if (!cancelled) {
             setPreview((s) => (s ? { ...s, loaded: cur } : s));
-          } else if (progress) {
-            clearInterval(progress);
           }
-        }, 120);
-
-        // 2) comentários reais (alimenta o sorteio)
-        const cr = await fetch(`/api/instagram/comments?url=${encodeURIComponent(link)}`);
-        const c = await cr.json();
-        if (cancelled) return;
-        if (progress) clearInterval(progress);
-        if (!cr.ok || c.error) {
-          setPreview((s) => (s ? { ...s, status: "error", error: c.error || "Falha ao carregar comentários" } : s));
-          return;
-        }
-        const list = normalizeComments((c.comments ?? []).map((x: { handle: string; text: string }) => ({ handle: x.handle, text: x.text })));
-        setComments(list);
-        setPreview((s) => (s ? { ...s, status: "loaded", total: total || list.length, loaded: total || list.length } : s));
+        }, 60);
       } catch (e) {
         if (!cancelled) setPreview({ status: "error", total: 0, loaded: 0, isReel: false, error: e instanceof Error ? e.message : "Erro de rede" });
       }
@@ -173,12 +165,48 @@ export function GiveawaySimulator() {
   /* ----- sorteio ----- */
   async function doDraw() {
     setBusy(true);
-    const { result: r } = await runDraw(comments, liveFilters, new Date().toISOString());
-    const s = buildRevealSpecFromDraw(r, { module, campaignName: campaign, locale: "pt-BR" });
-    setResult(r);
-    setSpec(s);
-    setStep("result");
-    setShowReveal(true); // abre a revelacao automaticamente (suspense antes de mostrar o vencedor)
+    try {
+      const res = await fetch("/api/draw", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postUrl: link || undefined,
+          comments: comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : undefined,
+          campaign,
+          module,
+          filters: liveFilters,
+          totalComments: displayCount,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        alert(data.error || "Falha no sorteio. Tente novamente.");
+        setBusy(false);
+        return;
+      }
+      const r: DrawResult = {
+        seed: "",
+        algorithm: "sha256-commit-reveal-fisher-yates",
+        totalCount: data.totalCount ?? 0,
+        eligibleCount: data.eligibleCount ?? 0,
+        winners: (data.winners ?? []).map((w: { position: number; handle: string; isBackup: boolean }) => ({
+          position: w.position,
+          isBackup: w.isBackup,
+          handle: w.handle,
+          text: "",
+        })),
+        certificateHash: data.certificateCode ?? "",
+        drawnAtIso: "",
+      };
+      const s = buildRevealSpecFromDraw(r, { module, campaignName: campaign, locale: "pt-BR" });
+      setResult(r);
+      setSpec(s);
+      setCertCode(data.certificateCode ?? null);
+      setStep("result");
+      setShowReveal(true); // abre a revelacao automaticamente (suspense antes do vencedor)
+    } catch (e) {
+      alert(e instanceof Error ? e.message : "Falha no sorteio.");
+    }
     setBusy(false);
   }
   async function redraw() {
@@ -331,7 +359,7 @@ export function GiveawaySimulator() {
 
           <div className="mt-5 flex items-center justify-between">
             <button onClick={() => setStep("base")} className="text-sm text-inkSoft hover:text-ink">← voltar</button>
-            <button disabled={!eligibleCount} onClick={() => setStep("unlock")} className="btn-gold py-2.5 disabled:opacity-40">
+            <button disabled={!displayCount} onClick={() => setStep("unlock")} className="btn-gold py-2.5 disabled:opacity-40">
               Continuar →
             </button>
           </div>
@@ -348,10 +376,14 @@ export function GiveawaySimulator() {
             count={displayCount}
             campaign={campaign}
             allowTest={allowTest}
-            sample={applyFilters(comments, liveFilters)
-              .filter((c) => c.eligible)
-              .slice(0, 5)
-              .map((c) => ({ handle: c.handle, text: c.text }))}
+            sample={
+              comments.length
+                ? applyFilters(comments, liveFilters)
+                    .filter((c) => c.eligible)
+                    .slice(0, 5)
+                    .map((c) => ({ handle: c.handle, text: c.text }))
+                : sample
+            }
             onTest={doDraw}
           />
         </div>
@@ -382,10 +414,15 @@ export function GiveawaySimulator() {
             <Stat label="Certificado" value={result.certificateHash.slice(0, 8) + "…"} mono />
           </div>
 
-          <div className="mt-4 rounded-lg border border-ink/5 bg-canvasAlt px-3 py-2">
-            <p className="text-[10px] uppercase tracking-widest text-inkSoft">Seed (reproduz o mesmo resultado)</p>
-            <p className="break-all font-mono text-xs text-violet">{result.seed}</p>
-          </div>
+          {certCode && (
+            <div className="mt-4 rounded-xl border border-gold/30 bg-gold/5 px-4 py-3">
+              <p className="text-[10px] uppercase tracking-widest text-gold-deep">Certificado de transparência</p>
+              <p className="font-mono text-sm text-ink">{certCode}</p>
+              <a href={`/verify/${certCode}`} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs font-semibold text-gold-deep underline-offset-2 hover:underline">
+                Verificar publicamente →
+              </a>
+            </div>
+          )}
 
           <div className="mt-5">
             <p className="mb-2 text-xs font-medium uppercase tracking-widest text-inkSoft">Cortes de vídeo prontos</p>
@@ -402,6 +439,16 @@ export function GiveawaySimulator() {
             <button onClick={newGiveaway} className="btn-ghost py-2.5">+ Novo sorteio</button>
           </div>
         </Card>
+      )}
+
+      {/* ---------- OVERLAY: sorteando ---------- */}
+      {busy && (
+        <div className="fixed inset-0 z-[115] grid place-items-center bg-ink/40 backdrop-blur-sm">
+          <div className="rounded-2xl bg-surface px-8 py-6 text-center shadow-lift">
+            <span className="mx-auto block h-7 w-7 animate-spin rounded-full border-2 border-ink/15 border-t-gold" />
+            <p className="mt-3 text-sm text-inkSoft">Coletando participantes e sorteando…</p>
+          </div>
+        </div>
       )}
 
       {/* ---------- REVEAL OVERLAY ---------- */}
