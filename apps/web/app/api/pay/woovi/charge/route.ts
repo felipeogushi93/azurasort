@@ -16,6 +16,7 @@ export async function POST(req: Request) {
     const charge = await createWooviCharge(PRICES.BRL[plan], `AzuraSort sorteio ${plan}`);
     return NextResponse.json(charge);
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error ? e.message : "Falha ao gerar PIX" }, { status: 502 });
+    console.error("[/api/pay/woovi/charge] erro:", e);
+    return NextResponse.json({ error: "Não foi possível gerar o PIX. Tente novamente." }, { status: 502 });
   }
 }

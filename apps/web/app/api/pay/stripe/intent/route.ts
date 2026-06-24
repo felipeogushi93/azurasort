@@ -29,6 +29,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ clientSecret: intent.client_secret, amount, plan, currency });
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error ? e.message : "Falha no pagamento" }, { status: 502 });
+    console.error("[/api/pay/stripe/intent] erro:", e);
+    return NextResponse.json({ error: "Não foi possível iniciar o pagamento. Tente novamente." }, { status: 502 });
   }
 }

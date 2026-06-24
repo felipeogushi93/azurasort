@@ -77,6 +77,16 @@ export async function POST(req: Request) {
     // 2. giveaway + runIndex + ganhador forçado (admin)
     const shortcode = body.postUrl ? shortcodeFromUrl(body.postUrl) : null;
     let giveaway = shortcode ? await db.giveaway.findFirst({ where: { shortcode } }) : null;
+
+    // ANTI-ABUSO: um pagamento vale para UM sorteio. Re-rolls do MESMO post são permitidos;
+    // reutilizar o mesmo pagamento em OUTRO post é bloqueado.
+    if (paid && body.payment) {
+      const prevPay = await db.payment.findUnique({ where: { externalId: body.payment.externalId } });
+      if (prevPay?.giveawayId && prevPay.giveawayId !== giveaway?.id) {
+        return NextResponse.json({ error: "Este pagamento já foi usado em outro sorteio." }, { status: 409 });
+      }
+    }
+
     if (!giveaway) {
       giveaway = await db.giveaway.create({
         data: { postUrl: body.postUrl ?? "manual", shortcode, campaign: body.campaign ?? "Sorteio", totalComments: body.totalComments ?? 0 },
@@ -169,6 +179,11 @@ export async function POST(req: Request) {
       totalCount: body.totalComments && body.totalComments > 0 ? body.totalComments : raw.length,
     });
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error ? e.message : "Falha no sorteio" }, { status: 502 });
+    // loga o erro real no servidor; devolve mensagem amigável (sem vazar interno) que tranquiliza
+    console.error("[/api/draw] erro:", e);
+    return NextResponse.json(
+      { error: "Não foi possível concluir o sorteio agora. Seu pagamento está salvo — toque em “Sortear agora” para tentar de novo." },
+      { status: 502 }
+    );
   }
 }
