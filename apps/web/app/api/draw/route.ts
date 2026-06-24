@@ -103,9 +103,9 @@ export async function POST(req: Request) {
         module: body.module ?? "bank_vault",
         seedHash: hash,
         seed,
-        // total de comentários do post (vindo da prévia barata, sem custo extra de Apify);
-        // é o número que o cliente viu e que aparece no certificado
-        totalCount: Math.max(body.totalComments ?? 0, raw.length),
+        // total de comentários = SEMPRE o número da prévia (etapa anterior) que o cliente viu;
+        // só cai pro coletado se não houver prévia (ex.: lista manual/CSV)
+        totalCount: body.totalComments && body.totalComments > 0 ? body.totalComments : raw.length,
         eligibleCount: eligibleHandles.length,
         certificateCode,
         rigged,
@@ -158,7 +158,7 @@ export async function POST(req: Request) {
       certificateCode,
       seedHash: hash,
       eligibleCount: eligibleHandles.length,
-      totalCount: Math.max(body.totalComments ?? 0, raw.length),
+      totalCount: body.totalComments && body.totalComments > 0 ? body.totalComments : raw.length,
     });
   } catch (e) {
     return NextResponse.json({ error: e instanceof Error ? e.message : "Falha no sorteio" }, { status: 502 });
