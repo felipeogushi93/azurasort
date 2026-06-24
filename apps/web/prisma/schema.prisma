@@ -87,3 +87,17 @@ model Event {
 
   @@index([type, createdAt])
 }
+
+// 🚨 RESGATE MANUAL (admin cola comentários do IG quando o scraping pega pouco).
+// Feature isolada — para remover: apague este model, /app/adminlkgat/RescuePanel.tsx,
+// /app/api/admin/rescue, lib/draw/parseIg.ts e o bloco "RESCUE manual" em /api/draw.
+model ManualPool {
+  id        String   @id @default(cuid())
+  shortcode String   @unique
+  postUrl   String
+  handles   Json // [{ handle, text }]
+  owner     String?
+  totalReal Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

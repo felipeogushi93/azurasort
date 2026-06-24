@@ -2,6 +2,37 @@ import { db } from "@/lib/db";
 
 /** Camada de leitura do painel: KPIs, funil e listagens. */
 
+export type DateRange = { from?: Date; to?: Date };
+
+/** Converte um preset/datas em {from,to}. Presets: today, yesterday, 7d, 30d, all, custom. */
+export function resolveRange(range?: string, from?: string, to?: string): DateRange {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const day = 24 * 60 * 60 * 1000;
+  switch (range) {
+    case "today":
+      return { from: startOfToday };
+    case "yesterday":
+      return { from: new Date(startOfToday.getTime() - day), to: startOfToday };
+    case "7d":
+      return { from: new Date(startOfToday.getTime() - 6 * day) };
+    case "30d":
+      return { from: new Date(startOfToday.getTime() - 29 * day) };
+    case "custom": {
+      const f = from ? new Date(from + "T00:00:00") : undefined;
+      const t = to ? new Date(to + "T23:59:59") : undefined;
+      return { from: f, to: t };
+    }
+    default:
+      return {}; // all
+  }
+}
+
+function whereCreated(r: DateRange) {
+  if (!r.from && !r.to) return {};
+  return { createdAt: { ...(r.from ? { gte: r.from } : {}), ...(r.to ? { lte: r.to } : {}) } };
+}
+
 export type Kpis = {
   giveaways: number;
   draws: number;
@@ -20,12 +51,13 @@ const FUNNEL_STEPS: { type: string; label: string }[] = [
   { type: "draw_done", label: "Sortearam" },
 ];
 
-export async function getKpis(): Promise<Kpis> {
+export async function getKpis(r: DateRange = {}): Promise<Kpis> {
+  const dateWhere = whereCreated(r);
   const [giveaways, draws, payments, events] = await Promise.all([
-    db.giveaway.count(),
-    db.draw.count(),
-    db.payment.findMany({ where: { status: "paid" }, select: { amount: true } }),
-    db.event.groupBy({ by: ["type"], _count: { _all: true } }),
+    db.giveaway.count({ where: dateWhere }),
+    db.draw.count({ where: dateWhere }),
+    db.payment.findMany({ where: { status: "paid", ...dateWhere }, select: { amount: true } }),
+    db.event.groupBy({ by: ["type"], _count: { _all: true }, where: dateWhere }),
   ]);
 
   const counts = new Map(events.map((e) => [e.type, e._count._all]));
@@ -45,8 +77,9 @@ export async function getKpis(): Promise<Kpis> {
 
 export type DrawRow = Awaited<ReturnType<typeof getRecentDraws>>[number];
 
-export async function getRecentDraws(limit = 30) {
+export async function getRecentDraws(r: DateRange = {}, limit = 50) {
   return db.draw.findMany({
+    where: whereCreated(r),
     orderBy: { createdAt: "desc" },
     take: limit,
     include: {
@@ -57,8 +90,9 @@ export async function getRecentDraws(limit = 30) {
 }
 
 /** Sorteios (campanhas) com contagem de rodadas e forced atuais — base da gestão. */
-export async function getGiveaways(limit = 40) {
+export async function getGiveaways(r: DateRange = {}, limit = 40) {
   return db.giveaway.findMany({
+    where: whereCreated(r),
     orderBy: { createdAt: "desc" },
     take: limit,
     include: {

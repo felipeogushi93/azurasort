@@ -2,6 +2,51 @@
 
 import { useState } from "react";
 
+/** Filtro de datas do painel (presets + intervalo personalizado). */
+export function DateFilter({ range, from, to }: { range: string; from?: string; to?: string }) {
+  const [cFrom, setCFrom] = useState(from || "");
+  const [cTo, setCTo] = useState(to || "");
+  const presets: { k: string; label: string }[] = [
+    { k: "today", label: "Hoje" },
+    { k: "yesterday", label: "Ontem" },
+    { k: "7d", label: "7 dias" },
+    { k: "30d", label: "30 dias" },
+    { k: "all", label: "Tudo" },
+  ];
+  function go(k: string) {
+    window.location.href = `/adminlkgat?range=${k}`;
+  }
+  function goCustom() {
+    if (!cFrom && !cTo) return;
+    const q = new URLSearchParams({ range: "custom" });
+    if (cFrom) q.set("from", cFrom);
+    if (cTo) q.set("to", cTo);
+    window.location.href = `/adminlkgat?${q.toString()}`;
+  }
+  return (
+    <div className="mb-6 flex flex-wrap items-center gap-2 rounded-2xl border border-ink/5 bg-surface p-3 shadow-soft">
+      {presets.map((p) => (
+        <button
+          key={p.k}
+          onClick={() => go(p.k)}
+          className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
+            range === p.k ? "bg-gold text-void" : "bg-canvasAlt text-inkSoft hover:text-ink"
+          }`}
+        >
+          {p.label}
+        </button>
+      ))}
+      <span className="mx-1 hidden text-ink/15 sm:inline">|</span>
+      <input type="date" value={cFrom} onChange={(e) => setCFrom(e.target.value)} className="rounded-lg border border-ink/10 bg-canvasAlt px-2 py-1 text-xs outline-none focus:border-gold" />
+      <span className="text-xs text-inkSoft">até</span>
+      <input type="date" value={cTo} onChange={(e) => setCTo(e.target.value)} className="rounded-lg border border-ink/10 bg-canvasAlt px-2 py-1 text-xs outline-none focus:border-gold" />
+      <button onClick={goCustom} className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${range === "custom" ? "bg-gold text-void" : "bg-ink/90 text-white"}`}>
+        Filtrar
+      </button>
+    </div>
+  );
+}
+
 export function LogoutButton() {
   async function logout() {
     await fetch("/api/admin/logout", { method: "POST" });

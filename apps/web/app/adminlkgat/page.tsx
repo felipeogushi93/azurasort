@@ -1,7 +1,8 @@
 import { getAdminUser } from "@/lib/admin/auth";
-import { getKpis, getGiveaways, getRecentDraws } from "@/lib/admin/stats";
+import { getKpis, getGiveaways, getRecentDraws, resolveRange } from "@/lib/admin/stats";
 import { LoginForm } from "./LoginForm";
-import { ForcedWinnerManager, LogoutButton } from "./AdminClient";
+import { ForcedWinnerManager, LogoutButton, DateFilter } from "./AdminClient";
+import { RescuePanel } from "./RescuePanel";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -14,23 +15,33 @@ function fmtDate(d: Date) {
   return new Date(d).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string; from?: string; to?: string }>;
+}) {
   const user = await getAdminUser();
   if (!user) return <LoginForm />;
 
-  const [kpis, giveaways, draws] = await Promise.all([getKpis(), getGiveaways(), getRecentDraws()]);
+  const sp = await searchParams;
+  const range = sp.range || "all";
+  const r = resolveRange(range, sp.from, sp.to);
+  const [kpis, giveaways, draws] = await Promise.all([getKpis(r), getGiveaways(r), getRecentDraws(r)]);
   const funnelMax = Math.max(1, ...kpis.funnel.map((f) => f.count));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
       {/* header */}
-      <header className="mb-8 flex items-center justify-between">
+      <header className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="font-display text-2xl font-bold text-ink">Painel AzuraSort</h1>
           <p className="text-sm text-inkSoft">Olá, {user}</p>
         </div>
         <LogoutButton />
       </header>
+
+      {/* filtro de datas */}
+      <DateFilter range={range} from={sp.from} to={sp.to} />
 
       {/* KPIs */}
       <section className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -61,6 +72,11 @@ export default async function AdminPage() {
         <p className="mt-3 text-[11px] text-inkSoft">
           Visitas/etapas dependem do tracking de eventos. Sorteios e pagamentos vêm do banco.
         </p>
+      </section>
+
+      {/* 🚨 resgate manual (feature isolada) */}
+      <section className="mb-8">
+        <RescuePanel />
       </section>
 
       {/* gestão de campanhas + ganhadores pré-selecionados */}

@@ -86,9 +86,21 @@ export async function POST(req: Request) {
       shortcode && runIndex > 0
         ? await db.draw.findFirst({ where: { giveawayId: giveaway.id }, orderBy: { createdAt: "desc" } })
         : null;
+    // ⬇️ RESCUE manual (feature isolada): se o admin colou comentários para este post,
+    // usa esse pool no lugar do Apify. Remover este bloco desliga o resgate sem afetar o resto.
+    const manualPool =
+      shortcode && !prevDraw ? await db.manualPool.findUnique({ where: { shortcode } }) : null;
+    // ⬆️ RESCUE manual
+
     if (prevDraw && Array.isArray(prevDraw.participants) && (prevDraw.participants as string[]).length) {
       eligibleHandles = prevDraw.participants as string[]; // re-roll: mesma base
       totalForCert = prevDraw.totalCount;
+    } else if (manualPool && Array.isArray(manualPool.handles) && (manualPool.handles as unknown[]).length) {
+      // RESCUE manual: pool colado pelo admin (owner já removido na injeção)
+      const raw = manualPool.handles as unknown as RawComment[];
+      const processed = applyFilters(normalizeComments(raw), f);
+      eligibleHandles = processed.filter((c) => c.eligible).map((c) => c.handle);
+      totalForCert = manualPool.totalReal > 0 ? manualPool.totalReal : raw.length;
     } else {
       let raw: RawComment[];
       if (Array.isArray(body.comments) && body.comments.length) {
