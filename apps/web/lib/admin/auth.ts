@@ -28,12 +28,13 @@ function safeEqual(a: string, b: string) {
 }
 
 export function checkCredentials(user: string, password: string): boolean {
-  const U = process.env.ADMIN_USER || "";
-  const P = process.env.ADMIN_PASSWORD || "";
+  // .trim() blinda contra espaço/quebra de linha colado na env do Vercel
+  const U = (process.env.ADMIN_USER || "").trim();
+  const P = (process.env.ADMIN_PASSWORD || "").trim();
   if (!U || !P) return false;
   // avalia ambos para não vazar qual campo falhou
-  const okU = safeEqual(user, U);
-  const okP = safeEqual(password, P);
+  const okU = safeEqual(user.trim(), U);
+  const okP = safeEqual(password.trim(), P);
   return okU && okP;
 }
 
