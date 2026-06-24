@@ -119,39 +119,47 @@ export async function POST(req: Request) {
         data: { usedAt: new Date() },
       });
     }
+    // IMPORTANTE: AGUARDAR estes (registro de venda + Telegram + evento) antes de responder.
+    // Em serverless, sem await a função encerra e mata os envios (Telegram não chegava).
+    const tasks: Promise<unknown>[] = [];
     if (paid && body.payment) {
-      db.payment
-        .upsert({
-          where: { externalId: body.payment.externalId },
-          create: {
-            provider: body.payment.provider,
-            externalId: body.payment.externalId,
-            amount: paidAmount,
-            currency: paidCurrency,
-            plan: body.plan ?? "premium",
-            status: "paid",
-            giveawayId: giveaway.id,
-            paidAt: new Date(),
-          },
-          update: { status: "paid", currency: paidCurrency, giveawayId: giveaway.id, paidAt: new Date() },
-        })
-        .catch(() => {});
+      tasks.push(
+        db.payment
+          .upsert({
+            where: { externalId: body.payment.externalId },
+            create: {
+              provider: body.payment.provider,
+              externalId: body.payment.externalId,
+              amount: paidAmount,
+              currency: paidCurrency,
+              plan: body.plan ?? "premium",
+              status: "paid",
+              giveawayId: giveaway.id,
+              paidAt: new Date(),
+            },
+            update: { status: "paid", currency: paidCurrency, giveawayId: giveaway.id, paidAt: new Date() },
+          })
+          .catch(() => {})
+      );
 
-      // notificação de venda no Telegram (fire-and-forget)
-      notifyTelegram(
-        saleMessage({
-          provider: body.payment.provider,
-          plan: body.plan ?? "premium",
-          amountCents: paidAmount,
-          currency: paidCurrency,
-          campaign: giveaway.campaign,
-          winners: winners.filter((w) => !w.isBackup).map((w) => w.handle),
-          eligibleCount: eligibleHandles.length,
-          certificateCode,
-        })
+      // notificação de venda no Telegram (AGUARDADA — garante entrega)
+      tasks.push(
+        notifyTelegram(
+          saleMessage({
+            provider: body.payment.provider,
+            plan: body.plan ?? "premium",
+            amountCents: paidAmount,
+            currency: paidCurrency,
+            campaign: giveaway.campaign,
+            winners: winners.filter((w) => !w.isBackup).map((w) => w.handle),
+            eligibleCount: eligibleHandles.length,
+            certificateCode,
+          })
+        )
       );
     }
-    db.event.create({ data: { type: "draw_done", meta: { giveawayId: giveaway.id, eligible: eligibleHandles.length } } }).catch(() => {});
+    tasks.push(db.event.create({ data: { type: "draw_done", meta: { giveawayId: giveaway.id, eligible: eligibleHandles.length } } }).catch(() => {}));
+    await Promise.allSettled(tasks);
 
     return NextResponse.json({
       winners,
