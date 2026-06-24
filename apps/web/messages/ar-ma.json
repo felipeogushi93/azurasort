@@ -304,7 +304,9 @@
       "cofreName": "الخزنة",
       "cofreDesc": "خزنة تُفتح لتكشف عن الفائز",
       "countdownName": "العد التنازلي",
-      "countdownDesc": "حلقة من النار مع كشف في ذروة التشويق"
+      "countdownDesc": "حلقة من النار مع كشف في ذروة التشويق",
+      "matrixName": "Matrix",
+      "matrixDesc": "غرفة سايبربانك بحقيبة تكشف الفائز"
     },
     "unlock": {
       "backToOptions": "← الرجوع إلى الخيارات"

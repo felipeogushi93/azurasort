@@ -304,7 +304,9 @@
       "cofreName": "Cofre",
       "cofreDesc": "Cofre que se abre revelando o vencedor",
       "countdownName": "Contagem regressiva",
-      "countdownDesc": "Anel de fogo com revelação no clímax"
+      "countdownDesc": "Anel de fogo com revelação no clímax",
+      "matrixName": "Matrix",
+      "matrixDesc": "Sala cyberpunk com a maleta revelando o vencedor"
     },
     "unlock": {
       "backToOptions": "← voltar para opções"

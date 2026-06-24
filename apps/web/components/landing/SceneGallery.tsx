@@ -10,7 +10,7 @@ const SCENES: Scene[] = [
   { name: "Bank Vault", emoji: "🔐", tier: 1, live: true, href: "/sorteio" },
   { name: "Countdown", emoji: "⏱️", tier: 1, live: true, href: "/sorteio" },
   { name: "Casino / Roulette", emoji: "🎰", tier: 2 },
-  { name: "Comment Matrix", emoji: "🟢", tier: 2 },
+  { name: "Matrix", emoji: "🟢", tier: 1, live: true, href: "/sorteio" },
   { name: "Dimensional Portal", emoji: "🌀", tier: 2 },
   { name: "Horse Race", emoji: "🐎", tier: 3 },
   { name: "Treasure Cave", emoji: "💰", tier: 3 },

@@ -35,10 +35,11 @@ const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
 
 // Cenas disponíveis (com vídeo de exemplo). Para adicionar uma nova no futuro,
 // basta colocar o vídeo em /public e acrescentar um item aqui.
-type SceneOption = { module: RevealModule; key: "cofre" | "countdown"; src: string };
+type SceneOption = { module: RevealModule; key: "cofre" | "countdown" | "matrix"; src: string };
 const SCENE_OPTIONS: SceneOption[] = [
   { module: "bank_vault", key: "cofre", src: "/cofre.mp4" },
   { module: "countdown", key: "countdown", src: "/contagem.mp4" },
+  { module: "comment_matrix", key: "matrix", src: "/matrix.mp4" },
 ];
 
 export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency }) {
@@ -535,6 +536,20 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               textLeft={50}
               textTop={50}
               fontScale={0.04}
+              openingLabel={t("reveal.opening")}
+              soundLabel={t("reveal.enableSound")}
+            />
+          ) : module === "comment_matrix" ? (
+            <CofreReveal
+              handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
+              src="/matrix.mp4"
+              revealAtSec={14.9}
+              suspenseMs={0}
+              playbackRate={1}
+              showBand={false}
+              textLeft={50}
+              textTop={48}
+              fontScale={0.05}
               openingLabel={t("reveal.opening")}
               soundLabel={t("reveal.enableSound")}
             />

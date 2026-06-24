@@ -304,7 +304,9 @@
       "cofreName": "Caja fuerte",
       "cofreDesc": "Caja fuerte que se abre revelando al ganador",
       "countdownName": "Cuenta atrás",
-      "countdownDesc": "Anillo de fuego con revelación en el clímax"
+      "countdownDesc": "Anillo de fuego con revelación en el clímax",
+      "matrixName": "Matrix",
+      "matrixDesc": "Sala cyberpunk con un maletín que revela al ganador"
     },
     "unlock": {
       "backToOptions": "← volver a las opciones"

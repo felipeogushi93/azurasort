@@ -304,7 +304,9 @@
       "cofreName": "Vault",
       "cofreDesc": "A vault that opens to reveal the winner",
       "countdownName": "Countdown",
-      "countdownDesc": "Ring of fire with a climactic reveal"
+      "countdownDesc": "Ring of fire with a climactic reveal",
+      "matrixName": "Matrix",
+      "matrixDesc": "Cyberpunk room with a briefcase revealing the winner"
     },
     "unlock": {
       "backToOptions": "← back to options"

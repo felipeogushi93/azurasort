@@ -304,7 +304,9 @@
       "cofreName": "Coffre-fort",
       "cofreDesc": "Un coffre-fort qui s’ouvre pour révéler le gagnant",
       "countdownName": "Compte à rebours",
-      "countdownDesc": "Anneau de feu avec révélation au point culminant"
+      "countdownDesc": "Anneau de feu avec révélation au point culminant",
+      "matrixName": "Matrix",
+      "matrixDesc": "Salle cyberpunk avec une mallette révélant le gagnant"
     },
     "unlock": {
       "backToOptions": "← retour aux options"
