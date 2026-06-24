@@ -44,17 +44,12 @@ export function Paywall({
   live?: boolean;
 }) {
   const t = useTranslations("sim");
-  const [soon, setSoon] = useState(false);
   const [showCard, setShowCard] = useState(false);
   const [showPix, setShowPix] = useState(false);
   const [plan, setPlan] = useState<PlanId>("premium");
   const labels = priceLabels(currency);
   const priceLabel = labels[plan];
   const isBrazil = currency === "BRL"; // PIX só no Brasil
-  const ping = () => {
-    setSoon(true);
-    setTimeout(() => setSoon(false), 2500);
-  };
 
   return (
     <div className="space-y-6">
@@ -143,18 +138,12 @@ export function Paywall({
 
       {/* pagamento */}
       <div>
-        <div className={`grid gap-3 ${isBrazil ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+        <div className={`grid gap-3 ${isBrazil ? "sm:grid-cols-2" : "mx-auto max-w-xs"}`}>
           {isBrazil && (
             <PayCard icon="⚡" title="PIX" sub={t("paywall.pixSub")} price={priceLabel} cta={t("paywall.pixCta")} accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
           )}
           <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={priceLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
-          <PayCard icon="🅿️" title="PayPal" sub={t("paywall.paypalSub")} price={priceLabel} cta={t("paywall.paypalCta")} onClick={ping} />
         </div>
-        {soon && (
-          <p className="mt-3 text-center text-sm text-gold-deep">
-            {t("paywall.soon")}
-          </p>
-        )}
         <p className="mt-3 text-center text-xs text-inkSoft">
           {t("paywall.guarantee")}
         </p>

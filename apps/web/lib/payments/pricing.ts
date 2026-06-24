@@ -22,24 +22,26 @@ export const PRICES: Record<Currency, Record<PlanId, number>> = {
   USD: { padrao: 100, premium: 100, vip: 100 },
 };
 
-/** Países da Europa (UE/EEE + próximos) → EUR. */
-const EUROPE = new Set([
+/** Países que cobramos em EUR (Europa UE/EEE + Marrocos, mercado-foco). */
+const EUR_COUNTRIES = new Set([
   "PT", "ES", "FR", "DE", "IT", "NL", "BE", "LU", "IE", "AT", "FI", "GR", "CY",
   "MT", "SK", "SI", "EE", "LV", "LT", "PL", "CZ", "HU", "RO", "BG", "HR", "DK",
   "SE", "GB", "NO", "CH", "IS", "LI",
+  "MA", // Marrocos (foco) → EUR
 ]);
 
 export function currencyForCountry(country?: string | null): Currency {
   const c = (country || "").toUpperCase();
   if (c === "BR") return "BRL";
-  if (EUROPE.has(c)) return "EUR";
+  if (EUR_COUNTRIES.has(c)) return "EUR";
   return "USD";
 }
 
 /** Fallback quando não há geo (ex.: dev local) — baseado no locale. */
 export function currencyForLocale(locale?: string | null): Currency {
   if (locale === "pt-br") return "BRL";
-  if (locale === "es") return "EUR";
+  // Espanha e Marrocos (es, ar-ma, fr-ma) → EUR; demais → USD
+  if (locale === "es" || locale === "ar-ma" || locale === "fr-ma") return "EUR";
   return "USD";
 }
 

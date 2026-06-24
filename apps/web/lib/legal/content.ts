@@ -3,8 +3,9 @@
  *
  * ⚠️ MODELO PADRÃO — não substitui revisão jurídica. Preencha os dados da empresa
  * (CNPJ, razão social, e-mail do DPO) antes de divulgar. PT é o documento canônico
- * (empresa BR / LGPD); EN serve os demais locales.
+ * (empresa BR / LGPD); EN serve os demais locales. ES/FR/AR em ./translations.
  */
+import { termsEs, privacyEs, termsFr, privacyFr, termsAr, privacyAr } from "./translations";
 
 export const LEGAL = {
   brand: "AzuraSort",
@@ -321,11 +322,21 @@ const privacyEn: LegalDoc = {
   ],
 };
 
-const isPt = (locale: string) => locale === "pt-br";
-
 export function getTerms(locale: string): LegalDoc {
-  return isPt(locale) ? termosPt : termsEn;
+  switch (locale) {
+    case "pt-br": return termosPt;
+    case "es": return termsEs as LegalDoc;
+    case "fr-ma": return termsFr as LegalDoc;
+    case "ar-ma": return termsAr as LegalDoc;
+    default: return termsEn;
+  }
 }
 export function getPrivacy(locale: string): LegalDoc {
-  return isPt(locale) ? privacidadePt : privacyEn;
+  switch (locale) {
+    case "pt-br": return privacidadePt;
+    case "es": return privacyEs as LegalDoc;
+    case "fr-ma": return privacyFr as LegalDoc;
+    case "ar-ma": return privacyAr as LegalDoc;
+    default: return privacyEn;
+  }
 }

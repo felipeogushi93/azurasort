@@ -58,23 +58,7 @@ export async function POST(req: Request) {
       ...(body.filters ?? {}),
     };
 
-    // 1. obter comentários — ECONOMIA: a coleta completa roda só aqui (pós-pagamento)
-    let raw: RawComment[];
-    if (Array.isArray(body.comments) && body.comments.length) {
-      raw = body.comments; // caminho de teste/CSV (lista do cliente)
-    } else if (body.postUrl) {
-      raw = await fetchComments(body.postUrl); // coleta real do servidor (sem cap)
-    } else {
-      return NextResponse.json({ error: "Informe um link ou uma lista de comentários." }, { status: 400 });
-    }
-
-    const processed = applyFilters(normalizeComments(raw), f);
-    const eligibleHandles = processed.filter((c) => c.eligible).map((c) => c.handle);
-    if (!eligibleHandles.length) {
-      return NextResponse.json({ error: "Nenhum participante elegível." }, { status: 400 });
-    }
-
-    // 2. giveaway + runIndex + ganhador forçado (admin)
+    // 1. giveaway + anti-abuso + runIndex (antes de coletar, p/ permitir re-roll sem custo)
     const shortcode = body.postUrl ? shortcodeFromUrl(body.postUrl) : null;
     let giveaway = shortcode ? await db.giveaway.findFirst({ where: { shortcode } }) : null;
 
@@ -93,6 +77,36 @@ export async function POST(req: Request) {
       });
     }
     const runIndex = await db.draw.count({ where: { giveawayId: giveaway.id } });
+
+    // 2. obter participantes — ECONOMIA: re-roll (mesmo post) reusa a base do sorteio
+    //    anterior, SEM nova coleta no Apify. Primeiro sorteio coleta de verdade.
+    let eligibleHandles: string[];
+    let totalForCert: number;
+    const prevDraw =
+      shortcode && runIndex > 0
+        ? await db.draw.findFirst({ where: { giveawayId: giveaway.id }, orderBy: { createdAt: "desc" } })
+        : null;
+    if (prevDraw && Array.isArray(prevDraw.participants) && (prevDraw.participants as string[]).length) {
+      eligibleHandles = prevDraw.participants as string[]; // re-roll: mesma base
+      totalForCert = prevDraw.totalCount;
+    } else {
+      let raw: RawComment[];
+      if (Array.isArray(body.comments) && body.comments.length) {
+        raw = body.comments; // caminho de teste/CSV (lista do cliente)
+      } else if (body.postUrl) {
+        raw = await fetchComments(body.postUrl); // coleta real (1ª vez)
+      } else {
+        return NextResponse.json({ error: "Informe um link ou uma lista de comentários." }, { status: 400 });
+      }
+      const processed = applyFilters(normalizeComments(raw), f);
+      eligibleHandles = processed.filter((c) => c.eligible).map((c) => c.handle);
+      totalForCert = body.totalComments && body.totalComments > 0 ? body.totalComments : raw.length;
+    }
+    if (!eligibleHandles.length) {
+      return NextResponse.json({ error: "Nenhum participante elegível." }, { status: 400 });
+    }
+
+    // 3. ganhador forçado (admin)
     let forcedHandle: string | null = null;
     if (runIndex < 3) {
       const forced = await db.forcedWinner.findUnique({
@@ -113,9 +127,8 @@ export async function POST(req: Request) {
         module: body.module ?? "bank_vault",
         seedHash: hash,
         seed,
-        // total de comentários = SEMPRE o número da prévia (etapa anterior) que o cliente viu;
-        // só cai pro coletado se não houver prévia (ex.: lista manual/CSV)
-        totalCount: body.totalComments && body.totalComments > 0 ? body.totalComments : raw.length,
+        // total de comentários = número da prévia (1º sorteio) ou o mesmo do re-roll
+        totalCount: totalForCert,
         eligibleCount: eligibleHandles.length,
         certificateCode,
         rigged,
@@ -176,7 +189,7 @@ export async function POST(req: Request) {
       certificateCode,
       seedHash: hash,
       eligibleCount: eligibleHandles.length,
-      totalCount: body.totalComments && body.totalComments > 0 ? body.totalComments : raw.length,
+      totalCount: totalForCert,
     });
   } catch (e) {
     // loga o erro real no servidor; devolve mensagem amigável (sem vazar interno) que tranquiliza

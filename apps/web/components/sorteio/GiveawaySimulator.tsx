@@ -7,6 +7,7 @@ import { RevealClient } from "@/components/reveal/RevealClient";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
 import { CofreReveal } from "@/components/reveal/CofreReveal";
 import { LiveStage } from "./LiveStage";
+import { RevealErrorBoundary } from "./RevealErrorBoundary";
 import { Paywall } from "./Paywall";
 import { normalizeComments, applyFilters } from "@/lib/draw/engine";
 import { generateMockComments } from "@/lib/draw/mock";
@@ -541,6 +542,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             )}
             <button onClick={() => setShowReveal(false)} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{liveActive ? t("reveal.results") : t("reveal.seeResult")}</button>
           </div>
+          <RevealErrorBoundary onClose={() => setShowReveal(false)} label={liveActive ? t("reveal.results") : t("reveal.seeResult")}>
           {module === "bank_vault" ? (
             <CofreReveal
               handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
@@ -581,6 +583,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           ) : (
             <RevealClient spec={spec} />
           )}
+          </RevealErrorBoundary>
         </div>
       )}
 
