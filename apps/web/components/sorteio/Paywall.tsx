@@ -47,7 +47,7 @@ export function Paywall({
   const [showCard, setShowCard] = useState(false);
   const [showPix, setShowPix] = useState(false);
   const [plan, setPlan] = useState<PlanId>("premium");
-  const labels = priceLabels(currency);
+  const labels = priceLabels(currency, count); // preço pela FAIXA de participantes
   const priceLabel = labels[plan];
   const isBrazil = currency === "BRL"; // PIX só no Brasil
 
@@ -164,6 +164,7 @@ export function Paywall({
           plan={plan}
           priceLabel={priceLabel}
           currency={currency}
+          count={count}
           onSuccess={(externalId) => {
             setShowCard(false);
             onUnlock({ provider: "stripe", externalId, plan });
@@ -176,6 +177,7 @@ export function Paywall({
         <WooviPix
           plan={plan}
           priceLabel={priceLabel}
+          count={count}
           onSuccess={(externalId) => {
             setShowPix(false);
             onUnlock({ provider: "woovi", externalId, plan });

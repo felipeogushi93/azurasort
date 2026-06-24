@@ -8,11 +8,13 @@ export function WooviPix({
   onClose,
   plan = "premium",
   priceLabel = "R$ 34,90",
+  count = 0,
 }: {
   onSuccess: (externalId: string) => void;
   onClose: () => void;
   plan?: string;
   priceLabel?: string;
+  count?: number;
 }) {
   const [charge, setCharge] = useState<{ correlationID: string; brCode: string; qrCodeImage: string } | null>(null);
   const [err, setErr] = useState<string | null>(null);
@@ -25,12 +27,12 @@ export function WooviPix({
     fetch("/api/pay/woovi/charge", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan }),
+      body: JSON.stringify({ plan, count }),
     })
       .then((r) => r.json())
       .then((d) => (d.brCode ? setCharge(d) : setErr(d.error || "Falha ao gerar o PIX")))
       .catch((e) => setErr(String(e)));
-  }, [plan]);
+  }, [plan, count]);
 
   // poll de status
   useEffect(() => {

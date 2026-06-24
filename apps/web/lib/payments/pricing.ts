@@ -10,17 +10,44 @@
 export type Currency = "BRL" | "EUR" | "USD";
 export type PlanId = "padrao" | "premium" | "vip";
 
-/** Preços na MENOR unidade da moeda (centavos). Ajuste aqui se quiser. */
-// ⚠️⚠️ MODO TESTE TEMPORÁRIO: todos os planos a 1,00 para teste de pagamento real.
-// REVERTER para os valores reais abaixo quando o teste terminar:
-//   BRL: { padrao: 1990, premium: 3490, vip: 5990 }
-//   EUR: { padrao: 490, premium: 790, vip: 1190 }
-//   USD: { padrao: 490, premium: 790, vip: 1290 }
-export const PRICES: Record<Currency, Record<PlanId, number>> = {
-  BRL: { padrao: 100, premium: 100, vip: 100 },
-  EUR: { padrao: 100, premium: 100, vip: 100 },
-  USD: { padrao: 100, premium: 100, vip: 100 },
+/**
+ * Preços por FAIXA de participantes (modelo Simplers).
+ * Faixas (limite superior): 100 · 500 · 1.000 · 3.000 · 10.000 · 30.000 · ∞
+ * Cada array tem 7 valores (índice = faixa), em centavos.
+ *   Padrão = tabela base (Simplers −R$1) · Cinematográfico ≈ ×1,6 · VIP ≈ ×2,4
+ * 💡 Para ajustar, edite só os arrays abaixo.
+ */
+const TIER_MAX = [100, 500, 1000, 3000, 10000, 30000, Infinity];
+
+/** Faixa (0..6) a partir do nº de participantes. */
+export function tierForCount(count: number): number {
+  const c = Math.max(1, Math.floor(count || 0));
+  const i = TIER_MAX.findIndex((max) => c <= max);
+  return i < 0 ? TIER_MAX.length - 1 : i;
+}
+
+export const PRICES: Record<Currency, Record<PlanId, number[]>> = {
+  BRL: {
+    padrao:  [1490, 1490, 1590, 1790, 2590, 3590, 4890],
+    premium: [2390, 2390, 2590, 2890, 4190, 5790, 7790],
+    vip:     [3590, 3590, 3790, 4290, 6190, 8590, 11690],
+  },
+  EUR: {
+    padrao:  [490, 490, 590, 690, 990, 1390, 1690],
+    premium: [790, 790, 990, 1090, 1590, 2190, 2690],
+    vip:     [1190, 1190, 1390, 1690, 2390, 3290, 3990],
+  },
+  USD: {
+    padrao:  [490, 490, 590, 690, 990, 1390, 1690],
+    premium: [790, 790, 990, 1090, 1590, 2190, 2690],
+    vip:     [1190, 1190, 1390, 1690, 2390, 3290, 3990],
+  },
 };
+
+/** Preço (centavos) para moeda + plano + nº de participantes. */
+export function priceForCount(currency: Currency, plan: PlanId, count: number): number {
+  return PRICES[currency][plan][tierForCount(count)];
+}
 
 /** Países que cobramos em EUR (Europa UE/EEE + Marrocos, mercado-foco). */
 const EUR_COUNTRIES = new Set([
@@ -62,11 +89,11 @@ export function formatPrice(cents: number, currency: Currency): string {
   return (cents / 100).toLocaleString(INTL_LOCALE[currency], { style: "currency", currency });
 }
 
-/** Rótulos formatados de todos os planos numa moeda. */
-export function priceLabels(currency: Currency): Record<PlanId, string> {
+/** Rótulos formatados dos 3 planos numa moeda, para um nº de participantes. */
+export function priceLabels(currency: Currency, count: number): Record<PlanId, string> {
   return {
-    padrao: formatPrice(PRICES[currency].padrao, currency),
-    premium: formatPrice(PRICES[currency].premium, currency),
-    vip: formatPrice(PRICES[currency].vip, currency),
+    padrao: formatPrice(priceForCount(currency, "padrao", count), currency),
+    premium: formatPrice(priceForCount(currency, "premium", count), currency),
+    vip: formatPrice(priceForCount(currency, "vip", count), currency),
   };
 }

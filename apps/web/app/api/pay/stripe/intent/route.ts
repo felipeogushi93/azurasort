@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/payments/stripe";
-import { PRICES, currencyForCountry, countryFromRequest, stripeCurrency, type PlanId, type Currency } from "@/lib/payments/pricing";
+import { priceForCount, currencyForCountry, countryFromRequest, stripeCurrency, type PlanId, type Currency } from "@/lib/payments/pricing";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Muitas tentativas. Aguarde." }, { status: 429 });
   }
   try {
-    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; currency?: Currency };
+    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; currency?: Currency; count?: number };
     const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";
 
     // moeda da localização escolhida (validada); fallback pelo país do visitante
@@ -18,7 +18,8 @@ export async function POST(req: Request) {
       body.currency === "BRL" || body.currency === "EUR" || body.currency === "USD"
         ? body.currency
         : currencyForCountry(countryFromRequest(req));
-    const amount = PRICES[currency][plan];
+    // preço pela FAIXA de participantes (nº vindo da prévia)
+    const amount = priceForCount(currency, plan, Number(body.count) || 0);
 
     const intent = await getStripe().paymentIntents.create({
       amount,

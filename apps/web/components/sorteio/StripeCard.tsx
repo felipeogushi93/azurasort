@@ -14,12 +14,14 @@ export function StripeCard({
   plan = "premium",
   priceLabel = "R$ 34,90",
   currency = "BRL",
+  count = 0,
 }: {
   onSuccess: (externalId: string) => void;
   onClose: () => void;
   plan?: string;
   priceLabel?: string;
   currency?: string;
+  count?: number;
 }) {
   const t = useTranslations("sim.card");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -29,12 +31,12 @@ export function StripeCard({
     fetch("/api/pay/stripe/intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan, currency }),
+      body: JSON.stringify({ plan, currency, count }),
     })
       .then((r) => r.json())
       .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || t("failStart"))))
       .catch((e) => setErr(String(e)));
-  }, [plan, currency, t]);
+  }, [plan, currency, count, t]);
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
