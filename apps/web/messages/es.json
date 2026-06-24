@@ -429,6 +429,12 @@
       "checkWinners": "ganadores reproducidos",
       "how": "Cómo verificar: ordena los @ participantes en orden alfabético, baraja con Fisher-Yates usando la semilla revelada (SHA-256) y comprueba que los ganadores coinciden. El hash se generó antes de la revelación.",
       "tagline": "sorteos verificables"
+    },
+    "ready": {
+      "title": "¡Pago confirmado!",
+      "subtitle": "Todo listo. Haz el sorteo cuando quieras.",
+      "drawNow": "🎲 Sortear ahora",
+      "hint": "La revelación empieza en cuanto hagas clic."
     }
   }
 }

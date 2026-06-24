@@ -429,6 +429,12 @@
       "checkWinners": "winners reproduced",
       "how": "How to verify: sort the participant @handles alphabetically, shuffle with Fisher-Yates using the revealed seed (SHA-256), and confirm the winners match. The hash was generated before the reveal.",
       "tagline": "verifiable giveaways"
+    },
+    "ready": {
+      "title": "Payment confirmed!",
+      "subtitle": "All set. Run the draw whenever you’re ready.",
+      "drawNow": "🎲 Draw now",
+      "hint": "The reveal starts as soon as you click."
     }
   }
 }

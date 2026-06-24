@@ -16,7 +16,7 @@ import { track } from "@/lib/track";
 import type { Currency } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
-type Step = "link" | "base" | "scene" | "unlock" | "result";
+type Step = "link" | "base" | "scene" | "unlock" | "ready" | "result";
 type Base = "comments" | "likes";
 type PreviewState = {
   status: "loading" | "loadingComments" | "loaded" | "error";
@@ -179,13 +179,19 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   // exibido ao cliente = total de comentários do post (esconde a filtragem interna)
   const displayCount = preview?.total ?? comments.length;
 
-  /* ----- sorteio ----- */
-  async function doDraw(payment?: { provider: string; externalId: string; plan?: string }) {
-    const pay = payment ?? lastPayment;
+  /* ----- pagamento confirmado: NÃO sorteia já; vai pra etapa "pronto" com botão ----- */
+  function handlePaid(payment?: { provider: string; externalId: string; plan?: string }) {
     if (payment) {
       setLastPayment(payment);
       track("pay_done", { provider: payment.provider, plan: payment.plan });
     }
+    setStep("ready");
+  }
+
+  /* ----- sorteio (disparado pelo botão "Sortear agora") ----- */
+  async function doDraw(payment?: { provider: string; externalId: string; plan?: string }) {
+    const pay = payment ?? lastPayment;
+    if (payment) setLastPayment(payment);
     // live só ativa no plano VIP (ou em modo teste, quando não há pagamento)
     setLiveActive(live && (!pay || pay.plan === "vip"));
     setBusy(true);
@@ -423,13 +429,30 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
                     .map((c) => ({ handle: c.handle, text: c.text }))
                 : sample
             }
-            onUnlock={doDraw}
+            onUnlock={handlePaid}
             currency={currency}
             sceneName={t(`scenes.${(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).key}Name`)}
             sceneSrc={(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).src}
             live={live}
           />
         </div>
+      )}
+
+      {/* ---------- PAGAMENTO CONFIRMADO → "Sortear agora" ---------- */}
+      {step === "ready" && (
+        <Card title={t("ready.title")} subtitle={t("ready.subtitle")}>
+          <div className="flex flex-col items-center gap-5 py-6 text-center">
+            <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald/15 text-3xl text-emerald">✓</div>
+            <div className="rounded-xl border border-ink/5 bg-canvasAlt px-5 py-3">
+              <p className="text-xs uppercase tracking-widest text-inkSoft">{t("s3.participants")}</p>
+              <p className="font-display text-3xl font-bold text-gold-deep">{displayCount.toLocaleString()}</p>
+            </div>
+            <button onClick={() => doDraw()} disabled={busy} className="btn-gold px-10 py-4 text-lg disabled:opacity-50">
+              {t("ready.drawNow")}
+            </button>
+            <p className="text-xs text-inkSoft">{t("ready.hint")}</p>
+          </div>
+        </Card>
       )}
 
       {/* ---------- 4 · RESULTADO ---------- */}
@@ -576,7 +599,8 @@ function Stepper({ step }: { step: Step }) {
     { k: "unlock", label: t("unlock") },
     { k: "result", label: t("result") },
   ];
-  const idx = steps.findIndex((s) => s.k === step);
+  // "ready" (pós-pagamento) aparece destacado no passo "Desbloquear"
+  const idx = steps.findIndex((s) => s.k === (step === "ready" ? "unlock" : step));
   return (
     <div className="mb-8 flex items-center justify-center gap-2 sm:gap-3">
       {steps.map((s, i) => (

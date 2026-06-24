@@ -429,6 +429,12 @@
       "checkWinners": "gagnants reproduits",
       "how": "Comment vérifier : triez les @ participants par ordre alphabétique, mélangez avec Fisher-Yates en utilisant la graine révélée (SHA-256) et vérifiez que les gagnants correspondent. Le hash a été généré avant la révélation.",
       "tagline": "tirages vérifiables"
+    },
+    "ready": {
+      "title": "Paiement confirmé !",
+      "subtitle": "Tout est prêt. Lancez le tirage quand vous voulez.",
+      "drawNow": "🎲 Tirer au sort",
+      "hint": "La révélation démarre dès que vous cliquez."
     }
   }
 }
