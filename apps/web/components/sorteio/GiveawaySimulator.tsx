@@ -14,7 +14,7 @@ import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { track } from "@/lib/track";
-import type { Currency } from "@/lib/payments/pricing";
+import type { Currency, PlanId } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
 type Step = "link" | "base" | "scene" | "unlock" | "ready" | "result";
@@ -36,11 +36,12 @@ const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
 
 // Cenas disponíveis (com vídeo de exemplo). Para adicionar uma nova no futuro,
 // basta colocar o vídeo em /public e acrescentar um item aqui.
-type SceneOption = { module: RevealModule; key: "cofre" | "countdown" | "matrix"; src: string };
+type SceneOption = { module: RevealModule; key: "cofre" | "countdown" | "matrix"; src: string; tier: PlanId };
+// tier = plano mínimo que inclui a animação. Padrão = só "Contagem".
 const SCENE_OPTIONS: SceneOption[] = [
-  { module: "bank_vault", key: "cofre", src: "/cofre.mp4" },
-  { module: "countdown", key: "countdown", src: "/contagem.mp4" },
-  { module: "comment_matrix", key: "matrix", src: "/matrix.mp4" },
+  { module: "bank_vault", key: "cofre", src: "/cofre.mp4", tier: "premium" },
+  { module: "countdown", key: "countdown", src: "/contagem.mp4", tier: "padrao" },
+  { module: "comment_matrix", key: "matrix", src: "/matrix.mp4", tier: "premium" },
 ];
 
 export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency }) {
@@ -350,6 +351,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
                 name={t(`scenes.${s.key}Name`)}
                 desc={t(`scenes.${s.key}Desc`)}
                 exampleLabel={t("s3.example")}
+                tierBadge={s.tier === "padrao" ? null : "Premium"}
                 active={module === s.module}
                 onClick={() => setModule(s.module)}
               />
@@ -434,6 +436,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             currency={currency}
             sceneName={t(`scenes.${(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).key}Name`)}
             sceneSrc={(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).src}
+            sceneTier={(SCENE_OPTIONS.find((s) => s.module === module) ?? SCENE_OPTIONS[0]).tier}
             live={live}
           />
         </div>
@@ -662,7 +665,7 @@ function BaseCard({ active, onClick, icon, title, desc }: { active: boolean; onC
   );
 }
 
-function ScenePreviewCard({ scene, name, desc, exampleLabel, active, onClick }: { scene: SceneOption; name: string; desc: string; exampleLabel: string; active: boolean; onClick: () => void }) {
+function ScenePreviewCard({ scene, name, desc, exampleLabel, tierBadge, active, onClick }: { scene: SceneOption; name: string; desc: string; exampleLabel: string; tierBadge: string | null; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -677,6 +680,9 @@ function ScenePreviewCard({ scene, name, desc, exampleLabel, active, onClick }: 
           <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-gold text-xs font-bold text-void">✓</span>
         )}
         <span className="absolute bottom-2 left-2 rounded-md bg-black/45 px-2 py-0.5 text-[10px] text-white backdrop-blur">{exampleLabel}</span>
+        {tierBadge && (
+          <span className="absolute left-2 top-2 rounded-full bg-gold px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-void shadow">{tierBadge}</span>
+        )}
       </div>
       <div className="p-3">
         <p className="text-sm font-bold text-ink">{name}</p>

@@ -5,6 +5,7 @@ import { fetchComments, shortcodeFromUrl } from "@/lib/providers/apify";
 import { drawFromHandles, generateSeed, makeCertificateCode } from "@/lib/draw/server";
 import { verifyStripePayment } from "@/lib/payments/stripe";
 import { getWooviStatus } from "@/lib/payments/woovi";
+import { priceForCount, type Currency, type PlanId } from "@/lib/payments/pricing";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 import { notifyTelegram, saleMessage } from "@/lib/notify/telegram";
 import type { DrawFilters, RawComment } from "@/lib/draw/types";
@@ -157,6 +158,15 @@ export async function POST(req: Request) {
     // IMPORTANTE: AGUARDAR estes (registro de venda + Telegram + evento) antes de responder.
     // Em serverless, sem await a função encerra e mata os envios (Telegram não chegava).
     const tasks: Promise<unknown>[] = [];
+    // Valor da venda: o status da Woovi (PIX) não retorna o valor, então o
+    // paidAmount fica 0. Calculamos pelo plano + faixa de participantes (é o
+    // mesmo cálculo da cobrança), garantindo valor correto no Telegram e no DB.
+    if (paid && !paidAmount) {
+      const planId = (["padrao", "premium", "vip"].includes(body.plan ?? "") ? body.plan : "premium") as PlanId;
+      const cur: Currency = paidCurrency === "EUR" || paidCurrency === "USD" ? paidCurrency : "BRL";
+      paidAmount = priceForCount(cur, planId, totalForCert);
+    }
+
     if (paid && body.payment) {
       tasks.push(
         db.payment

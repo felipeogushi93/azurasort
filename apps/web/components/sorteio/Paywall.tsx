@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
@@ -31,6 +31,7 @@ export function Paywall({
   currency = "BRL",
   sceneName = "Cofre",
   sceneSrc = "/cofre.mp4",
+  sceneTier = "premium",
   live = false,
 }: {
   count: number;
@@ -41,12 +42,22 @@ export function Paywall({
   currency?: Currency;
   sceneName?: string;
   sceneSrc?: string;
+  sceneTier?: PlanId;
   live?: boolean;
 }) {
   const t = useTranslations("sim");
   const [showCard, setShowCard] = useState(false);
   const [showPix, setShowPix] = useState(false);
-  const [plan, setPlan] = useState<PlanId>("premium");
+  // plano mínimo exigido: a animação escolhida define o piso; live força VIP.
+  const RANK: Record<PlanId, number> = { padrao: 0, premium: 1, vip: 2 };
+  const minTier: PlanId = live ? "vip" : sceneTier;
+  const planAllowed = (id: PlanId) => RANK[id] >= RANK[minTier];
+  const [plan, setPlan] = useState<PlanId>(planAllowed("premium") ? "premium" : minTier);
+  // se a cena/live exigem um plano maior que o selecionado, sobe automaticamente.
+  useEffect(() => {
+    if (RANK[plan] < RANK[minTier]) setPlan(minTier);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [minTier]);
   const labels = priceLabels(currency, count); // preço pela FAIXA de participantes
   const priceLabel = labels[plan];
   const isBrazil = currency === "BRL"; // PIX só no Brasil
@@ -106,12 +117,18 @@ export function Paywall({
       <div className="grid gap-3 md:grid-cols-3">
         {PLAN_META.map((p) => {
           const sel = plan === p.id;
+          const locked = !planAllowed(p.id);
           return (
             <button
               key={p.id}
-              onClick={() => setPlan(p.id)}
+              onClick={() => !locked && setPlan(p.id)}
+              disabled={locked}
               className={`relative rounded-2xl border-2 p-5 text-left transition ${
-                sel ? "border-gold bg-gradient-to-br from-gold/10 to-surface shadow-gold" : "border-ink/10 bg-surface hover:border-gold/40"
+                locked
+                  ? "cursor-not-allowed border-ink/10 bg-surface opacity-50"
+                  : sel
+                    ? "border-gold bg-gradient-to-br from-gold/10 to-surface shadow-gold"
+                    : "border-ink/10 bg-surface hover:border-gold/40"
               }`}
             >
               {p.badgeKey && (
@@ -128,13 +145,21 @@ export function Paywall({
                   <li key={f}>✓ {t(`plans.${f}`)}</li>
                 ))}
               </ul>
-              <span className={`mt-3 block text-xs font-semibold ${sel ? "text-gold-deep" : "text-inkSoft/0"}`}>
-                {sel ? t("paywall.selected") : t("paywall.select")}
+              <span className={`mt-3 block text-xs font-semibold ${locked ? "text-inkSoft" : sel ? "text-gold-deep" : "text-inkSoft/0"}`}>
+                {locked ? `🔒 ${t("paywall.planLocked")}` : sel ? t("paywall.selected") : t("paywall.select")}
               </span>
             </button>
           );
         })}
       </div>
+
+      {minTier !== "padrao" && (
+        <p className="-mt-2 text-center text-xs text-inkSoft">
+          {live
+            ? t("paywall.liveNeedsVip")
+            : t("paywall.sceneNeedsPlan", { scene: sceneName, plan: t(`plans.${minTier}Name`) })}
+        </p>
+      )}
 
       {/* pagamento */}
       <div>
