@@ -2,8 +2,11 @@ import type { Metadata } from "next";
 import { Unbounded, Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import { routing, isRtl } from "@/i18n/routing";
+import { getSeo } from "@/lib/seo/content";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationSchema, websiteSchema, softwareAppSchema } from "@/lib/seo/schema";
 import "../globals.css";
 
 // display divertida/arrojada (rounded) + corpo moderno e legível
@@ -31,30 +34,28 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "hero" });
+  const seo = getSeo(locale); // títulos/descrições ricos em palavra-chave por idioma
 
   // hreflang: cada idioma + x-default
   const languages: Record<string, string> = {};
   for (const l of routing.locales) languages[l] = `/${l}`;
   languages["x-default"] = "/en";
 
-  const description = t("subtitle");
-  const title = `AzuraSort — ${t("title")} ${t("titleHighlight")}`;
-
   return {
     metadataBase: new URL("https://azurasort.com"),
-    title,
-    description,
+    title: seo.homeTitle,
+    description: seo.homeDescription,
+    keywords: seo.keywords,
     alternates: { canonical: `/${locale}`, languages },
     openGraph: {
-      title,
-      description,
+      title: seo.homeTitle,
+      description: seo.homeDescription,
       url: `https://azurasort.com/${locale}`,
       siteName: "AzuraSort",
       locale,
       type: "website",
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title: seo.homeTitle, description: seo.homeDescription },
   };
 }
 
@@ -68,6 +69,7 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
+  const seo = getSeo(locale);
 
   return (
     <html
@@ -76,6 +78,7 @@ export default async function LocaleLayout({
       className={`${display.variable} ${sans.variable}`}
     >
       <body className="bg-canvas font-sans text-ink antialiased">
+        <JsonLd data={[organizationSchema(), websiteSchema(), softwareAppSchema(seo)]} />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

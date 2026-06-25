@@ -101,6 +101,9 @@ export default async function Home({
             <Link href="/privacidade" className="hover:text-ink hover:underline">
               {locale === "pt-br" ? "Privacidade" : "Privacy"}
             </Link>
+            <Link href="/guia" className="hover:text-ink hover:underline">
+              {locale === "pt-br" ? "Como fazer um sorteio" : locale === "es" ? "Cómo hacer un sorteo" : locale === "fr-ma" ? "Comment faire un tirage" : locale === "ar-ma" ? "كيفية عمل سحب" : "How to run a giveaway"}
+            </Link>
           </nav>
         </div>
         <p className="mx-auto mt-6 max-w-6xl text-center text-xs text-inkSoft/60">

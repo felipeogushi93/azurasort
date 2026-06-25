@@ -3,8 +3,8 @@ import { routing } from "@/i18n/routing";
 
 const BASE = "https://azurasort.com";
 
-// páginas públicas (indexáveis) — o /sorteio é a ferramenta; landing é a principal
-const PATHS = ["", "/sorteio"];
+// páginas públicas (indexáveis): landing · ferramenta · guia (cauda longa SEO) · legais
+const PATHS = ["", "/sorteio", "/guia", "/termos", "/privacidade"];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -21,7 +21,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${BASE}/${l}${path}`,
         lastModified: now,
         changeFrequency: "weekly",
-        priority: path === "" ? 1 : 0.8,
+        priority: path === "" ? 1 : path === "/guia" ? 0.9 : 0.7,
         alternates: { languages },
       });
     }
