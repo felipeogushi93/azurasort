@@ -27,6 +27,7 @@ export async function POST(req: Request) {
       totalComments?: number;
       plan?: string;
       payment?: { provider: string; externalId: string };
+      sessionId?: string;
     };
 
     // GATE: pagamento confirmado no SERVIDOR (antes de coletar — economia)
@@ -203,7 +204,7 @@ export async function POST(req: Request) {
         )
       );
     }
-    tasks.push(db.event.create({ data: { type: "draw_done", meta: { giveawayId: giveaway.id, eligible: eligibleHandles.length } } }).catch(() => {}));
+    tasks.push(db.event.create({ data: { type: "draw_done", sessionId: typeof body.sessionId === "string" ? body.sessionId.slice(0, 64) : null, meta: { giveawayId: giveaway.id, eligible: eligibleHandles.length } } }).catch(() => {}));
     await Promise.allSettled(tasks);
 
     return NextResponse.json({

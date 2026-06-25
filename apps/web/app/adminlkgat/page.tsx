@@ -1,5 +1,5 @@
 import { getAdminUser } from "@/lib/admin/auth";
-import { getKpis, getGiveaways, getRecentDraws, resolveRange } from "@/lib/admin/stats";
+import { getKpis, getGiveaways, getRecentDraws, getSourceBreakdown, sourceLabel, resolveRange } from "@/lib/admin/stats";
 import { LoginForm } from "./LoginForm";
 import { ForcedWinnerManager, LogoutButton, DateFilter } from "./AdminClient";
 import { RescuePanel } from "./RescuePanel";
@@ -26,8 +26,9 @@ export default async function AdminPage({
   const sp = await searchParams;
   const range = sp.range || "all";
   const r = resolveRange(range, sp.from, sp.to);
-  const [kpis, giveaways, draws] = await Promise.all([getKpis(r), getGiveaways(r), getRecentDraws(r)]);
+  const [kpis, giveaways, draws, sources] = await Promise.all([getKpis(r), getGiveaways(r), getRecentDraws(r), getSourceBreakdown(r)]);
   const funnelMax = Math.max(1, ...kpis.funnel.map((f) => f.count));
+  const sourcesMax = Math.max(1, ...sources.map((s) => s.visits));
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
@@ -72,6 +73,53 @@ export default async function AdminPage({
         <p className="mt-3 text-[11px] text-inkSoft">
           Visitas/etapas dependem do tracking de eventos. Sorteios e pagamentos vêm do banco.
         </p>
+      </section>
+
+      {/* origem dos visitantes/leads (de onde vieram) */}
+      <section className="mb-8 rounded-3xl border border-ink/5 bg-surface p-6 shadow-card">
+        <h2 className="mb-1 font-display text-lg font-bold text-ink">Origem dos leads</h2>
+        <p className="mb-4 text-[11px] text-inkSoft">
+          De onde cada visitante veio (ChatGPT, Google, anúncio, etc.) e quantos pagaram. Detectado por referrer/UTM no 1º acesso.
+        </p>
+        {sources.length === 0 ? (
+          <p className="rounded-2xl border border-dashed border-ink/15 p-6 text-center text-sm text-inkSoft">
+            Sem dados de origem ainda no período.
+          </p>
+        ) : (
+          <div className="overflow-hidden rounded-2xl border border-ink/5">
+            <table className="w-full text-sm">
+              <thead className="bg-canvasAlt text-left text-xs uppercase tracking-wider text-inkSoft">
+                <tr>
+                  <th className="px-4 py-2.5">Origem</th>
+                  <th className="px-4 py-2.5">Visitas</th>
+                  <th className="px-4 py-2.5">Pagaram</th>
+                  <th className="px-4 py-2.5">Conversão</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sources.map((s) => (
+                  <tr key={s.source} className="border-t border-ink/5">
+                    <td className="px-4 py-2.5">
+                      <span className={`font-medium ${s.source.startsWith("ai-") ? "text-violet" : "text-ink"}`}>
+                        {sourceLabel(s.source)}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 w-24 overflow-hidden rounded bg-canvasAlt">
+                          <div className="h-full rounded bg-gradient-to-r from-violet to-gold" style={{ width: `${Math.max(4, (s.visits / sourcesMax) * 100)}%` }} />
+                        </div>
+                        <span className="tabular-nums text-inkSoft">{s.visits}</span>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2.5 tabular-nums text-inkSoft">{s.paid}</td>
+                    <td className="px-4 py-2.5 tabular-nums font-semibold text-ink">{s.conversion}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       {/* 🚨 resgate manual (feature isolada) */}

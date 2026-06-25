@@ -89,6 +89,47 @@ export async function getRecentDraws(r: DateRange = {}, limit = 50) {
   });
 }
 
+/** Origem dos visitantes/leads (de onde vieram) — agrega o campo meta.src dos eventos.
+ * Mostra visitas e pagamentos por fonte (ChatGPT/Google/ads/etc) + conversão. */
+export type SourceRow = { source: string; visits: number; paid: number; conversion: number };
+
+const SOURCE_LABELS: Record<string, string> = {
+  "ai-chatgpt": "ChatGPT", "ai-claude": "Claude", "ai-perplexity": "Perplexity",
+  "ai-gemini": "Gemini", "ai-copilot": "Copilot",
+  "organic-google": "Google (orgânico)", "organic-bing": "Bing", "organic-duckduckgo": "DuckDuckGo",
+  "social-instagram": "Instagram", "social-facebook": "Facebook", "social-tiktok": "TikTok",
+  "social-youtube": "YouTube", "social-x": "X/Twitter", "whatsapp": "WhatsApp",
+  referral: "Outros sites", direct: "Direto/desconhecido",
+};
+
+export function sourceLabel(src: string): string {
+  return SOURCE_LABELS[src] ?? src;
+}
+
+export async function getSourceBreakdown(r: DateRange = {}): Promise<SourceRow[]> {
+  const rows = await db.event.findMany({
+    where: { type: { in: ["visit", "pay_done"] }, ...whereCreated(r) },
+    select: { type: true, meta: true },
+  });
+  const map = new Map<string, { visits: number; paid: number }>();
+  for (const e of rows) {
+    const meta = (e.meta ?? {}) as { src?: string };
+    const src = typeof meta.src === "string" && meta.src ? meta.src : "direct";
+    const row = map.get(src) ?? { visits: 0, paid: 0 };
+    if (e.type === "visit") row.visits++;
+    else if (e.type === "pay_done") row.paid++;
+    map.set(src, row);
+  }
+  return [...map.entries()]
+    .map(([source, v]) => ({
+      source,
+      visits: v.visits,
+      paid: v.paid,
+      conversion: v.visits > 0 ? Math.round((v.paid / v.visits) * 1000) / 10 : 0,
+    }))
+    .sort((a, b) => b.visits - a.visits || b.paid - a.paid);
+}
+
 /** Sorteios (campanhas) com contagem de rodadas e forced atuais — base da gestão. */
 export async function getGiveaways(r: DateRange = {}, limit = 40) {
   return db.giveaway.findMany({

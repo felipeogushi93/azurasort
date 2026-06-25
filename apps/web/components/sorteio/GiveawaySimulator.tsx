@@ -13,7 +13,7 @@ import { normalizeComments, applyFilters } from "@/lib/draw/engine";
 import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
-import { track } from "@/lib/track";
+import { track, getSessionId } from "@/lib/track";
 import type { Currency, PlanId } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
@@ -210,6 +210,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           totalComments: displayCount,
           plan: pay?.plan ?? "premium",
           payment: pay ? { provider: pay.provider, externalId: pay.externalId } : undefined,
+          sessionId: getSessionId(),
         }),
       });
       const data = await res.json();
