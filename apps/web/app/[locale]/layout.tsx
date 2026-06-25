@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Unbounded, Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -80,6 +81,9 @@ export default async function LocaleLayout({
       <body className="bg-canvas font-sans text-ink antialiased">
         <JsonLd data={[organizationSchema(), websiteSchema(), softwareAppSchema(seo)]} />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        {/* Painel-IA central: rastreia origem do lead (ChatGPT/Claude/Google/ads), visitor_id e
+            jornada — junto dos outros sites. Mesma URL/script que os demais sites usam. */}
+        <Script src="https://painel-ia-ten.vercel.app/t.js?c=azurasort" strategy="afterInteractive" />
       </body>
     </html>
   );
