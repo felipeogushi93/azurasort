@@ -3,8 +3,11 @@ import { routing } from "@/i18n/routing";
 
 const BASE = "https://azurasort.com";
 
-// páginas públicas (indexáveis): landing · ferramenta · guia (cauda longa SEO) · legais
-const PATHS = ["", "/sorteio", "/guia", "/termos", "/privacidade"];
+// páginas públicas (indexáveis): landing · ferramenta · guia + pillar vídeo (cauda longa SEO) · legais
+const PATHS = ["", "/sorteio", "/guia", "/instagram-giveaway-video", "/termos", "/privacidade"];
+
+// pillars de cauda longa ganham prioridade alta (logo abaixo da home)
+const HIGH_PRIORITY = new Set(["/guia", "/instagram-giveaway-video"]);
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -21,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${BASE}/${l}${path}`,
         lastModified: now,
         changeFrequency: "weekly",
-        priority: path === "" ? 1 : path === "/guia" ? 0.9 : 0.7,
+        priority: path === "" ? 1 : HIGH_PRIORITY.has(path) ? 0.9 : 0.7,
         alternates: { languages },
       });
     }

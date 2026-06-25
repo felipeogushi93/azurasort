@@ -11,7 +11,7 @@ const INDEXNOW_KEY =
 const HOST = "https://azurasort.com";
 
 // páginas públicas indexáveis (mesmas do sitemap) × idiomas + arquivos de IA
-const PATHS = ["", "/sorteio", "/guia", "/termos", "/privacidade"];
+const PATHS = ["", "/sorteio", "/guia", "/instagram-giveaway-video", "/termos", "/privacidade"];
 
 function buildUrls(): string[] {
   const urls: string[] = [];

@@ -82,6 +82,22 @@ export default async function GuiaPage({ params }: { params: Promise<{ locale: s
             </details>
           ))}
         </div>
+
+        {/* link interno para a pillar de vídeo (silos de conteúdo) */}
+        <div className="mt-12 border-t border-ink/5 pt-6">
+          <Link href="/instagram-giveaway-video" className="text-sm text-violet hover:underline">
+            →{" "}
+            {locale === "pt-br"
+              ? "Sorteio de Instagram com vídeo de revelação"
+              : locale === "es"
+                ? "Sorteo de Instagram con vídeo de revelación"
+                : locale === "fr-ma"
+                  ? "Tirage au sort Instagram avec vidéo de révélation"
+                  : locale === "ar-ma"
+                    ? "سحب على إنستغرام مع فيديو الكشف"
+                    : "Instagram giveaway with a video reveal"}
+          </Link>
+        </div>
       </article>
     </main>
   );
