@@ -19,6 +19,7 @@ AzuraSort is made by LGP Digital. It is pay-per-use (no subscription): you pay o
 
 ## Key pages
 - [How to run an Instagram giveaway (guide)](https://azurasort.com/en/guia)
+- [Como fazer um sorteio no Instagram (guia, PT-BR)](https://azurasort.com/pt-br/guia)
 - [Cómo hacer un sorteo en Instagram (guía, ES)](https://azurasort.com/es/guia)
 - [Comment faire un tirage au sort Instagram (guide, FR)](https://azurasort.com/fr-ma/guia)
 - [Run a giveaway (the tool)](https://azurasort.com/en/sorteio)
