@@ -5,6 +5,8 @@
  * A chave é hospedada em /public/<key>.txt para o protocolo validar a posse do domínio.
  */
 import { PROGRAMMATIC_LOCALES, allProgrammaticUrls } from "./programmatic";
+import { PILLAR_SLUGS } from "./pillars/registry";
+import { routing } from "@/i18n/routing";
 
 const INDEXNOW_KEY = "ff06472380979b6cc975f39ec65da986";
 const HOST = "azurasort.com";
@@ -33,5 +35,7 @@ export function mainSiteUrls(): string[] {
   // hub + páginas programáticas de cauda longa
   for (const l of PROGRAMMATIC_LOCALES) urls.add(`https://${HOST}/${l}/recursos`);
   for (const u of allProgrammaticUrls(`https://${HOST}`)) urls.add(u);
+  // pillar pages (comparativos) em todos os idiomas
+  for (const l of routing.locales) for (const s of PILLAR_SLUGS) urls.add(`https://${HOST}/${l}/${s}`);
   return [...urls];
 }
