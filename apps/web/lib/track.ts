@@ -14,6 +14,11 @@ function sessionId(): string {
   }
 }
 
+/** Mesmo sessionId do funil — pra amarrar o draw (server-side) à sessão do visitante. */
+export function getSessionId(): string {
+  return sessionId();
+}
+
 export function track(type: "visit" | "link_loaded" | "unlock_view" | "pay_started" | "pay_done", meta?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   try {

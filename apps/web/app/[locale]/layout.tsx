@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Unbounded, Plus_Jakarta_Sans } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -80,6 +81,11 @@ export default async function LocaleLayout({
       <body className="bg-canvas font-sans text-ink antialiased">
         <JsonLd data={[organizationSchema(), websiteSchema(), softwareAppSchema(seo)]} />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        {/* Tracking do Painel-IA central (origem do lead: ChatGPT/Claude/Google/ads, visitor_id, UTM).
+            Inerte até NEXT_PUBLIC_PAINEL_TRACK_SRC ser configurado (ex.: https://painel-ia.sorteigram.app/t.js?c=azurasort). */}
+        {process.env.NEXT_PUBLIC_PAINEL_TRACK_SRC ? (
+          <Script src={process.env.NEXT_PUBLIC_PAINEL_TRACK_SRC} strategy="afterInteractive" />
+        ) : null}
       </body>
     </html>
   );
