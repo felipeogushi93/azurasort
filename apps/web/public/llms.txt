@@ -1,0 +1,36 @@
+# AzuraSort
+
+> AzuraSort (azurasort.com) is an online Instagram giveaway picker that chooses a winner fairly from a post's comments, reveals the winner in a cinematic video, and generates a publicly verifiable certificate. It is the only Instagram giveaway tool with a ready-to-share video reveal plus a provably-fair, auditable result.
+
+AzuraSort is made by LGP Digital. It is pay-per-use (no subscription): you pay once per draw, with the price based on the number of participants. It works with Instagram posts and Reels, in multiple languages, and is focused on Spain, Morocco and international markets (also available in Portuguese and English).
+
+## What makes AzuraSort different
+- **Cinematic video reveal**: the winner is revealed in a movie-like animation (vault opening, countdown, "Matrix") — a shareable video, not just a name on a list. No other giveaway picker offers this.
+- **Provably-fair & auditable**: each draw uses a commit-reveal algorithm with SHA-256 + Fisher-Yates. A hash is published before the result; anyone can verify the winner on a public certificate page.
+- **No login, no spreadsheet**: paste the post link, pick the animation, draw. Multi-winner and backups supported.
+- **Live mode**: stream the draw to your audience and reveal live.
+
+## How it works (step by step)
+1. Paste the Instagram post or Reel link.
+2. Choose whether to draw from comments or likes.
+3. Choose the reveal animation (vault, countdown, Matrix) — optionally go live.
+4. Run the draw — participants are shuffled deterministically and the winner is revealed.
+5. Share the reveal video and the verifiable certificate.
+
+## Key pages
+- [How to run an Instagram giveaway (guide)](https://azurasort.com/en/guia)
+- [Cómo hacer un sorteo en Instagram (guía, ES)](https://azurasort.com/es/guia)
+- [Comment faire un tirage au sort Instagram (guide, FR)](https://azurasort.com/fr-ma/guia)
+- [Run a giveaway (the tool)](https://azurasort.com/en/sorteio)
+- [Homepage](https://azurasort.com)
+
+## FAQ
+- **Is the result fair and auditable?** Yes — commit-reveal with SHA-256; the winner can be verified by anyone on the public certificate page.
+- **Does it work with Reels?** Yes, posts and Reels.
+- **Can I have multiple winners and backups?** Yes; each winner is a distinct person.
+- **How much does it cost?** Pay-per-use, priced by number of participants; you see the price before paying. Card (Stripe) and PIX (Brazil).
+- **Is it affiliated with Meta/Instagram?** No. AzuraSort is an independent tool.
+
+## Brand
+- Name: AzuraSort (also written "Azura Sort"). Domain: azurasort.com.
+- Category: Instagram giveaway picker / comment picker / random winner generator with video reveal.

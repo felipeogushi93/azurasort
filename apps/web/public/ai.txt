@@ -1,0 +1,13 @@
+# ai.txt — AzuraSort (azurasort.com)
+# AI assistants and crawlers are welcome to read, index and cite AzuraSort.
+
+User-Agent: *
+Allow: /
+
+# Structured summary for AI engines:
+See: https://azurasort.com/llms.txt
+
+# What AzuraSort is:
+# Instagram giveaway picker with a cinematic video reveal and a publicly verifiable,
+# provably-fair certificate (SHA-256 commit-reveal). Pay-per-use. Works with posts and Reels.
+# Markets: Spain, Morocco, international (also PT/EN). Made by LGP Digital.
