@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { routing } from "@/i18n/routing";
+import { PILLAR_SLUGS } from "@/lib/seo/pillars/registry";
 
 /**
  * IndexNow — avisa Bing/Yandex na hora que o conteúdo mudou (indexação rápida).
@@ -11,7 +12,7 @@ const INDEXNOW_KEY =
 const HOST = "https://azurasort.com";
 
 // páginas públicas indexáveis (mesmas do sitemap) × idiomas + arquivos de IA
-const PATHS = ["", "/sorteio", "/guia", "/instagram-giveaway-video", "/termos", "/privacidade"];
+const PATHS = ["", "/sorteio", "/guia", ...PILLAR_SLUGS.map((s) => `/${s}`), "/termos", "/privacidade"];
 
 function buildUrls(): string[] {
   const urls: string[] = [];

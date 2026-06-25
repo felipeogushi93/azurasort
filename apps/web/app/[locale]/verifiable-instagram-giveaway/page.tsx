@@ -4,7 +4,7 @@ import { routing } from "@/i18n/routing";
 import { PillarArticle } from "@/components/seo/PillarArticle";
 import { pillarMetadata } from "@/lib/seo/pillars/registry";
 
-const SLUG = "instagram-giveaway-video";
+const SLUG = "verifiable-instagram-giveaway";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
