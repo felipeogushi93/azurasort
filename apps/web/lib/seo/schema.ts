@@ -9,7 +9,7 @@ export function organizationSchema() {
     name: SITE.name,
     url: SITE.url,
     logo: `${SITE.url}/icon.png`,
-    sameAs: ["https://www.instagram.com/azurasort", "https://www.tiktok.com/@azurasort"],
+    sameAs: ["https://www.instagram.com/azurasortoffical", "https://www.tiktok.com/@azurasort"],
   };
 }
 
