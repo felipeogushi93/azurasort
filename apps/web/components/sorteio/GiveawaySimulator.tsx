@@ -14,6 +14,7 @@ import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { track, getSessionId } from "@/lib/track";
+import { exportRevealVideo, downloadBlob, exportSupported, type ExportRatio } from "@/lib/video/exportReveal";
 import type { Currency, PlanId } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
@@ -76,6 +77,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [liveStarted, setLiveStarted] = useState(false); // na live: vira true quando dá START
   const [liveActive, setLiveActive] = useState(false); // live só vale no VIP (ou modo teste)
   const [busy, setBusy] = useState(false);
+  const [videoBusy, setVideoBusy] = useState<ExportRatio | null>(null);
+  const [videoProgress, setVideoProgress] = useState(0);
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
   const [allowTest, setAllowTest] = useState(false);
   useEffect(() => {
@@ -180,6 +183,35 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   );
   // exibido ao cliente = total de comentários do post (esconde a filtragem interna)
   const displayCount = preview?.total ?? comments.length;
+
+  // gera o vídeo do sorteio no navegador (canvas + MediaRecorder) e baixa
+  async function exportVideo(ratio: ExportRatio) {
+    if (videoBusy || !result) return;
+    const handle = (result.winners.find((w) => !w.isBackup) ?? result.winners[0])?.handle;
+    if (!handle) return;
+    if (!exportSupported()) {
+      alert("Seu navegador não suporta gerar o vídeo aqui. Use o Chrome ou Safari atualizado (de preferência no celular).");
+      return;
+    }
+    setVideoBusy(ratio);
+    setVideoProgress(0);
+    try {
+      const { blob, ext } = await exportRevealVideo({
+        module,
+        handle,
+        ratio,
+        label: t("result.winner"),
+        campaign: campaign.trim() || undefined,
+        onProgress: setVideoProgress,
+      });
+      downloadBlob(blob, `sorteio-${handle}-${ratio.replace(":", "x")}.${ext}`);
+    } catch {
+      alert("Não foi possível gerar o vídeo. Tente novamente.");
+    } finally {
+      setVideoBusy(null);
+      setVideoProgress(0);
+    }
+  }
 
   /* ----- pagamento confirmado: NÃO sorteia já; vai pra etapa "pronto" com botão ----- */
   function handlePaid(payment?: { provider: string; externalId: string; plan?: string }) {
@@ -496,15 +528,24 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           )}
 
           <div className="mt-5">
-            <p className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-inkSoft">
+            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-inkSoft">
               {t("result.cutsReady")}
-              <span className="rounded-full bg-ink/10 px-2 py-0.5 text-[9px] font-bold normal-case tracking-normal text-inkSoft">{t("result.cutsSoon")}</span>
             </p>
             <div className="flex gap-2">
-              {["9:16", "16:9", "1:1"].map((f) => (
-                <button key={f} disabled title={t("result.cutsSoon")} className="flex-1 cursor-not-allowed rounded-xl border border-ink/10 bg-surface py-2.5 text-sm text-inkSoft/50 shadow-soft">⬇ {f}</button>
+              {(["9:16", "16:9", "1:1"] as ExportRatio[]).map((f) => (
+                <button
+                  key={f}
+                  disabled={!!videoBusy}
+                  onClick={() => exportVideo(f)}
+                  className="flex-1 rounded-xl border border-gold/40 bg-surface py-2.5 text-sm font-semibold text-gold-deep shadow-soft transition hover:bg-gold/10 disabled:cursor-wait disabled:opacity-50"
+                >
+                  {videoBusy === f ? `🎬 ${Math.round(videoProgress * 100)}%` : `⬇ ${f}`}
+                </button>
               ))}
             </div>
+            {videoBusy && (
+              <p className="mt-2 text-[11px] text-inkSoft">🎬 Gerando o vídeo… mantenha a aba aberta.</p>
+            )}
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
