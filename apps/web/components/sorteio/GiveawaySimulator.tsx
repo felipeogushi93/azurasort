@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import type { RevealModule, RevealSpec } from "@prizegram/reveal-spec";
 import { RevealClient } from "@/components/reveal/RevealClient";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
@@ -46,6 +46,7 @@ const SCENE_OPTIONS: SceneOption[] = [
 
 export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency }) {
   const t = useTranslations("sim");
+  const locale = useLocale();
   const [step, setStep] = useState<Step>("link");
 
   // passo 1 — publicacao
@@ -492,6 +493,23 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               <a href={`/verify/${certCode}`} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs font-semibold text-gold-deep underline-offset-2 hover:underline">
                 {t("result.verifyPublic")}
               </a>
+              {/* certificado-imagem pronto pro Instagram (Story 9:16 + Feed 1:1) */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                <a
+                  href={`/api/certificate/${certCode}?format=story&locale=${locale}`}
+                  download={`certificado-${certCode}-story.png`}
+                  className="rounded-lg border border-gold/40 bg-surface px-3 py-1.5 text-xs font-semibold text-gold-deep shadow-soft transition hover:bg-gold/10"
+                >
+                  ⬇ Certificado Story 9:16
+                </a>
+                <a
+                  href={`/api/certificate/${certCode}?format=feed&locale=${locale}`}
+                  download={`certificado-${certCode}-feed.png`}
+                  className="rounded-lg border border-gold/40 bg-surface px-3 py-1.5 text-xs font-semibold text-gold-deep shadow-soft transition hover:bg-gold/10"
+                >
+                  ⬇ Certificado Feed 1:1
+                </a>
+              </div>
             </div>
           )}
 
