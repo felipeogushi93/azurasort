@@ -87,6 +87,24 @@ export default async function VerifyPage({
             </div>
           </div>
 
+          {/* baixar certificado-imagem pronto pro Instagram */}
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
+            <a
+              href={`/api/certificate/${draw.certificateCode}?format=story&locale=${locale}`}
+              download={`certificado-${draw.certificateCode}-story.png`}
+              className="rounded-lg border border-gold/40 bg-gold/5 px-4 py-2 text-xs font-semibold text-gold-deep transition hover:bg-gold/10"
+            >
+              ⬇ Story 9:16
+            </a>
+            <a
+              href={`/api/certificate/${draw.certificateCode}?format=feed&locale=${locale}`}
+              download={`certificado-${draw.certificateCode}-feed.png`}
+              className="rounded-lg border border-gold/40 bg-gold/5 px-4 py-2 text-xs font-semibold text-gold-deep transition hover:bg-gold/10"
+            >
+              ⬇ Feed 1:1
+            </a>
+          </div>
+
           <p className="mt-6 text-center text-xs leading-relaxed text-inkSoft">
             {t("how")}
           </p>
