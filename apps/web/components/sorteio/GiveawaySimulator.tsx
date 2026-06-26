@@ -16,7 +16,7 @@ import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { track, getSessionId } from "@/lib/track";
 import { exportRevealVideo, downloadBlob, exportSupported, mp4Supported, type ExportRatio } from "@/lib/video/exportReveal";
 import { useLiveRoom } from "@/lib/live/useLiveRoom";
-import type { Currency, PlanId } from "@/lib/payments/pricing";
+import { priceForCount, type Currency, type PlanId } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
 type Step = "link" | "base" | "scene" | "unlock" | "ready" | "result";
@@ -272,6 +272,15 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
     if (payment) {
       setLastPayment(payment);
       track("pay_done", { provider: payment.provider, plan: payment.plan });
+      // conversão de COMPRA para o GA4 (base das campanhas Google/Meta)
+      const planId = (payment.plan === "padrao" || payment.plan === "vip" ? payment.plan : "premium") as PlanId;
+      const value = priceForCount(currency, planId, displayCount) / 100;
+      (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.("event", "purchase", {
+        currency,
+        value,
+        transaction_id: payment.externalId,
+        items: [{ item_name: planId }],
+      });
     }
     setStep("ready");
   }
