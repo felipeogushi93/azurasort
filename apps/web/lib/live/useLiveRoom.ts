@@ -17,6 +17,7 @@ export function useLiveRoom(
   roomId: string | null,
   role: "host" | "viewer",
   onMessage?: (m: LiveMessage) => void,
+  hostToken?: string, // só o host tem — concede PUBLISH no /api/ably-token
 ) {
   const [count, setCount] = useState(0);
   const [connected, setConnected] = useState(false);
@@ -37,8 +38,11 @@ export function useLiveRoom(
     (async () => {
       try {
         const Ably = await import("ably");
+        const authUrl =
+          `/api/ably-token?room=${encodeURIComponent(roomId)}` +
+          (hostToken ? `&h=${encodeURIComponent(hostToken)}` : "");
         client = new Ably.Realtime({
-          authUrl: "/api/ably-token",
+          authUrl,
           clientId: `${role}-${Math.random().toString(36).slice(2, 8)}`,
         });
         clientRef.current = client;
@@ -89,7 +93,7 @@ export function useLiveRoom(
         /* ignore */
       }
     };
-  }, [roomId, role]);
+  }, [roomId, role, hostToken]);
 
   const publish = useCallback((data: LiveMessage) => {
     try {

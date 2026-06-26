@@ -77,6 +77,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [liveStarted, setLiveStarted] = useState(false); // na live: vira true quando dá START
   const [liveActive, setLiveActive] = useState(false); // live só vale no VIP (ou modo teste)
   const [liveRoomId, setLiveRoomId] = useState<string | null>(null); // sala da live REAL (Ably)
+  const [liveHostToken, setLiveHostToken] = useState<string | null>(null); // prova de host (publish)
   const [busy, setBusy] = useState(false);
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
   const [allowTest, setAllowTest] = useState(false);
@@ -184,13 +185,30 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const displayCount = preview?.total ?? comments.length;
 
   // ===== LIVE REAL (Ably): sala em tempo real, link compartilhável e sync =====
+  // o servidor gera roomId + hostToken (só o host publica — integridade do sorteio)
   useEffect(() => {
-    if (showReveal && liveActive && !liveRoomId) {
-      setLiveRoomId("az-" + Math.random().toString(36).slice(2, 9));
-    }
+    if (!(showReveal && liveActive) || liveRoomId) return;
+    let cancelled = false;
+    fetch("/api/live/create", { method: "POST" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!cancelled && d?.roomId) {
+          setLiveRoomId(d.roomId);
+          setLiveHostToken(d.hostToken ?? null);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
   }, [showReveal, liveActive, liveRoomId]);
 
-  const liveRoom = useLiveRoom(showReveal && liveActive ? liveRoomId : null, "host");
+  const liveRoom = useLiveRoom(
+    showReveal && liveActive ? liveRoomId : null,
+    "host",
+    undefined,
+    liveHostToken ?? undefined,
+  );
   function publishLiveState() {
     if (!liveRoom.configured) return;
     if (liveStarted && spec) liveRoom.publish({ type: "start", spec, campaign });
