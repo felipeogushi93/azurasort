@@ -20,12 +20,18 @@ export function LiveStage({
   labels = { badge: "Ao vivo", camera: "câmera", exit: "✕ sair", ready: "Quando estiver com a audiência pronta, inicie o sorteio.", start: "▶ Iniciar sorteio", noCam: "Câmera não disponível — você pode iniciar mesmo assim.", goLive: "🔴 Iniciar transmissão", goLiveHint: "Comece a live e fale com a sua audiência. Quando quiser, inicie o sorteio." },
   onStart,
   onClose,
+  onGoLive,
+  shareUrl,
+  realViewers,
 }: {
   campaign?: string;
   comments?: ChatMsg[];
   labels?: LiveLabels;
   onStart: () => void;
   onClose: () => void;
+  onGoLive?: () => void;
+  shareUrl?: string; // link público /live/<id> — quando setado, mostra caixa de compartilhar (live REAL)
+  realViewers?: number; // contagem REAL de espectadores (presence). Sem ela, usa simulação.
 }) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -36,6 +42,7 @@ export function LiveStage({
   const [count, setCount] = useState(3);
   const [chat, setChat] = useState<ChatMsg[]>([]);
   const [liveOn, setLiveOn] = useState(false); // 1º "Start live", depois "Iniciar sorteio"
+  const [copied, setCopied] = useState(false);
 
   // (re)liga a câmera no facingMode atual
   const startCamera = useCallback(async (mode: "user" | "environment") => {
@@ -60,14 +67,16 @@ export function LiveStage({
     };
   }, [facing, startCamera]);
 
-  // contador de espectadores "subindo" (efeito de live)
+  // contador de espectadores — usa o REAL (presence) quando disponível; senão, simula.
   useEffect(() => {
+    if (realViewers !== undefined) return; // live real: contagem vem por props
     setViewers(Math.floor(Math.random() * 40) + 18);
     const id = setInterval(() => {
       setViewers((v) => Math.max(0, v + Math.floor(Math.random() * 7) - 2));
     }, 2200);
     return () => clearInterval(id);
-  }, []);
+  }, [realViewers]);
+  const shownViewers = realViewers !== undefined ? realViewers : viewers;
 
   // chat: empurra um comentário a cada ~1.6s, mantém os últimos 6 visíveis
   useEffect(() => {
@@ -128,7 +137,7 @@ export function LiveStage({
                 <span className="h-2 w-2 animate-pulse rounded-full bg-white" /> {labels.badge}
               </span>
               <span className="flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-xs font-medium text-white backdrop-blur">
-                👁 {viewers.toLocaleString("pt-BR")}
+                👁 {shownViewers.toLocaleString("pt-BR")}
               </span>
             </>
           )}
@@ -199,7 +208,10 @@ export function LiveStage({
             <>
               <p className="text-center text-sm text-white/80 drop-shadow">{labels.goLiveHint}</p>
               <button
-                onClick={() => setLiveOn(true)}
+                onClick={() => {
+                  setLiveOn(true);
+                  onGoLive?.();
+                }}
                 className="rounded-full bg-red-600 px-10 py-4 font-display text-lg font-bold text-white shadow-lift transition hover:-translate-y-0.5"
               >
                 {labels.goLive}
@@ -207,6 +219,30 @@ export function LiveStage({
             </>
           ) : (
             <>
+              {shareUrl && (
+                <div className="flex w-full max-w-md items-center gap-2 rounded-xl border border-white/15 bg-black/50 px-3 py-2 backdrop-blur">
+                  <span className="flex-1 truncate text-xs text-white/80">{shareUrl}</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard?.writeText(shareUrl).then(
+                        () => {
+                          setCopied(true);
+                          setTimeout(() => setCopied(false), 1800);
+                        },
+                        () => {},
+                      );
+                    }}
+                    className="shrink-0 rounded-lg bg-gold px-3 py-1.5 text-xs font-bold text-void transition hover:bg-gold-hi"
+                  >
+                    {copied ? "✓ copiado" : "📋 copiar link"}
+                  </button>
+                </div>
+              )}
+              {shareUrl && (
+                <p className="text-center text-xs text-white/70 drop-shadow">
+                  Mande esse link pra sua audiência entrar e acompanhar o sorteio ao vivo.
+                </p>
+              )}
               <p className="text-center text-sm text-white/80 drop-shadow">{labels.ready}</p>
               <button
                 onClick={start}
