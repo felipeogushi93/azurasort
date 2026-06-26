@@ -26,11 +26,24 @@ const GOLD = "#E8C26B";
 const GOLD_DEEP = "#B8862F";
 const CYAN = "#3DF5FF";
 
+// várias formas de pedir MP4/H.264 — navegadores aceitam strings diferentes.
+const MP4_TYPES = [
+  'video/mp4;codecs="avc1.42E01E"',
+  'video/mp4;codecs="avc1.4d002a"',
+  "video/mp4;codecs=avc1",
+  "video/mp4;codecs=h264",
+  "video/mp4",
+];
+
+function bestMp4(): string | null {
+  if (typeof MediaRecorder === "undefined") return null;
+  for (const t of MP4_TYPES) if (MediaRecorder.isTypeSupported(t)) return t;
+  return null;
+}
+
 function pickMime(): { mime: string; ext: string } {
-  const mp4 = 'video/mp4;codecs="avc1.42E01E"';
-  if (typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported(mp4)) {
-    return { mime: mp4, ext: "mp4" };
-  }
+  const mp4 = bestMp4();
+  if (mp4) return { mime: mp4, ext: "mp4" };
   const vp9 = "video/webm;codecs=vp9";
   if (typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported(vp9)) {
     return { mime: vp9, ext: "webm" };
@@ -40,10 +53,7 @@ function pickMime(): { mime: string; ext: string } {
 
 /** true se o navegador grava MP4 (Instagram só aceita MP4; WebM não sobe lá). */
 export function mp4Supported(): boolean {
-  return (
-    typeof MediaRecorder !== "undefined" &&
-    MediaRecorder.isTypeSupported('video/mp4;codecs="avc1.42E01E"')
-  );
+  return bestMp4() !== null;
 }
 
 export function exportSupported(): boolean {
