@@ -22,8 +22,13 @@ export function useLiveRoom(
   const [count, setCount] = useState(0);
   const [connected, setConnected] = useState(false);
   const [configured, setConfigured] = useState<boolean | null>(null);
+  const [channel, setChannel] = useState<unknown>(null); // exposto p/ o WebRTC (câmera)
   const channelRef = useRef<unknown>(null);
   const clientRef = useRef<unknown>(null);
+  const clientIdRef = useRef<string>("");
+  if (!clientIdRef.current) {
+    clientIdRef.current = `${role}-${Math.random().toString(36).slice(2, 8)}`;
+  }
   const onMsgRef = useRef(onMessage);
   onMsgRef.current = onMessage;
 
@@ -43,7 +48,7 @@ export function useLiveRoom(
           (hostToken ? `&h=${encodeURIComponent(hostToken)}` : "");
         client = new Ably.Realtime({
           authUrl,
-          clientId: `${role}-${Math.random().toString(36).slice(2, 8)}`,
+          clientId: clientIdRef.current,
         });
         clientRef.current = client;
         client.connection.on("connected", () => {
@@ -58,6 +63,7 @@ export function useLiveRoom(
 
         channel = client.channels.get(`live:${roomId}`);
         channelRef.current = channel;
+        if (!cancelled) setChannel(channel);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await channel.subscribe("msg", (m: any) => {
@@ -92,6 +98,7 @@ export function useLiveRoom(
       } catch {
         /* ignore */
       }
+      setChannel(null);
     };
   }, [roomId, role, hostToken]);
 
@@ -104,5 +111,5 @@ export function useLiveRoom(
     }
   }, []);
 
-  return { count, connected, configured, publish };
+  return { count, connected, configured, publish, channel, clientId: clientIdRef.current };
 }
