@@ -84,6 +84,14 @@ export default async function LocaleLayout({
         {/* Painel-IA central: rastreia origem do lead (ChatGPT/Claude/Google/ads), visitor_id e
             jornada — junto dos outros sites. Mesma URL/script que os demais sites usam. */}
         <Script src="https://painel-ia-ten.vercel.app/t.js?c=azurasort" strategy="afterInteractive" />
+        {/* Google Analytics 4 — painel de visitas + base das campanhas (Google/Meta) */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-3H6JSKZNM5" strategy="afterInteractive" />
+        <Script id="ga4" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-3H6JSKZNM5');`}
+        </Script>
       </body>
     </html>
   );
