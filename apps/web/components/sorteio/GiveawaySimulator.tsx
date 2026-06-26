@@ -14,7 +14,7 @@ import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { track, getSessionId } from "@/lib/track";
-import { exportRevealVideo, downloadBlob, exportSupported, type ExportRatio } from "@/lib/video/exportReveal";
+import { exportRevealVideo, downloadBlob, exportSupported, mp4Supported, type ExportRatio } from "@/lib/video/exportReveal";
 import type { Currency, PlanId } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
@@ -192,6 +192,12 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
     if (!exportSupported()) {
       alert("Seu navegador não suporta gerar o vídeo aqui. Use o Chrome ou Safari atualizado (de preferência no celular).");
       return;
+    }
+    if (!mp4Supported()) {
+      const ok = window.confirm(
+        "Seu navegador vai gerar o vídeo em WebM, que o Instagram NÃO aceita. Para um MP4 que sobe no Instagram, abra no Chrome ou Safari atualizado (de preferência no celular).\n\nBaixar em WebM mesmo assim?",
+      );
+      if (!ok) return;
     }
     setVideoBusy(ratio);
     setVideoProgress(0);

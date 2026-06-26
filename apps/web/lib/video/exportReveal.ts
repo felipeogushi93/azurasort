@@ -38,6 +38,14 @@ function pickMime(): { mime: string; ext: string } {
   return { mime: "video/webm", ext: "webm" };
 }
 
+/** true se o navegador grava MP4 (Instagram só aceita MP4; WebM não sobe lá). */
+export function mp4Supported(): boolean {
+  return (
+    typeof MediaRecorder !== "undefined" &&
+    MediaRecorder.isTypeSupported('video/mp4;codecs="avc1.42E01E"')
+  );
+}
+
 export function exportSupported(): boolean {
   return (
     typeof MediaRecorder !== "undefined" &&
@@ -80,6 +88,50 @@ export async function exportRevealVideo(opts: {
   const duration = Math.min(video.duration || clip.revealAtSec + 5, 25);
   const { mime, ext } = pickMime();
   const stream = canvas.captureStream(30);
+
+  // áudio do clipe — decodificado à parte (independe do <video> mudo). À prova de
+  // falha: qualquer erro = vídeo sem som, nunca quebra a exportação.
+  let startAudio = () => {};
+  let stopAudio = () => {};
+  try {
+    const AC =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (AC) {
+      const ac = new AC();
+      await ac.resume().catch(() => {});
+      const buf = await fetch(clip.src)
+        .then((r) => r.arrayBuffer())
+        .then((b) => ac.decodeAudioData(b));
+      const dest = ac.createMediaStreamDestination();
+      const node = ac.createBufferSource();
+      node.buffer = buf;
+      node.connect(dest);
+      dest.stream.getAudioTracks().forEach((tr) => stream.addTrack(tr));
+      startAudio = () => {
+        try {
+          node.start(0);
+        } catch {
+          /* ignore */
+        }
+      };
+      stopAudio = () => {
+        try {
+          node.stop();
+        } catch {
+          /* ignore */
+        }
+        try {
+          ac.close();
+        } catch {
+          /* ignore */
+        }
+      };
+    }
+  } catch {
+    /* sem áudio: vídeo mudo */
+  }
+
   const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 8_000_000 });
   const chunks: Blob[] = [];
   rec.ondataavailable = (e) => {
@@ -166,6 +218,7 @@ export async function exportRevealVideo(opts: {
 
   await video.play().catch(() => {});
   rec.start();
+  startAudio();
 
   await new Promise<void>((resolve) => {
     function loop() {
@@ -195,6 +248,7 @@ export async function exportRevealVideo(opts: {
   });
 
   const blob = await stopped;
+  stopAudio();
   try {
     video.pause();
     video.removeAttribute("src");
