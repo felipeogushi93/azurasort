@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useCameraLink } from "@/lib/live/useCameraLink";
 
 type ChatMsg = { handle: string; text: string };
 
@@ -23,6 +24,8 @@ export function LiveStage({
   onGoLive,
   shareUrl,
   realViewers,
+  rtcChannel,
+  rtcClientId,
 }: {
   campaign?: string;
   comments?: ChatMsg[];
@@ -32,7 +35,11 @@ export function LiveStage({
   onGoLive?: () => void;
   shareUrl?: string; // link público /live/<id> — quando setado, mostra caixa de compartilhar (live REAL)
   realViewers?: number; // contagem REAL de espectadores (presence). Sem ela, usa simulação.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  rtcChannel?: any; // canal Ably p/ transmitir a câmera (WebRTC). Sem ele = sem broadcast.
+  rtcClientId?: string;
 }) {
+  const broadcasting = !!rtcChannel;
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [camOk, setCamOk] = useState<boolean | null>(null);
@@ -43,22 +50,39 @@ export function LiveStage({
   const [chat, setChat] = useState<ChatMsg[]>([]);
   const [liveOn, setLiveOn] = useState(false); // 1º "Start live", depois "Iniciar sorteio"
   const [copied, setCopied] = useState(false);
+  const [camStream, setCamStream] = useState<MediaStream | null>(null);
 
-  // (re)liga a câmera no facingMode atual
-  const startCamera = useCallback(async (mode: "user" | "environment") => {
-    try {
-      streamRef.current?.getTracks().forEach((t) => t.stop());
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: mode }, audio: false });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play().catch(() => {});
+  // transmite a câmera/voz do host pros espectadores (WebRTC) quando estiver ao vivo
+  useCameraLink({
+    channel: rtcChannel ?? null,
+    clientId: rtcClientId ?? "",
+    role: "host",
+    localStream: camStream,
+    enabled: broadcasting && liveOn,
+  });
+
+  // (re)liga a câmera no facingMode atual (com microfone quando vai transmitir)
+  const startCamera = useCallback(
+    async (mode: "user" | "environment") => {
+      try {
+        streamRef.current?.getTracks().forEach((t) => t.stop());
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: mode },
+          audio: broadcasting, // mic ligado só quando transmite (pros espectadores ouvirem)
+        });
+        streamRef.current = stream;
+        setCamStream(stream);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play().catch(() => {});
+        }
+        setCamOk(true);
+      } catch {
+        setCamOk(false);
       }
-      setCamOk(true);
-    } catch {
-      setCamOk(false);
-    }
-  }, []);
+    },
+    [broadcasting],
+  );
 
   useEffect(() => {
     startCamera(facing);

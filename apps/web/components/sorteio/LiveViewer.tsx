@@ -1,11 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { RevealSpec } from "@prizegram/reveal-spec";
 import { CofreReveal } from "@/components/reveal/CofreReveal";
 import { VideoReveal } from "@/components/reveal/VideoReveal";
 import { RevealErrorBoundary } from "./RevealErrorBoundary";
 import { useLiveRoom, type LiveMessage } from "@/lib/live/useLiveRoom";
+import { useCameraLink } from "@/lib/live/useCameraLink";
+
+/** Mostra a câmera/voz do host (recebida por WebRTC) em tela cheia. */
+function HostCamera({ stream }: { stream: MediaStream | null }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (v && stream) {
+      v.srcObject = stream;
+      v.play().catch(() => {});
+    }
+  }, [stream]);
+  if (!stream) return null;
+  return <video ref={ref} autoPlay playsInline className="absolute inset-0 h-full w-full object-cover" />;
+}
 
 /** Renderiza a revelação a partir do spec (mesma lógica do organizador). */
 function RevealFromSpec({ spec }: { spec: RevealSpec }) {
@@ -32,7 +47,13 @@ export function LiveViewer({ id }: { id: string }) {
     if (m.type === "end") setSpec(null);
   }
 
-  const { count, connected, configured } = useLiveRoom(id, "viewer", onMessage);
+  const { count, connected, configured, channel, clientId } = useLiveRoom(id, "viewer", onMessage);
+  const { remoteStream } = useCameraLink({
+    channel,
+    clientId,
+    role: "viewer",
+    enabled: configured === true,
+  });
 
   // sala indisponível (sem realtime configurado)
   if (configured === false) {
@@ -47,7 +68,13 @@ export function LiveViewer({ id }: { id: string }) {
   }
 
   return (
-    <main className="relative min-h-screen bg-void">
+    <main className="relative min-h-screen overflow-hidden bg-void">
+      {/* câmera/voz do host (fundo) enquanto não começou o sorteio */}
+      {!spec && <HostCamera stream={remoteStream} />}
+      {!spec && remoteStream && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+      )}
+
       {/* topo: AO VIVO + espectadores */}
       <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between p-4">
         <span className="flex items-center gap-2 rounded-full bg-red-600 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-lg">
@@ -64,13 +91,22 @@ export function LiveViewer({ id }: { id: string }) {
             <RevealFromSpec spec={spec} />
           </RevealErrorBoundary>
         </div>
+      ) : remoteStream ? (
+        // host ao vivo na câmera + legenda de espera
+        <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center gap-2 p-8 text-center">
+          {campaign && <p className="font-display text-xl font-bold text-white drop-shadow">{campaign}</p>}
+          <p className="text-sm text-white/80 drop-shadow">
+            {connected ? "O organizador vai iniciar o sorteio a qualquer momento…" : "Conectando…"}
+          </p>
+        </div>
       ) : (
+        // ainda sem câmera: tela de espera
         <div className="grid min-h-screen place-items-center px-6 text-center">
           <div className="flex flex-col items-center gap-4">
             <span className="text-5xl">🎬</span>
             {campaign && <p className="font-display text-2xl font-bold text-white">{campaign}</p>}
             <p className="text-sm text-white/70">
-              {connected ? "Aguardando o organizador iniciar o sorteio…" : "Conectando à transmissão…"}
+              {connected ? "Aguardando o organizador iniciar a transmissão…" : "Conectando à transmissão…"}
             </p>
             <span className="mt-2 h-6 w-6 animate-spin rounded-full border-2 border-white/20 border-t-gold" />
             <p className="mt-6 text-xs text-white/40">AzuraSort · sorteio ao vivo verificável</p>
