@@ -64,6 +64,11 @@ export function Paywall({
 
   return (
     <div className="space-y-6">
+      {allowTest && (
+        <div className="rounded-2xl border border-dashed border-emerald/40 bg-emerald/5 px-4 py-2.5 text-center text-sm font-medium text-emerald">
+          🧪 MODO TESTE ativo — o pagamento com <strong>cartão</strong> cobra só <strong>R$ 1,00</strong>
+        </div>
+      )}
       {/* amostra de participantes */}
       <div className="rounded-3xl border border-ink/5 bg-surface p-5 shadow-card sm:p-6">
         <div className="mb-4 flex items-center justify-between">
@@ -167,7 +172,7 @@ export function Paywall({
           {isBrazil && (
             <PayCard icon="⚡" title="PIX" sub={t("paywall.pixSub")} price={priceLabel} cta={t("paywall.pixCta")} accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
           )}
-          <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={priceLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
+          <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={allowTest ? "R$ 1,00 (teste)" : priceLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
         </div>
         <p className="mt-3 text-center text-xs text-inkSoft">
           {t("paywall.guarantee")}
