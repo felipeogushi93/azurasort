@@ -660,9 +660,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       {showReveal && spec && (!liveActive || liveStarted) && (
         <div className="fixed inset-0 z-[100] bg-void">
           <div className="absolute right-5 top-5 z-[110] flex gap-2">
-            {liveActive && (
-              <button onClick={() => setLiveStarted(false)} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{t("reveal.backToLive")}</button>
-            )}
+            {/* Sem "voltar pra live": depois do sorteio a revelação fica na tela
+                (a live continua), evitando reabrir o sorteio / reiniciar a live. */}
             <button onClick={() => setShowReveal(false)} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{liveActive ? t("reveal.results") : t("reveal.seeResult")}</button>
           </div>
           <RevealErrorBoundary onClose={() => setShowReveal(false)} label={liveActive ? t("reveal.results") : t("reveal.seeResult")}>
