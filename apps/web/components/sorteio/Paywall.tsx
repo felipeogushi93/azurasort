@@ -190,6 +190,7 @@ export function Paywall({
           priceLabel={priceLabel}
           currency={currency}
           count={count}
+          test={allowTest}
           onSuccess={(externalId) => {
             setShowCard(false);
             onUnlock({ provider: "stripe", externalId, plan });

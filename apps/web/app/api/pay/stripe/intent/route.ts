@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Muitas tentativas. Aguarde." }, { status: 429 });
   }
   try {
-    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; currency?: Currency; count?: number };
+    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; currency?: Currency; count?: number; test?: boolean };
     const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";
 
     // moeda da localização escolhida (validada); fallback pelo país do visitante
@@ -18,8 +18,10 @@ export async function POST(req: Request) {
       body.currency === "BRL" || body.currency === "EUR" || body.currency === "USD"
         ? body.currency
         : currencyForCountry(countryFromRequest(req));
-    // preço pela FAIXA de participantes (nº vindo da prévia)
-    const amount = priceForCount(currency, plan, Number(body.count) || 0);
+    // preço pela FAIXA de participantes (nº vindo da prévia).
+    // ⚠️ TESTE: com ?teste=1 cobra só 1,00 (100 centavos) — usado p/ validar o fluxo
+    // pago em produção sem gastar. Remover quando o teste acabar.
+    const amount = body.test === true ? 100 : priceForCount(currency, plan, Number(body.count) || 0);
 
     const intent = await getStripe().paymentIntents.create({
       amount,

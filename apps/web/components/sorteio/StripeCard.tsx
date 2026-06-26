@@ -15,6 +15,7 @@ export function StripeCard({
   priceLabel = "R$ 34,90",
   currency = "BRL",
   count = 0,
+  test = false,
 }: {
   onSuccess: (externalId: string) => void;
   onClose: () => void;
@@ -22,21 +23,24 @@ export function StripeCard({
   priceLabel?: string;
   currency?: string;
   count?: number;
+  test?: boolean;
 }) {
   const t = useTranslations("sim.card");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  // no modo teste (?teste=1) cobra só R$1 — ver /api/pay/stripe/intent
+  const label = test ? "R$ 1,00 (teste)" : priceLabel;
 
   useEffect(() => {
     fetch("/api/pay/stripe/intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan, currency, count }),
+      body: JSON.stringify({ plan, currency, count, test }),
     })
       .then((r) => r.json())
       .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || t("failStart"))))
       .catch((e) => setErr(String(e)));
-  }, [plan, currency, count, t]);
+  }, [plan, currency, count, test, t]);
 
   return (
     <div className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm">
@@ -56,7 +60,7 @@ export function StripeCard({
 
         {clientSecret && (
           <Elements stripe={stripePromise} options={{ clientSecret, appearance: { theme: "stripe", variables: { colorPrimary: "#C2922E" } } }}>
-            <CardForm onSuccess={onSuccess} priceLabel={priceLabel} />
+            <CardForm onSuccess={onSuccess} priceLabel={label} />
           </Elements>
         )}
 
