@@ -645,6 +645,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             labels={{ badge: t("live.badge"), camera: t("live.camera"), exit: t("live.exit"), ready: t("live.ready"), start: t("live.start"), noCam: t("live.noCam"), goLive: t("live.goLive"), goLiveHint: t("live.goLiveHint") }}
             shareUrl={liveShareUrl}
             realViewers={liveRoom.configured ? liveRoom.count : undefined}
+            rtcChannel={liveRoom.configured ? liveRoom.channel : undefined}
+            rtcClientId={liveRoom.clientId}
             onGoLive={() => liveRoom.configured && liveRoom.publish({ type: "hello", campaign })}
             onStart={() => {
               if (liveRoom.configured && spec) liveRoom.publish({ type: "start", spec, campaign });
