@@ -9,7 +9,11 @@ export function organizationSchema() {
     name: SITE.name,
     url: SITE.url,
     logo: `${SITE.url}/icon.png`,
-    sameAs: ["https://www.instagram.com/azurasortofficial", "https://www.tiktok.com/@azurasort"],
+    sameAs: [
+      "https://www.instagram.com/azurasortofficial",
+      "https://www.tiktok.com/@azurasort",
+      "https://www.wikidata.org/wiki/Q140357518",
+    ],
   };
 }
 
