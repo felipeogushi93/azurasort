@@ -14,6 +14,7 @@ import { generateMockComments } from "@/lib/draw/mock";
 import { parsePastedComments } from "@/lib/draw/parse";
 import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { track, getSessionId } from "@/lib/track";
+import { useLiveRoom } from "@/lib/live/useLiveRoom";
 import type { Currency, PlanId } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
@@ -75,6 +76,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [showReveal, setShowReveal] = useState(false);
   const [liveStarted, setLiveStarted] = useState(false); // na live: vira true quando dá START
   const [liveActive, setLiveActive] = useState(false); // live só vale no VIP (ou modo teste)
+  const [liveRoomId, setLiveRoomId] = useState<string | null>(null); // sala da live REAL (Ably)
   const [busy, setBusy] = useState(false);
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
   const [allowTest, setAllowTest] = useState(false);
@@ -180,6 +182,32 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   );
   // exibido ao cliente = total de comentários do post (esconde a filtragem interna)
   const displayCount = preview?.total ?? comments.length;
+
+  // ===== LIVE REAL (Ably): sala em tempo real, link compartilhável e sync =====
+  useEffect(() => {
+    if (showReveal && liveActive && !liveRoomId) {
+      setLiveRoomId("az-" + Math.random().toString(36).slice(2, 9));
+    }
+  }, [showReveal, liveActive, liveRoomId]);
+
+  const liveRoom = useLiveRoom(showReveal && liveActive ? liveRoomId : null, "host");
+  function publishLiveState() {
+    if (!liveRoom.configured) return;
+    if (liveStarted && spec) liveRoom.publish({ type: "start", spec, campaign });
+    else liveRoom.publish({ type: "hello", campaign });
+  }
+  const liveShareUrl =
+    liveRoomId && liveRoom.configured && typeof window !== "undefined"
+      ? `${window.location.origin}/${window.location.pathname.split("/")[1] || "pt-br"}/live/${liveRoomId}`
+      : undefined;
+
+  // heartbeat: reenvia o estado a cada 3s p/ quem entrar depois pegar a live em andamento
+  useEffect(() => {
+    if (!(showReveal && liveActive && liveRoom.configured)) return;
+    const id = setInterval(() => publishLiveState(), 3000);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showReveal, liveActive, liveRoom.configured, liveStarted, spec, campaign]);
 
   /* ----- pagamento confirmado: NÃO sorteia já; vai pra etapa "pronto" com botão ----- */
   function handlePaid(payment?: { provider: string; externalId: string; plan?: string }) {
@@ -532,7 +560,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             campaign={campaign}
             comments={comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : sample}
             labels={{ badge: t("live.badge"), camera: t("live.camera"), exit: t("live.exit"), ready: t("live.ready"), start: t("live.start"), noCam: t("live.noCam"), goLive: t("live.goLive"), goLiveHint: t("live.goLiveHint") }}
-            onStart={() => setLiveStarted(true)}
+            shareUrl={liveShareUrl}
+            realViewers={liveRoom.configured ? liveRoom.count : undefined}
+            onGoLive={() => liveRoom.configured && liveRoom.publish({ type: "hello", campaign })}
+            onStart={() => {
+              if (liveRoom.configured && spec) liveRoom.publish({ type: "start", spec, campaign });
+              setLiveStarted(true);
+            }}
             onClose={() => setShowReveal(false)}
           />
         </div>
