@@ -348,7 +348,9 @@
       "start": "▶ Start the draw",
       "noCam": "Camera not available — you can start anyway.",
       "goLive": "🔴 Go live",
-      "goLiveHint": "Start the live and talk to your audience. Whenever you’re ready, start the draw."
+      "goLiveHint": "Start the live and talk to your audience. Whenever you’re ready, start the draw.",
+      "finish": "End live",
+      "thank": "Draw complete! Thank your audience and end the live whenever you want."
     },
     "paywall": {
       "sampleTitle": "Sample of who participated",

@@ -13,12 +13,12 @@ type ChatMsg = { handle: string; text: string };
  * carregados — sem custo extra) e um botão START. Só quando ele clica em START é
  * que a revelação (vídeo do vencedor) começa — via onStart().
  */
-type LiveLabels = { badge: string; camera: string; exit: string; ready: string; start: string; noCam: string; goLive: string; goLiveHint: string };
+type LiveLabels = { badge: string; camera: string; exit: string; ready: string; start: string; noCam: string; goLive: string; goLiveHint: string; finish: string; thank: string };
 
 export function LiveStage({
   campaign,
   comments = [],
-  labels = { badge: "Ao vivo", camera: "câmera", exit: "✕ sair", ready: "Quando estiver com a audiência pronta, inicie o sorteio.", start: "▶ Iniciar sorteio", noCam: "Câmera não disponível — você pode iniciar mesmo assim.", goLive: "🔴 Iniciar transmissão", goLiveHint: "Comece a live e fale com a sua audiência. Quando quiser, inicie o sorteio." },
+  labels = { badge: "Ao vivo", camera: "câmera", exit: "✕ sair", ready: "Quando estiver com a audiência pronta, inicie o sorteio.", start: "▶ Iniciar sorteio", noCam: "Câmera não disponível — você pode iniciar mesmo assim.", goLive: "🔴 Iniciar transmissão", goLiveHint: "Comece a live e fale com a sua audiência. Quando quiser, inicie o sorteio.", finish: "Encerrar live", thank: "Sorteio concluído! Agradeça à sua audiência e encerre quando quiser." },
   onStart,
   onClose,
   onGoLive,
@@ -26,6 +26,7 @@ export function LiveStage({
   realViewers,
   rtcChannel,
   rtcClientId,
+  winner,
 }: {
   campaign?: string;
   comments?: ChatMsg[];
@@ -38,7 +39,9 @@ export function LiveStage({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   rtcChannel?: any; // canal Ably p/ transmitir a câmera (WebRTC). Sem ele = sem broadcast.
   rtcClientId?: string;
+  winner?: string; // setado = modo PÓS-SORTEIO: volta pra câmera p/ agradecer, sem re-sortear
 }) {
+  const postDraw = !!winner;
   const broadcasting = !!rtcChannel;
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -48,7 +51,7 @@ export function LiveStage({
   const [counting, setCounting] = useState(false);
   const [count, setCount] = useState(3);
   const [chat, setChat] = useState<ChatMsg[]>([]);
-  const [liveOn, setLiveOn] = useState(false); // 1º "Start live", depois "Iniciar sorteio"
+  const [liveOn, setLiveOn] = useState<boolean>(() => postDraw); // pós-sorteio já entra "ao vivo"
   const [copied, setCopied] = useState(false);
   const [camStream, setCamStream] = useState<MediaStream | null>(null);
 
@@ -211,6 +214,14 @@ export function LiveStage({
         </div>
       )}
 
+      {/* PÓS-SORTEIO: banner do vencedor (continua na live pra agradecer) */}
+      {postDraw && !counting && (
+        <div className="pointer-events-none absolute left-1/2 top-24 z-10 -translate-x-1/2 rounded-2xl border border-gold/40 bg-black/55 px-5 py-3 text-center backdrop-blur">
+          <p className="text-2xl">🏆</p>
+          <p className="mt-0.5 font-display text-2xl font-black text-white drop-shadow">@{winner}</p>
+        </div>
+      )}
+
       {/* contagem regressiva sobreposta */}
       {counting && (
         <div className="absolute inset-0 z-20 grid place-items-center bg-black/40 backdrop-blur-sm">
@@ -228,7 +239,20 @@ export function LiveStage({
               {labels.noCam}
             </p>
           )}
-          {!liveOn ? (
+          {postDraw ? (
+            <>
+              <p className="text-center text-sm text-white/80 drop-shadow">{labels.thank}</p>
+              <button
+                onClick={() => {
+                  streamRef.current?.getTracks().forEach((t) => t.stop());
+                  onClose();
+                }}
+                className="rounded-full bg-gradient-to-r from-rose to-gold px-10 py-4 font-display text-lg font-bold text-white shadow-gold transition hover:-translate-y-0.5 hover:shadow-lift"
+              >
+                {labels.finish}
+              </button>
+            </>
+          ) : !liveOn ? (
             <>
               <p className="text-center text-sm text-white/80 drop-shadow">{labels.goLiveHint}</p>
               <button

@@ -77,6 +77,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [spec, setSpec] = useState<RevealSpec | null>(null);
   const [showReveal, setShowReveal] = useState(false);
   const [liveStarted, setLiveStarted] = useState(false); // na live: vira true quando dá START
+  const [livePostDraw, setLivePostDraw] = useState(false); // após o sorteio: volta pra câmera p/ agradecer
   const [liveActive, setLiveActive] = useState(false); // live só vale no VIP (ou modo teste)
   const [liveRoomId, setLiveRoomId] = useState<string | null>(null); // sala da live REAL (Ably)
   const [liveHostToken, setLiveHostToken] = useState<string | null>(null); // prova de host (publish)
@@ -642,17 +643,18 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           <LiveStage
             campaign={campaign}
             comments={comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : sample}
-            labels={{ badge: t("live.badge"), camera: t("live.camera"), exit: t("live.exit"), ready: t("live.ready"), start: t("live.start"), noCam: t("live.noCam"), goLive: t("live.goLive"), goLiveHint: t("live.goLiveHint") }}
+            labels={{ badge: t("live.badge"), camera: t("live.camera"), exit: t("live.exit"), ready: t("live.ready"), start: t("live.start"), noCam: t("live.noCam"), goLive: t("live.goLive"), goLiveHint: t("live.goLiveHint"), finish: t("live.finish"), thank: t("live.thank") }}
             shareUrl={liveShareUrl}
             realViewers={liveRoom.configured ? liveRoom.count : undefined}
             rtcChannel={liveRoom.configured ? liveRoom.channel : undefined}
             rtcClientId={liveRoom.clientId}
+            winner={livePostDraw ? (spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle : undefined}
             onGoLive={() => liveRoom.configured && liveRoom.publish({ type: "hello", campaign })}
             onStart={() => {
               if (liveRoom.configured && spec) liveRoom.publish({ type: "start", spec, campaign });
               setLiveStarted(true);
             }}
-            onClose={() => setShowReveal(false)}
+            onClose={() => { setShowReveal(false); setLivePostDraw(false); setLiveStarted(false); }}
           />
         </div>
       )}
@@ -660,9 +662,11 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       {showReveal && spec && (!liveActive || liveStarted) && (
         <div className="fixed inset-0 z-[100] bg-void">
           <div className="absolute right-5 top-5 z-[110] flex gap-2">
-            {/* Sem "voltar pra live": depois do sorteio a revelação fica na tela
-                (a live continua), evitando reabrir o sorteio / reiniciar a live. */}
-            <button onClick={() => setShowReveal(false)} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{liveActive ? t("reveal.results") : t("reveal.seeResult")}</button>
+            {liveActive && (
+              // volta pra câmera em modo PÓS-SORTEIO (agradecer) — NÃO reabre o sorteio
+              <button onClick={() => { setLivePostDraw(true); setLiveStarted(false); }} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{t("reveal.backToLive")}</button>
+            )}
+            <button onClick={() => { setShowReveal(false); setLivePostDraw(false); setLiveStarted(false); }} className="rounded-full border border-white/15 bg-black/40 px-4 py-2 text-sm text-white backdrop-blur hover:border-gold">{liveActive ? t("reveal.results") : t("reveal.seeResult")}</button>
           </div>
           <RevealErrorBoundary onClose={() => setShowReveal(false)} label={liveActive ? t("reveal.results") : t("reveal.seeResult")}>
           {module === "bank_vault" ? (

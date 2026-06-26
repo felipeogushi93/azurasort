@@ -348,7 +348,9 @@
       "start": "▶ Iniciar el sorteo",
       "noCam": "Cámara no disponible — puedes iniciar de todos modos.",
       "goLive": "🔴 Iniciar transmisión",
-      "goLiveHint": "Comienza el directo y habla con tu audiencia. Cuando quieras, inicia el sorteo."
+      "goLiveHint": "Comienza el directo y habla con tu audiencia. Cuando quieras, inicia el sorteo.",
+      "finish": "Finalizar directo",
+      "thank": "¡Sorteo completado! Agradece a tu audiencia y finaliza cuando quieras."
     },
     "paywall": {
       "sampleTitle": "Muestra de quién participó",
