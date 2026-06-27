@@ -306,7 +306,13 @@
       "countdownName": "Countdown",
       "countdownDesc": "Ring of fire with a climactic reveal",
       "matrixName": "Matrix",
-      "matrixDesc": "Cyberpunk room with a briefcase revealing the winner"
+      "matrixDesc": "Cyberpunk room with a briefcase revealing the winner",
+      "casinoName": "Casino",
+      "casinoDesc": "Casino roulette that stops on the winner's name",
+      "pirataName": "Pirate Treasure",
+      "pirataDesc": "Treasure chest revealing the winner",
+      "cavaloName": "Horse Race",
+      "cavaloDesc": "Race victory with the winner on the jumbotron"
     },
     "unlock": {
       "backToOptions": "← back to options"

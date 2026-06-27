@@ -306,7 +306,13 @@
       "countdownName": "Compte à rebours",
       "countdownDesc": "Anneau de feu avec révélation au point culminant",
       "matrixName": "Matrix",
-      "matrixDesc": "Salle cyberpunk avec une mallette révélant le gagnant"
+      "matrixDesc": "Salle cyberpunk avec une mallette révélant le gagnant",
+      "casinoName": "Casino",
+      "casinoDesc": "Roulette de casino qui s'arrête sur le gagnant",
+      "pirataName": "Trésor Pirate",
+      "pirataDesc": "Coffre au trésor révélant le gagnant",
+      "cavaloName": "Course de Chevaux",
+      "cavaloDesc": "Victoire de la course avec le gagnant sur l'écran géant"
     },
     "unlock": {
       "backToOptions": "← retour aux options"

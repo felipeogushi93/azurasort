@@ -38,12 +38,15 @@ const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
 
 // Cenas disponíveis (com vídeo de exemplo). Para adicionar uma nova no futuro,
 // basta colocar o vídeo em /public e acrescentar um item aqui.
-type SceneOption = { module: RevealModule; key: "cofre" | "countdown" | "matrix"; src: string; tier: PlanId };
+type SceneOption = { module: RevealModule; key: "cofre" | "countdown" | "matrix" | "casino" | "pirata" | "cavalo"; src: string; tier: PlanId };
 // tier = plano mínimo que inclui a animação. Padrão = só "Contagem".
 const SCENE_OPTIONS: SceneOption[] = [
   { module: "bank_vault", key: "cofre", src: "/cofre.mp4", tier: "premium" },
   { module: "countdown", key: "countdown", src: "/contagem.mp4", tier: "padrao" },
   { module: "comment_matrix", key: "matrix", src: "/matrix.mp4", tier: "premium" },
+  { module: "casino_roulette", key: "casino", src: "/casino.mp4", tier: "premium" },
+  { module: "treasure_cave", key: "pirata", src: "/pirata.mp4", tier: "premium" },
+  { module: "stadium_jumbotron", key: "cavalo", src: "/cavalo.mp4", tier: "premium" },
 ];
 
 export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency }) {
@@ -751,6 +754,46 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               textLeft={50}
               textTop={48}
               fontScale={0.05}
+              openingLabel={t("reveal.opening")}
+              soundLabel={t("reveal.enableSound")}
+            />
+          ) : module === "casino_roulette" ? (
+            <CofreReveal
+              handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
+              src="/casino.mp4"
+              revealAtSec={11.3}
+              suspenseMs={0}
+              showBand={false}
+              textLeft={50}
+              textTop={50}
+              fontScale={0.09}
+              openingLabel={t("reveal.opening")}
+              soundLabel={t("reveal.enableSound")}
+            />
+          ) : module === "treasure_cave" ? (
+            <CofreReveal
+              handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
+              src="/pirata.mp4"
+              revealAtSec={10}
+              suspenseMs={0}
+              showBand={false}
+              textLeft={48}
+              textTop={60}
+              rotation={-6}
+              fontScale={0.05}
+              openingLabel={t("reveal.opening")}
+              soundLabel={t("reveal.enableSound")}
+            />
+          ) : module === "stadium_jumbotron" ? (
+            <CofreReveal
+              handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
+              src="/cavalo.mp4"
+              revealAtSec={11.1}
+              suspenseMs={0}
+              showBand={false}
+              textLeft={50}
+              textTop={62}
+              fontScale={0.045}
               openingLabel={t("reveal.opening")}
               soundLabel={t("reveal.enableSound")}
             />

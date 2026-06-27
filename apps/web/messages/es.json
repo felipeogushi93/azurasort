@@ -306,7 +306,13 @@
       "countdownName": "Cuenta atrás",
       "countdownDesc": "Anillo de fuego con revelación en el clímax",
       "matrixName": "Matrix",
-      "matrixDesc": "Sala cyberpunk con un maletín que revela al ganador"
+      "matrixDesc": "Sala cyberpunk con un maletín que revela al ganador",
+      "casinoName": "Casino",
+      "casinoDesc": "Ruleta de casino que se detiene en el ganador",
+      "pirataName": "Tesoro Pirata",
+      "pirataDesc": "Cofre del tesoro que revela al ganador",
+      "cavaloName": "Carrera de Caballos",
+      "cavaloDesc": "Victoria en la carrera con el ganador en la pantalla"
     },
     "unlock": {
       "backToOptions": "← volver a las opciones"

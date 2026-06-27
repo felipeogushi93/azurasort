@@ -306,7 +306,13 @@
       "countdownName": "Contagem regressiva",
       "countdownDesc": "Anel de fogo com revelação no clímax",
       "matrixName": "Matrix",
-      "matrixDesc": "Sala cyberpunk com a maleta revelando o vencedor"
+      "matrixDesc": "Sala cyberpunk com a maleta revelando o vencedor",
+      "casinoName": "Cassino",
+      "casinoDesc": "Roleta de cassino que para no nome do vencedor",
+      "pirataName": "Tesouro Pirata",
+      "pirataDesc": "Baú do tesouro que revela o vencedor",
+      "cavaloName": "Corrida de Cavalo",
+      "cavaloDesc": "Vitória na corrida com o vencedor no telão"
     },
     "unlock": {
       "backToOptions": "← voltar para opções"

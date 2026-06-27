@@ -20,6 +20,9 @@ export const REVEAL_CLIP: Record<string, { src: string; revealAtSec: number }> =
   bank_vault: { src: "/cofre.mp4", revealAtSec: 12.5 },
   countdown: { src: "/contagem.mp4", revealAtSec: 15.9 },
   comment_matrix: { src: "/matrix.mp4", revealAtSec: 14.9 },
+  casino_roulette: { src: "/casino.mp4", revealAtSec: 11.3 },
+  treasure_cave: { src: "/pirata.mp4", revealAtSec: 10 },
+  stadium_jumbotron: { src: "/cavalo.mp4", revealAtSec: 11.1 },
 };
 
 const GOLD = "#E8C26B";
