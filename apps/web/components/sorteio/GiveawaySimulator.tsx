@@ -792,8 +792,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               suspenseMs={0}
               showBand={false}
               textLeft={50}
-              textTop={74}
-              fontScale={0.05}
+              textTop={80}
+              fontScale={0.042}
               openingLabel={t("reveal.opening")}
               soundLabel={t("reveal.enableSound")}
             />
