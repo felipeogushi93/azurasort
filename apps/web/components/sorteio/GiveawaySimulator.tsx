@@ -690,7 +690,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           {module === "bank_vault" ? (
             <CofreReveal
               handle={(spec.winners.find((w) => w.position === 1) ?? spec.winners[0]).handle}
-              suspenseMs={live ? 900 : 2600}
+              revealAtSec={12.5}
+              suspenseMs={0}
+              showBand={false}
               openingLabel={t("reveal.opening")}
               soundLabel={t("reveal.enableSound")}
             />

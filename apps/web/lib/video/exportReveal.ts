@@ -17,7 +17,7 @@ const DIMS: Record<ExportRatio, [number, number]> = {
 
 // clipe + segundo em que o nome aparece, por módulo de cena
 export const REVEAL_CLIP: Record<string, { src: string; revealAtSec: number }> = {
-  bank_vault: { src: "/cofre.mp4", revealAtSec: 3.9 },
+  bank_vault: { src: "/cofre.mp4", revealAtSec: 12.5 },
   countdown: { src: "/contagem.mp4", revealAtSec: 15.9 },
   comment_matrix: { src: "/matrix.mp4", revealAtSec: 14.9 },
 };
