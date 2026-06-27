@@ -275,11 +275,20 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       // conversão de COMPRA para o GA4 (base das campanhas Google/Meta)
       const planId = (payment.plan === "padrao" || payment.plan === "vip" ? payment.plan : "premium") as PlanId;
       const value = priceForCount(currency, planId, displayCount) / 100;
-      (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag?.("event", "purchase", {
+      const gtagFn = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+      // GA4 (relatórios)
+      gtagFn?.("event", "purchase", {
         currency,
         value,
         transaction_id: payment.externalId,
         items: [{ item_name: planId }],
+      });
+      // Google Ads (conversão de compra — otimização das campanhas)
+      gtagFn?.("event", "conversion", {
+        send_to: "AW-18276235962/gmOFCOnLl8YcELr15IpE",
+        value,
+        currency,
+        transaction_id: payment.externalId,
       });
     }
     setStep("ready");

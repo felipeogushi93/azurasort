@@ -90,7 +90,8 @@ export default async function LocaleLayout({
           {`window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-3H6JSKZNM5');`}
+gtag('config', 'G-3H6JSKZNM5');
+gtag('config', 'AW-18276235962');`}
         </Script>
       </body>
     </html>
