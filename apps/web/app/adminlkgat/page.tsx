@@ -1,5 +1,6 @@
 import { getAdminUser } from "@/lib/admin/auth";
 import { getKpis, getGiveaways, getRecentDraws, getSourceBreakdown, sourceLabel, resolveRange } from "@/lib/admin/stats";
+import { getHealth, type HealthResult } from "@/lib/admin/health";
 import { LoginForm } from "./LoginForm";
 import { ForcedWinnerManager, LogoutButton, DateFilter } from "./AdminClient";
 import { RescuePanel } from "./RescuePanel";
@@ -26,7 +27,7 @@ export default async function AdminPage({
   const sp = await searchParams;
   const range = sp.range || "all";
   const r = resolveRange(range, sp.from, sp.to);
-  const [kpis, giveaways, draws, sources] = await Promise.all([getKpis(r), getGiveaways(r), getRecentDraws(r), getSourceBreakdown(r)]);
+  const [kpis, giveaways, draws, sources, health] = await Promise.all([getKpis(r), getGiveaways(r), getRecentDraws(r), getSourceBreakdown(r), getHealth()]);
   const funnelMax = Math.max(1, ...kpis.funnel.map((f) => f.count));
   const sourcesMax = Math.max(1, ...sources.map((s) => s.visits));
 
@@ -40,6 +41,9 @@ export default async function AdminPage({
         </div>
         <LogoutButton />
       </header>
+
+      {/* 🩺 saúde / alertas automáticos */}
+      <HealthPanel health={health} />
 
       {/* filtro de datas */}
       <DateFilter range={range} from={sp.from} to={sp.to} />
@@ -205,6 +209,69 @@ export default async function AdminPage({
           </table>
         </div>
       </section>
+    </div>
+  );
+}
+
+function HealthPanel({ health }: { health: HealthResult }) {
+  const { status, waiting, alerts, stats } = health;
+  const head = waiting
+    ? { dot: "🟡", title: "Aguardando primeiras visitas", sub: "Campanhas recém-publicadas — normal não ter dados ainda." }
+    : status === "alert"
+      ? { dot: "🔴", title: "Atenção: tem problema", sub: "Veja o alerta abaixo e me avise (Claude)." }
+      : status === "warn"
+        ? { dot: "🟡", title: "Atenção", sub: "Tem um ponto pra olhar abaixo." }
+        : { dot: "🟢", title: "Tudo certo", sub: "Nenhum problema detectado." };
+
+  return (
+    <section className="mb-6 rounded-3xl border border-ink/5 bg-surface p-6 shadow-card">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="font-display text-lg font-bold text-ink">🩺 Saúde do AzuraSort</h2>
+          <p className="mt-0.5 text-sm text-inkSoft">
+            <span className="mr-1">{head.dot}</span>
+            <span className="font-semibold text-ink">{head.title}</span> — {head.sub}
+          </p>
+        </div>
+      </div>
+
+      {alerts.length > 0 && (
+        <ul className="mt-4 space-y-2">
+          {alerts.map((a, i) => (
+            <li
+              key={i}
+              className={`rounded-2xl border px-4 py-3 text-sm ${
+                a.level === "alert"
+                  ? "border-rose/30 bg-rose/5 text-rose"
+                  : "border-gold/40 bg-gold/5 text-gold-deep"
+              }`}
+            >
+              {a.level === "alert" ? "🔴" : "🟡"} {a.msg}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <MiniStat label="Visitas (24h)" value={stats.visits24h} />
+        <MiniStat label="Visitas (7 dias)" value={stats.visits7d} />
+        <MiniStat label="Semana anterior" value={stats.visitsPrev7d} />
+        <MiniStat label="Vendas (7 dias)" value={stats.sales7d} />
+      </div>
+
+      <p className="mt-4 rounded-xl bg-canvasAlt px-4 py-2.5 text-[11px] text-inkSoft">
+        👉 Dados das campanhas (CPA, anúncio reprovado, gasto) ficam no <strong>Google Ads</strong> — dá uma olhada lá a cada 2-3 dias
+        (especialmente em <strong>Termos de pesquisa</strong>). Aqui mostramos a saúde do site/negócio.
+      </p>
+    </section>
+  );
+}
+
+function MiniStat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-2xl border border-ink/5 bg-canvasAlt p-3">
+      <p className="text-[11px] text-inkSoft">{label}</p>
+      <p className="mt-0.5 font-display text-xl font-bold text-ink tabular-nums">{value.toLocaleString("pt-BR")}</p>
     </div>
   );
 }
