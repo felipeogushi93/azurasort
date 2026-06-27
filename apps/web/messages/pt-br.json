@@ -314,6 +314,13 @@
       "cavaloName": "Corrida de Cavalo",
       "cavaloDesc": "Vitória na corrida com o vencedor no telão"
     },
+    "errors": {
+      "previewFail": "Falha ao buscar a publicação",
+      "exportUnsupported": "Seu navegador não suporta gerar o vídeo aqui. Use o Chrome ou Safari atualizado (de preferência no celular).",
+      "videoWebm": "Seu navegador vai gerar o vídeo em WebM, que o Instagram NÃO aceita. Para um MP4 que sobe no Instagram, abra no Chrome ou Safari atualizado (de preferência no celular).\n\nBaixar em WebM mesmo assim?",
+      "videoFail": "Não foi possível gerar o vídeo. Tente novamente.",
+      "drawFail": "Falha no sorteio."
+    },
     "unlock": {
       "backToOptions": "← voltar para opções"
     },

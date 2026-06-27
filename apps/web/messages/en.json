@@ -314,6 +314,13 @@
       "cavaloName": "Horse Race",
       "cavaloDesc": "Race victory with the winner on the jumbotron"
     },
+    "errors": {
+      "previewFail": "Couldn't load the post",
+      "exportUnsupported": "Your browser can't generate the video here. Use an updated Chrome or Safari (ideally on mobile).",
+      "videoWebm": "Your browser will generate the video in WebM, which Instagram does NOT accept. For an Instagram-ready MP4, open in an updated Chrome or Safari (ideally on mobile).\n\nDownload as WebM anyway?",
+      "videoFail": "Couldn't generate the video. Please try again.",
+      "drawFail": "Draw failed."
+    },
     "unlock": {
       "backToOptions": "← back to options"
     },

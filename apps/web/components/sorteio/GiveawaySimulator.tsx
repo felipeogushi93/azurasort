@@ -117,7 +117,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         const p = await pr.json();
         if (cancelled) return;
         if (!pr.ok || p.error) {
-          setPreview({ status: "error", total: 0, loaded: 0, isReel: false, error: p.error || "Falha ao buscar a publicação" });
+          setPreview({ status: "error", total: 0, loaded: 0, isReel: false, error: p.error || t("errors.previewFail") });
           return;
         }
         setSample((p.sampleComments ?? []).map((c: { handle: string; text: string }) => ({ handle: c.handle, text: c.text })));
@@ -198,13 +198,11 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
     const handle = (result.winners.find((w) => !w.isBackup) ?? result.winners[0])?.handle;
     if (!handle) return;
     if (!exportSupported()) {
-      alert("Seu navegador não suporta gerar o vídeo aqui. Use o Chrome ou Safari atualizado (de preferência no celular).");
+      alert(t("errors.exportUnsupported"));
       return;
     }
     if (!mp4Supported()) {
-      const ok = window.confirm(
-        "Seu navegador vai gerar o vídeo em WebM, que o Instagram NÃO aceita. Para um MP4 que sobe no Instagram, abra no Chrome ou Safari atualizado (de preferência no celular).\n\nBaixar em WebM mesmo assim?",
-      );
+      const ok = window.confirm(t("errors.videoWebm"));
       if (!ok) return;
     }
     setVideoBusy(ratio);
@@ -220,7 +218,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       });
       downloadBlob(blob, `sorteio-${handle}-${ratio.replace(":", "x")}.${ext}`);
     } catch {
-      alert("Não foi possível gerar o vídeo. Tente novamente.");
+      alert(t("errors.videoFail"));
     } finally {
       setVideoBusy(null);
       setVideoProgress(0);
@@ -348,7 +346,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       setLiveStarted(false); // na live, primeiro a tela ao vivo; só dá START depois
       setShowReveal(true); // abre a revelacao automaticamente (suspense antes do vencedor)
     } catch (e) {
-      alert(e instanceof Error ? e.message : "Falha no sorteio.");
+      alert(e instanceof Error ? e.message : t("errors.drawFail"));
     }
     setBusy(false);
   }

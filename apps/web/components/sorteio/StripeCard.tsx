@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { formatPrice, type Currency } from "@/lib/payments/pricing";
 
 const stripePromise = loadStripe((process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? "").trim());
 
@@ -28,8 +29,8 @@ export function StripeCard({
   const t = useTranslations("sim.card");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
-  // no modo teste (?teste=1) cobra só R$1 — ver /api/pay/stripe/intent
-  const label = test ? "R$ 1,00 (teste)" : priceLabel;
+  // no modo teste (?teste=1) cobra só 1,00 na moeda local — ver /api/pay/stripe/intent
+  const label = test ? `${formatPrice(100, (currency as Currency) || "BRL")} (teste)` : priceLabel;
 
   useEffect(() => {
     fetch("/api/pay/stripe/intent", {

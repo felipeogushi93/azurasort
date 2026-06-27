@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
 import { track } from "@/lib/track";
-import { priceLabels, type Currency, type PlanId } from "@/lib/payments/pricing";
+import { priceLabels, formatPrice, type Currency, type PlanId } from "@/lib/payments/pricing";
 
 // estrutura dos planos; nomes/recursos vêm das traduções (sim.plans.*)
 const PLAN_META: { id: PlanId; nameKey: string; badgeKey?: string; featureKeys: string[] }[] = [
@@ -66,7 +66,7 @@ export function Paywall({
     <div className="space-y-6">
       {allowTest && (
         <div className="rounded-2xl border border-dashed border-emerald/40 bg-emerald/5 px-4 py-2.5 text-center text-sm font-medium text-emerald">
-          🧪 MODO TESTE ativo — o pagamento com <strong>cartão</strong> cobra só <strong>R$ 1,00</strong>
+          🧪 MODO TESTE ativo — o pagamento com <strong>cartão</strong> cobra só <strong>{formatPrice(100, currency)}</strong>
         </div>
       )}
       {/* amostra de participantes */}
@@ -172,7 +172,7 @@ export function Paywall({
           {isBrazil && (
             <PayCard icon="⚡" title="PIX" sub={t("paywall.pixSub")} price={priceLabel} cta={t("paywall.pixCta")} accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
           )}
-          <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={allowTest ? "R$ 1,00 (teste)" : priceLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
+          <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={allowTest ? `${formatPrice(100, currency)} (teste)` : priceLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
         </div>
         <p className="mt-3 text-center text-xs text-inkSoft">
           {t("paywall.guarantee")}
