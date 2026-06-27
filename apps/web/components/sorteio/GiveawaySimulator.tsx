@@ -777,10 +777,10 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               revealAtSec={10}
               suspenseMs={0}
               showBand={false}
-              textLeft={48}
-              textTop={60}
-              rotation={-6}
-              fontScale={0.05}
+              textLeft={52}
+              textTop={58}
+              rotation={-9}
+              fontScale={0.04}
               openingLabel={t("reveal.opening")}
               soundLabel={t("reveal.enableSound")}
             />
@@ -792,8 +792,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               suspenseMs={0}
               showBand={false}
               textLeft={50}
-              textTop={62}
-              fontScale={0.045}
+              textTop={74}
+              fontScale={0.05}
               openingLabel={t("reveal.opening")}
               soundLabel={t("reveal.enableSound")}
             />
