@@ -364,10 +364,40 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
     setRaw("");
   }
 
+  // PREVIEW (modo teste): abre o reveal direto com um ganhador fake — sem Apify, sem pagar
+  function previewScene(m: RevealModule) {
+    setModule(m);
+    setLive(false);
+    setLiveActive(false);
+    setLiveStarted(false);
+    setLivePostDraw(false);
+    setSpec({ winners: [{ position: 1, handle: "ganhador_teste", isBackup: false }] } as unknown as RevealSpec);
+    setShowReveal(true);
+  }
+
   /* ============================ RENDER ============================ */
   return (
     <div className="mx-auto max-w-3xl px-6 pb-24 pt-28">
       <Stepper step={step} />
+
+      {/* 🎬 PREVIEW DE ANIMAÇÕES (modo teste — sem Apify, sem pagar) */}
+      {allowTest && (
+        <div className="mb-6 rounded-2xl border border-dashed border-emerald/40 bg-emerald/5 p-4">
+          <p className="text-sm font-semibold text-emerald">🎬 Preview de animações (modo teste)</p>
+          <p className="mt-0.5 text-xs text-inkSoft">Veja cada reveal na hora, com um ganhador fake — não gasta Apify nem cobra nada.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {SCENE_OPTIONS.map((s) => (
+              <button
+                key={s.module}
+                onClick={() => previewScene(s.module)}
+                className="rounded-full border border-ink/15 bg-surface px-4 py-2 text-sm font-medium text-ink transition hover:-translate-y-0.5 hover:border-gold"
+              >
+                ▶ {t(`scenes.${s.key}Name`)}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ---------- 1 · PUBLICAÇÃO ---------- */}
       {step === "link" && (
