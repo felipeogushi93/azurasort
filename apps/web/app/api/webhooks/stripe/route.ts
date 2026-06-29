@@ -50,6 +50,24 @@ export async function POST(req: Request) {
         },
         update: { status: "paid", paidAt: new Date() },
       });
+
+      // Painel-IA central: notificar conversão pra atribuir lead à origem (AI/Google/etc).
+      // Fire-and-forget — falha do painel não derruba o webhook do Stripe.
+      void fetch("https://painel-ia-ten.vercel.app/api/webhook/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tenant: "azurasort",
+          gateway: "stripe",
+          external_id: pi.id,
+          amount_cents: pi.amount ?? 0,
+          currency: (pi.currency ?? "brl").toUpperCase(),
+          plan: (pi.metadata?.plan as string) ?? "premium",
+          session_id: (pi.metadata?.session_id as string) ?? null,
+          status: "paid",
+        }),
+        signal: AbortSignal.timeout(3000),
+      }).catch(() => { /* swallow */ });
     }
   } catch (e) {
     console.error("[webhook/stripe] erro ao processar:", e);
