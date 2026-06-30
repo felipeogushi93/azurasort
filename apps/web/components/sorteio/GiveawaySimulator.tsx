@@ -291,6 +291,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         currency,
         transaction_id: payment.externalId,
       });
+      // Meta Pixel (conversão de compra — otimização das campanhas Facebook/Instagram)
+      const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq;
+      fbq?.("track", "Purchase", { value, currency });
     }
     setStep("ready");
   }
