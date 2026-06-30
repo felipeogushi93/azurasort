@@ -453,5 +453,27 @@
       "drawNow": "🎲 Draw now",
       "hint": "The reveal starts as soon as you click."
     }
+  },
+  "free": {
+    "metaTitle": "Free Instagram giveaway — paste & draw | AzuraSort",
+    "metaDescription": "Run a free Instagram giveaway: paste the @s or comments and draw instantly, no signup. Verifiable result.",
+    "title": "Free Instagram giveaway",
+    "subtitle": "Paste the @s or comments and draw instantly. Free, no signup.",
+    "pasteLabel": "Paste the participants (one per line: @handle or the comment)",
+    "winners": "Winners",
+    "campaign": "Name (optional)",
+    "campaignPh": "e.g. iPhone giveaway",
+    "run": "Draw for free 🎲",
+    "running": "Drawing…",
+    "empty": "Paste at least a few @s to draw.",
+    "manualNote": "Free and manual: you paste the participants. To collect comments automatically, use the full giveaway.",
+    "resultTitle": "Result",
+    "backups": "Backups",
+    "amongN": "Drawn among {n} participants",
+    "cert": "View verifiable certificate",
+    "again": "Draw again",
+    "upsellTitle": "Want to really impress?",
+    "upsellText": "The full giveaway: automatic comment collection + a cinematic video reveal ready to post + live streaming.",
+    "upsellCta": "Run giveaway with video 🎬"
   }
 }

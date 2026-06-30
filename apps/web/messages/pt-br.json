@@ -453,5 +453,27 @@
       "drawNow": "🎲 Sortear agora",
       "hint": "A revelação começa assim que você clicar."
     }
+  },
+  "free": {
+    "metaTitle": "Sorteio de Instagram grátis — cole e sorteie | AzuraSort",
+    "metaDescription": "Faça um sorteio de Instagram grátis: cole os @ ou comentários e sorteie na hora, sem cadastro. Resultado verificável.",
+    "title": "Sorteio de Instagram grátis",
+    "subtitle": "Cole os @ ou comentários e sorteie na hora. Grátis, sem cadastro.",
+    "pasteLabel": "Cole os participantes (um por linha: @fulano ou o comentário)",
+    "winners": "Ganhadores",
+    "campaign": "Nome (opcional)",
+    "campaignPh": "Ex: Sorteio iPhone",
+    "run": "Sortear grátis 🎲",
+    "running": "Sorteando…",
+    "empty": "Cole pelo menos alguns @ para sortear.",
+    "manualNote": "Grátis e manual: você cola os participantes. Para coletar os comentários automaticamente, use o sorteio completo.",
+    "resultTitle": "Resultado",
+    "backups": "Suplentes",
+    "amongN": "Sorteado entre {n} participantes",
+    "cert": "Ver certificado verificável",
+    "again": "Sortear de novo",
+    "upsellTitle": "Quer impressionar de verdade?",
+    "upsellText": "No sorteio completo: coleta automática dos comentários + revelação em vídeo cinematográfico pronto pra postar + transmissão ao vivo.",
+    "upsellCta": "Fazer sorteio com vídeo 🎬"
   }
 }

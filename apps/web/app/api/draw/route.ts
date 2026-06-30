@@ -28,6 +28,7 @@ export async function POST(req: Request) {
       plan?: string;
       payment?: { provider: string; externalId: string };
       sessionId?: string;
+      free?: boolean; // sorteio GRÁTIS: só manual (comments colados), sem Apify, sem premium
     };
 
     // GATE: pagamento confirmado no SERVIDOR (antes de coletar — economia)
@@ -46,7 +47,8 @@ export async function POST(req: Request) {
         paidCurrency = "BRL"; // PIX é sempre BRL
       }
     }
-    if (!paid && process.env.ALLOW_FREE_DRAWS !== "1") {
+    // GRÁTIS: libera sem pagamento, MAS só no caminho manual (comments colados) — nunca Apify.
+    if (!paid && !body.free && process.env.ALLOW_FREE_DRAWS !== "1") {
       return NextResponse.json({ error: "Pagamento necessário para sortear." }, { status: 402 });
     }
 
@@ -106,11 +108,14 @@ export async function POST(req: Request) {
     } else {
       let raw: RawComment[];
       if (Array.isArray(body.comments) && body.comments.length) {
-        raw = body.comments; // caminho de teste/CSV (lista do cliente)
-      } else if (body.postUrl) {
-        raw = await fetchComments(body.postUrl); // coleta real (1ª vez)
+        raw = body.comments; // caminho manual/CSV/grátis (lista do cliente)
+      } else if (body.postUrl && !body.free) {
+        raw = await fetchComments(body.postUrl); // coleta real (1ª vez) — NUNCA no grátis
       } else {
-        return NextResponse.json({ error: "Informe um link ou uma lista de comentários." }, { status: 400 });
+        return NextResponse.json(
+          { error: body.free ? "Cole os @ ou comentários para sortear." : "Informe um link ou uma lista de comentários." },
+          { status: 400 },
+        );
       }
       const processed = applyFilters(normalizeComments(raw), f);
       eligibleHandles = processed.filter((c) => c.eligible).map((c) => c.handle);

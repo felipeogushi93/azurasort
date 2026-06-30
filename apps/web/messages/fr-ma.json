@@ -453,5 +453,27 @@
       "drawNow": "🎲 Tirer au sort",
       "hint": "La révélation démarre dès que vous cliquez."
     }
+  },
+  "free": {
+    "metaTitle": "Tirage au sort Instagram gratuit — collez et tirez | AzuraSort",
+    "metaDescription": "Faites un tirage au sort Instagram gratuit : collez les @ ou commentaires et tirez instantanément, sans inscription. Résultat vérifiable.",
+    "title": "Tirage au sort Instagram gratuit",
+    "subtitle": "Collez les @ ou commentaires et tirez instantanément. Gratuit, sans inscription.",
+    "pasteLabel": "Collez les participants (un par ligne : @pseudo ou le commentaire)",
+    "winners": "Gagnants",
+    "campaign": "Nom (facultatif)",
+    "campaignPh": "Ex : Tirage iPhone",
+    "run": "Tirer au sort gratuitement 🎲",
+    "running": "Tirage…",
+    "empty": "Collez au moins quelques @ pour tirer au sort.",
+    "manualNote": "Gratuit et manuel : vous collez les participants. Pour collecter les commentaires automatiquement, utilisez le tirage complet.",
+    "resultTitle": "Résultat",
+    "backups": "Suppléants",
+    "amongN": "Tiré parmi {n} participants",
+    "cert": "Voir le certificat vérifiable",
+    "again": "Tirer à nouveau",
+    "upsellTitle": "Envie d'impressionner vraiment ?",
+    "upsellText": "Dans le tirage complet : collecte automatique des commentaires + révélation en vidéo cinématographique prête à publier + direct.",
+    "upsellCta": "Faire un tirage avec vidéo 🎬"
   }
 }

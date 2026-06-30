@@ -9,7 +9,7 @@ const BASE = "https://azurasort.com";
 const PILLAR_PATHS = PILLAR_SLUGS.map((s) => `/${s}`);
 
 // páginas públicas (indexáveis): landing · ferramenta · guia · pillars · legais
-const PATHS = ["", "/sorteio", "/guia", ...PILLAR_PATHS, "/termos", "/privacidade"];
+const PATHS = ["", "/sorteio", "/gratis", "/guia", ...PILLAR_PATHS, "/termos", "/privacidade"];
 
 // guia + pillars ganham prioridade alta (logo abaixo da home)
 const HIGH_PRIORITY = new Set(["/guia", ...PILLAR_PATHS]);

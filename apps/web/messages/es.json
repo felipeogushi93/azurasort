@@ -453,5 +453,27 @@
       "drawNow": "🎲 Sortear ahora",
       "hint": "La revelación empieza en cuanto hagas clic."
     }
+  },
+  "free": {
+    "metaTitle": "Sorteo de Instagram gratis — pega y sortea | AzuraSort",
+    "metaDescription": "Haz un sorteo de Instagram gratis: pega los @ o comentarios y sortea al instante, sin registro. Resultado verificable.",
+    "title": "Sorteo de Instagram gratis",
+    "subtitle": "Pega los @ o comentarios y sortea al instante. Gratis, sin registro.",
+    "pasteLabel": "Pega los participantes (uno por línea: @usuario o el comentario)",
+    "winners": "Ganadores",
+    "campaign": "Nombre (opcional)",
+    "campaignPh": "Ej: Sorteo iPhone",
+    "run": "Sortear gratis 🎲",
+    "running": "Sorteando…",
+    "empty": "Pega al menos algunos @ para sortear.",
+    "manualNote": "Gratis y manual: tú pegas los participantes. Para recopilar los comentarios automáticamente, usa el sorteo completo.",
+    "resultTitle": "Resultado",
+    "backups": "Suplentes",
+    "amongN": "Sorteado entre {n} participantes",
+    "cert": "Ver certificado verificable",
+    "again": "Sortear de nuevo",
+    "upsellTitle": "¿Quieres impresionar de verdad?",
+    "upsellText": "En el sorteo completo: recopilación automática de comentarios + revelación en vídeo cinematográfico listo para publicar + directo.",
+    "upsellCta": "Hacer sorteo con vídeo 🎬"
   }
 }
