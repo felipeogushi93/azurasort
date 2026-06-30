@@ -26,15 +26,18 @@ function extract(re: RegExp, text: string): string[] {
 
 /** Normaliza comentarios crus: extrai mencoes/hashtags e gera ids estaveis. */
 export function normalizeComments(raw: RawComment[]): Comment[] {
-  return raw.map((c, i) => ({
-    id: c.id ?? `c${i}`,
-    handle: c.handle.replace(/^@/, "").trim().toLowerCase(),
-    text: c.text,
-    mentions: extract(MENTION_RE, c.text),
-    hashtags: extract(HASHTAG_RE, c.text),
-    likeCount: c.likeCount ?? 0,
-    eligible: true,
-  }));
+  return raw.map((c, i) => {
+    const text = c.text ?? ""; // blinda contra comentário sem texto (ex.: só @ no grátis)
+    return {
+      id: c.id ?? `c${i}`,
+      handle: (c.handle ?? "").replace(/^@/, "").trim().toLowerCase(),
+      text,
+      mentions: extract(MENTION_RE, text),
+      hashtags: extract(HASHTAG_RE, text),
+      likeCount: c.likeCount ?? 0,
+      eligible: true,
+    };
+  });
 }
 
 /** Aplica os filtros, marcando cada comentario como elegivel ou nao (com motivo). */
