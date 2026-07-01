@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { parsePastedComments } from "@/lib/draw/parse";
-import { track } from "@/lib/track";
 
 type Winner = { position: number; handle: string; isBackup: boolean };
 
@@ -22,9 +21,7 @@ export function FreeDraw() {
   const [err, setErr] = useState("");
   const [result, setResult] = useState<{ winners: Winner[]; certificateCode: string; eligibleCount: number } | null>(null);
 
-  useEffect(() => {
-    track("visit");
-  }, []);
+  // visita contada globalmente pelo <VisitTracker/> no layout (toda página)
 
   async function run() {
     const comments = parsePastedComments(raw);

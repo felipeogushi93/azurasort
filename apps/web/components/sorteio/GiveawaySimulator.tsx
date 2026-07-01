@@ -91,7 +91,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [allowTest, setAllowTest] = useState(false);
   useEffect(() => {
     setAllowTest(new URLSearchParams(window.location.search).get("teste") === "1");
-    track("visit");
+    // visita agora é contada globalmente pelo <VisitTracker/> no layout (toda página)
   }, []);
 
   // funil: registra quando o cliente chega no paywall (uma vez por entrada no passo)

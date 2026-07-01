@@ -7,6 +7,7 @@ import { setRequestLocale } from "next-intl/server";
 import { routing, isRtl } from "@/i18n/routing";
 import { getSeo } from "@/lib/seo/content";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { VisitTracker } from "@/components/VisitTracker";
 import { organizationSchema, websiteSchema, softwareAppSchema } from "@/lib/seo/schema";
 import "../globals.css";
 
@@ -80,6 +81,7 @@ export default async function LocaleLayout({
     >
       <body className="bg-canvas font-sans text-ink antialiased">
         <JsonLd data={[organizationSchema(), websiteSchema(), softwareAppSchema(seo)]} />
+        <VisitTracker />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
         {/* Painel-IA central: rastreia origem do lead (ChatGPT/Claude/Google/ads), visitor_id e
             jornada — junto dos outros sites. Mesma URL/script que os demais sites usam. */}
