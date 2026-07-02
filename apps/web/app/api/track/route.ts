@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { clientIp } from "@/lib/rateLimit";
+import { notifyTelegram, funnelMessage } from "@/lib/notify/telegram";
 
 export const runtime = "nodejs";
 
@@ -30,6 +31,16 @@ export async function POST(req: Request) {
         },
       })
       .catch(() => {});
+
+    // Feed de atividade (funil) num grupo SEPARADO do Telegram. Só dispara se
+    // TELEGRAM_FUNNEL_CHAT_ID estiver configurado — assim não polui o grupo de
+    // vendas. Eventos: link_loaded, unlock_view, pay_started (visit/pay_done não).
+    const funnelChat = process.env.TELEGRAM_FUNNEL_CHAT_ID?.trim();
+    if (funnelChat) {
+      const msg = funnelMessage({ type, meta, ip, country });
+      if (msg) await notifyTelegram(msg, funnelChat);
+    }
+
     return NextResponse.json({ ok: true });
   } catch {
     return NextResponse.json({ ok: false }, { status: 204 });
