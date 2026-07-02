@@ -15,7 +15,10 @@ export async function POST(req: Request) {
     }
     const ip = clientIp(req);
     const country = req.headers.get("x-vercel-ip-country") ?? null;
-    db.event
+    // IMPORTANTE: await na gravação. Em serverless (Vercel), promessa não
+    // aguardada é cortada quando a resposta retorna e o evento se PERDE. Como o
+    // cliente usa sendBeacon (não espera a resposta), aguardar não afeta a UX.
+    await db.event
       .create({
         data: {
           type,
