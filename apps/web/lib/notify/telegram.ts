@@ -50,35 +50,46 @@ const SRC_LABEL: Record<string, string> = {
 };
 
 /**
- * Feed de atividade do site (funil) pro Telegram — estilo "site respirando".
- * Retorna null pros eventos que não geram alerta (visit é barulho; pay_done já
- * vira a mensagem de venda). Só link_loaded, unlock_view e pay_started.
+ * Mapa da jornada do visitante pro Telegram — estilo "site respirando". Cada
+ * mensagem leva uma etiqueta curta da sessão (#xxxxx) pra dar pra SEGUIR a mesma
+ * pessoa: entrou → carregou post → paywall → iniciou pagamento → pagou.
+ * "visit" só na 1ª página da sessão (o filtro é no /api/track). Retorna null
+ * pros tipos sem alerta.
  */
 export function funnelMessage(opts: {
   type: string;
   meta?: Record<string, unknown>;
   ip?: string | null;
   country?: string | null;
+  sessionId?: string | null;
+  path?: string | null;
 }): string | null {
   const m = opts.meta ?? {};
+  const tag = opts.sessionId ? escapeHtml(opts.sessionId.slice(-5)) : "?????";
+  const who = `👤 <code>#${tag}</code>`;
   const srcRaw = typeof m.src === "string" ? m.src : undefined;
   const src = escapeHtml(srcRaw ? SRC_LABEL[srcRaw] ?? srcRaw : "—");
   const fromAds = m.gclid || m.fbclid ? " (Ads)" : "";
   const loc = [opts.country ? escapeHtml(opts.country) : null, opts.ip ? escapeHtml(opts.ip) : null].filter(Boolean).join(" · ");
-  const foot = [`Origem: ${src}${fromAds}`, loc || null].filter(Boolean).join("\n");
 
   switch (opts.type) {
+    case "visit": {
+      const page = opts.path ? escapeHtml(opts.path) : "—";
+      return [`${who} 🟢 <b>entrou no site</b>`, `Página: ${page}`, `Origem: ${src}${fromAds}`, loc || null].filter(Boolean).join("\n");
+    }
     case "link_loaded": {
       const total = typeof m.total === "number" ? m.total.toLocaleString("pt-BR") : "?";
-      return `🔗 <b>Cliente carregou um post</b>\nComentários: <b>${total}</b>\n${foot}`;
+      return `${who} 🔗 <b>carregou um post</b> — ${total} comentários`;
     }
     case "unlock_view":
-      return `🧊 <b>Cliente chegou no paywall</b>\n${foot}`;
+      return `${who} 🧊 <b>chegou no paywall</b>`;
     case "pay_started": {
       const method = m.method === "pix" ? "PIX" : m.method === "card" ? "Cartão" : escapeHtml(String(m.method ?? "—"));
       const plan = PLAN_LABEL[String(m.plan)] ?? escapeHtml(String(m.plan ?? "—"));
-      return `💳 <b>Cliente iniciou pagamento</b>\nMétodo: ${method} · Plano: ${plan}\n${foot}`;
+      return `${who} 💳 <b>iniciou pagamento</b> — ${method} · ${plan}`;
     }
+    case "pay_done":
+      return `${who} ✅ <b>PAGOU!</b> 🎉`;
     default:
       return null;
   }

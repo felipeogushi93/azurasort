@@ -32,13 +32,21 @@ export async function POST(req: Request) {
       })
       .catch(() => {});
 
-    // Feed de atividade (funil) num grupo SEPARADO do Telegram. Só dispara se
-    // TELEGRAM_FUNNEL_CHAT_ID estiver configurado — assim não polui o grupo de
-    // vendas. Eventos: link_loaded, unlock_view, pay_started (visit/pay_done não).
+    // Mapa da jornada num grupo SEPARADO do Telegram. Só dispara se
+    // TELEGRAM_FUNNEL_CHAT_ID estiver setado (não polui o grupo de vendas).
+    // "visit" só avisa na PRIMEIRA página da sessão (senão spam a cada clique).
     const funnelChat = process.env.TELEGRAM_FUNNEL_CHAT_ID?.trim();
     if (funnelChat) {
-      const msg = funnelMessage({ type, meta, ip, country });
-      if (msg) await notifyTelegram(msg, funnelChat);
+      const sid = typeof sessionId === "string" ? sessionId : "";
+      let send = true;
+      if (type === "visit") {
+        // create já foi aguardado acima; count === 1 => esta é a 1ª visita
+        send = sid ? (await db.event.count({ where: { type: "visit", sessionId: sid } })) <= 1 : false;
+      }
+      if (send) {
+        const msg = funnelMessage({ type, meta, ip, country, sessionId, path });
+        if (msg) await notifyTelegram(msg, funnelChat);
+      }
     }
 
     return NextResponse.json({ ok: true });
