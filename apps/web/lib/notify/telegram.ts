@@ -78,11 +78,16 @@ export function funnelMessage(opts: {
       return [`${who} 🟢 <b>entrou no site</b>`, `Página: ${page}`, `Origem: ${src}${fromAds}`, loc || null].filter(Boolean).join("\n");
     }
     case "link_loaded": {
-      const total = typeof m.total === "number" ? m.total.toLocaleString("pt-BR") : "?";
-      return `${who} 🔗 <b>carregou um post</b> — ${total} comentários`;
+      const n = typeof m.total === "number" ? m.total : null;
+      const total = n !== null ? n.toLocaleString("pt-BR") : "?";
+      const warn = n === 0 ? " ⚠️" : "";
+      const url = typeof m.postUrl === "string" && m.postUrl ? `\n${escapeHtml(m.postUrl)}` : "";
+      return `${who} 🔗 <b>carregou um post</b> — ${total} comentários${warn}${url}`;
     }
-    case "unlock_view":
-      return `${who} 🧊 <b>chegou no paywall</b>`;
+    case "unlock_view": {
+      const url = typeof m.postUrl === "string" && m.postUrl ? `\n${escapeHtml(m.postUrl)}` : "";
+      return `${who} 🧊 <b>chegou no paywall</b>${url}`;
+    }
     case "pay_started": {
       const method = m.method === "pix" ? "PIX" : m.method === "card" ? "Cartão" : escapeHtml(String(m.method ?? "—"));
       const plan = PLAN_LABEL[String(m.plan)] ?? escapeHtml(String(m.plan ?? "—"));

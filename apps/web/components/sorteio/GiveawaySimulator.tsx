@@ -96,7 +96,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
   // funil: registra quando o cliente chega no paywall (uma vez por entrada no passo)
   useEffect(() => {
-    if (step === "unlock") track("unlock_view");
+    if (step === "unlock") track("unlock_view", { postUrl: link });
   }, [step]);
 
   /* ----- passo 1: ao colar o link, busca a publicacao e carrega os comentarios
@@ -143,7 +143,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             if (progress) clearInterval(progress);
             if (!cancelled) {
               setPreview((s) => (s ? { ...s, status: "loaded", loaded: total } : s));
-              track("link_loaded", { total });
+              track("link_loaded", { total, postUrl: link });
             }
           } else if (!cancelled) {
             setPreview((s) => (s ? { ...s, loaded: cur } : s));
