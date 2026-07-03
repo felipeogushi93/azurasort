@@ -550,10 +550,15 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             <span className="text-sm text-inkSoft">{t("s3.participants")}</span>
             <span className="font-display text-2xl font-semibold text-gold-deep">{displayCount.toLocaleString()}</span>
           </div>
+          {/* prévia é cosmética: se vier 0 (post privado/sem comentários ou prévia
+              falhou) NÃO trava — a coleta real é no sorteio; só avisa e deixa seguir */}
+          {preview?.status === "loaded" && displayCount === 0 && (
+            <p className="mt-2 text-xs text-inkSoft">⚠️ {t("s3.zeroHint")}</p>
+          )}
 
           <div className="mt-5 flex items-center justify-between">
             <button onClick={() => setStep("base")} className="text-sm text-inkSoft hover:text-ink">{t("common.back")}</button>
-            <button disabled={!displayCount} onClick={() => setStep("unlock")} className="btn-gold py-2.5 disabled:opacity-40">
+            <button disabled={!(preview?.status === "loaded" || comments.length > 0)} onClick={() => setStep("unlock")} className="btn-gold py-2.5 disabled:opacity-40">
               {t("common.continue")}
             </button>
           </div>

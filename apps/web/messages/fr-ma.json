@@ -297,6 +297,7 @@
       "minMentions": "Min. de mentions",
       "noDup": "Sans doublons",
       "participants": "Participants",
+      "zeroHint": "Nous n'avons pas détecté de commentaires dans l'aperçu (post privé, sans commentaires ou aperçu en échec). Vous pouvez continuer — la collecte réelle se fait lors du tirage.",
       "example": "exemple",
       "liveVip": "Réservé au plan VIP."
     },

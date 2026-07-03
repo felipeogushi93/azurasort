@@ -297,6 +297,7 @@
       "minMentions": "Mín. de menciones",
       "noDup": "Sin duplicados",
       "participants": "Participantes",
+      "zeroHint": "No detectamos comentarios en la vista previa (post privado, sin comentarios o la vista previa falló). Puedes continuar — la recolección real es en el sorteo.",
       "example": "ejemplo",
       "liveVip": "Exclusivo del plan VIP."
     },
