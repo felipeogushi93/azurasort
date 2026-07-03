@@ -4,6 +4,7 @@ import { getHealth, type HealthResult } from "@/lib/admin/health";
 import { LoginForm } from "./LoginForm";
 import { ForcedWinnerManager, LogoutButton, DateFilter } from "./AdminClient";
 import { RescuePanel } from "./RescuePanel";
+import { GrowthLeverage } from "./GrowthLeverage";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -44,6 +45,9 @@ export default async function AdminPage({
 
       {/* 🩺 saúde / alertas automáticos */}
       <HealthPanel health={health} />
+
+      {/* 🚀 alavancagem — mapa de crescimento + checklist */}
+      <GrowthLeverage visits7d={health.stats.visits7d} sales7d={health.stats.sales7d} />
 
       {/* filtro de datas */}
       <DateFilter range={range} from={sp.from} to={sp.to} />
