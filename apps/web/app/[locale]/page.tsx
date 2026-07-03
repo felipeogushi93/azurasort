@@ -104,6 +104,14 @@ export default async function Home({
             <Link href="/guia" className="hover:text-ink hover:underline">
               {locale === "pt-br" ? "Como fazer um sorteio" : locale === "es" ? "Cómo hacer un sorteo" : locale === "fr-ma" ? "Comment faire un tirage" : locale === "ar-ma" ? "كيفية عمل سحب" : "How to run a giveaway"}
             </Link>
+            <a
+              href="https://wa.me/5548991420313"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-ink hover:underline"
+            >
+              💬 {locale === "pt-br" ? "Suporte" : locale === "es" ? "Soporte" : locale === "ar-ma" ? "الدعم" : "Support"}
+            </a>
           </nav>
         </div>
         <p className="mx-auto mt-6 max-w-6xl text-center text-xs text-inkSoft/60">
