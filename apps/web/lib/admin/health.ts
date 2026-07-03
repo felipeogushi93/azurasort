@@ -10,7 +10,7 @@ export type HealthResult = {
   status: "ok" | "warn" | "alert";
   waiting: boolean; // true = ainda sem tráfego (campanhas recém-publicadas)
   alerts: HealthAlert[];
-  stats: { visits24h: number; visits7d: number; visitsPrev7d: number; sales7d: number };
+  stats: { visits24h: number; visits7d: number; visitsPrev7d: number; sales7d: number; bots7d: number };
 };
 
 export async function getHealth(): Promise<HealthResult> {
@@ -19,12 +19,14 @@ export async function getHealth(): Promise<HealthResult> {
   const d7 = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
   const d14 = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
 
-  const [visits24h, visits7d, visitsPrev7d, sales7d] = await Promise.all([
-    db.event.count({ where: { type: "visit", createdAt: { gte: d24 } } }),
-    db.event.count({ where: { type: "visit", createdAt: { gte: d7 } } }),
-    db.event.count({ where: { type: "visit", createdAt: { gte: d14, lt: d7 } } }),
+  // visitas contam só HUMANOS (bot: false); bots7d é o lixo de crawler separado
+  const [visits24h, visits7d, visitsPrev7d, sales7d, bots7d] = await Promise.all([
+    db.event.count({ where: { type: "visit", bot: false, createdAt: { gte: d24 } } }),
+    db.event.count({ where: { type: "visit", bot: false, createdAt: { gte: d7 } } }),
+    db.event.count({ where: { type: "visit", bot: false, createdAt: { gte: d14, lt: d7 } } }),
     db.payment.count({ where: { status: "paid", paidAt: { gte: d7 } } }),
-  ]).catch(() => [0, 0, 0, 0]);
+    db.event.count({ where: { type: "visit", bot: true, createdAt: { gte: d7 } } }),
+  ]).catch(() => [0, 0, 0, 0, 0]);
 
   const alerts: HealthAlert[] = [];
   const hadTraffic = visits7d > 0 || visitsPrev7d > 0;
@@ -53,5 +55,5 @@ export async function getHealth(): Promise<HealthResult> {
   }
 
   const status = alerts.some((a) => a.level === "alert") ? "alert" : alerts.length ? "warn" : "ok";
-  return { status, waiting, alerts, stats: { visits24h, visits7d, visitsPrev7d, sales7d } };
+  return { status, waiting, alerts, stats: { visits24h, visits7d, visitsPrev7d, sales7d, bots7d } };
 }

@@ -82,10 +82,13 @@ model Event {
   ip        String?
   country   String?
   path      String?
+  bot       Boolean  @default(false) // true = crawler/robô (user-agent conhecido) — filtrado do painel
+  ua        String? // user-agent (auditar bot vs pessoa)
   meta      Json?
   createdAt DateTime @default(now())
 
   @@index([type, createdAt])
+  @@index([type, bot, createdAt])
 }
 
 // 🚨 RESGATE MANUAL (admin cola comentários do IG quando o scraping pega pouco).

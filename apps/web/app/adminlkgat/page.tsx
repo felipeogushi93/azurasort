@@ -257,11 +257,14 @@ function HealthPanel({ health }: { health: HealthResult }) {
       )}
 
       <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <MiniStat label="Visitas (24h)" value={stats.visits24h} />
-        <MiniStat label="Visitas (7 dias)" value={stats.visits7d} />
+        <MiniStat label="Visitas reais (24h)" value={stats.visits24h} />
+        <MiniStat label="Visitas reais (7 dias)" value={stats.visits7d} />
         <MiniStat label="Semana anterior" value={stats.visitsPrev7d} />
         <MiniStat label="Vendas (7 dias)" value={stats.sales7d} />
       </div>
+      <p className="mt-2 text-[11px] text-inkSoft">
+        🤖 Visitas contam só <b>pessoas reais</b> — {stats.bots7d} visita(s) de robôs/crawlers nos últimos 7 dias foram filtradas.
+      </p>
 
       <p className="mt-4 rounded-xl bg-canvasAlt px-4 py-2.5 text-[11px] text-inkSoft">
         👉 Dados das campanhas (CPA, anúncio reprovado, gasto) ficam no <strong>Google Ads</strong> — dá uma olhada lá a cada 2-3 dias

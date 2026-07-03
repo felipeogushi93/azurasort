@@ -57,7 +57,7 @@ export async function getKpis(r: DateRange = {}): Promise<Kpis> {
     db.giveaway.count({ where: dateWhere }),
     db.draw.count({ where: dateWhere }),
     db.payment.findMany({ where: { status: "paid", ...dateWhere }, select: { amount: true } }),
-    db.event.groupBy({ by: ["type"], _count: { _all: true }, where: dateWhere }),
+    db.event.groupBy({ by: ["type"], _count: { _all: true }, where: { ...dateWhere, bot: false } }),
   ]);
 
   const counts = new Map(events.map((e) => [e.type, e._count._all]));
@@ -108,7 +108,7 @@ export function sourceLabel(src: string): string {
 
 export async function getSourceBreakdown(r: DateRange = {}): Promise<SourceRow[]> {
   const rows = await db.event.findMany({
-    where: { type: { in: ["visit", "pay_done"] }, ...whereCreated(r) },
+    where: { type: { in: ["visit", "pay_done"] }, bot: false, ...whereCreated(r) },
     select: { type: true, meta: true },
   });
   const map = new Map<string, { visits: number; paid: number }>();
