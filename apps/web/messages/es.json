@@ -317,6 +317,7 @@
     },
     "errors": {
       "previewFail": "No se pudo cargar la publicación",
+      "noComments": "No pudimos leer los comentarios de esta publicación. Puede ser +18, privada o sin comentarios. Prueba con otro enlace.",
       "exportUnsupported": "Tu navegador no puede generar el vídeo aquí. Usa Chrome o Safari actualizado (preferiblemente en el móvil).",
       "videoWebm": "Tu navegador generará el vídeo en WebM, que Instagram NO acepta. Para un MP4 que se suba a Instagram, abre en Chrome o Safari actualizado (preferiblemente en el móvil).\n\n¿Descargar en WebM de todos modos?",
       "videoFail": "No se pudo generar el vídeo. Inténtalo de nuevo.",

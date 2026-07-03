@@ -317,6 +317,7 @@
     },
     "errors": {
       "previewFail": "Falha ao buscar a publicação",
+      "noComments": "Não conseguimos ler os comentários deste post. Pode ser um post +18, privado ou sem comentários. Tente outro link.",
       "exportUnsupported": "Seu navegador não suporta gerar o vídeo aqui. Use o Chrome ou Safari atualizado (de preferência no celular).",
       "videoWebm": "Seu navegador vai gerar o vídeo em WebM, que o Instagram NÃO aceita. Para um MP4 que sobe no Instagram, abra no Chrome ou Safari atualizado (de preferência no celular).\n\nBaixar em WebM mesmo assim?",
       "videoFail": "Não foi possível gerar o vídeo. Tente novamente.",

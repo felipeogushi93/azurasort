@@ -89,6 +89,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [videoProgress, setVideoProgress] = useState(0);
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
   const [allowTest, setAllowTest] = useState(false);
+  const [verifying, setVerifying] = useState(false); // conferindo comentários quando a prévia veio 0
+  const [verifyFail, setVerifyFail] = useState(false); // post +18/privado/vazio → não dá pra sortear
   useEffect(() => {
     setAllowTest(new URLSearchParams(window.location.search).get("teste") === "1");
     // visita agora é contada globalmente pelo <VisitTracker/> no layout (toda página)
@@ -164,6 +166,33 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   function loadPasted() {
     const c = normalizeComments(parsePastedComments(raw));
     if (c.length) setComments(c);
+  }
+
+  /* Continuar quando a prévia veio 0: confirma de verdade (coleta pesada) antes de
+     deixar pagar. Post +18/privado/vazio volta 0 no Apify → NÃO deixa pagar por nada.
+     Se achar comentários, já carrega (o sorteio reaproveita, sem custo duplo). */
+  async function verifyAndContinue() {
+    if (displayCount > 0 || comments.length > 0) {
+      setStep("unlock");
+      return;
+    }
+    setVerifyFail(false);
+    setVerifying(true);
+    try {
+      const r = await fetch(`/api/instagram/comments?url=${encodeURIComponent(link)}`);
+      const d = await r.json();
+      if (r.ok && (d.count ?? 0) > 0 && Array.isArray(d.comments)) {
+        setComments(normalizeComments(d.comments));
+        setPreview((s) => (s ? { ...s, total: d.count, loaded: d.count } : s));
+        setStep("unlock");
+      } else {
+        setVerifyFail(true);
+      }
+    } catch {
+      setVerifyFail(true);
+    } finally {
+      setVerifying(false);
+    }
   }
   function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
@@ -551,15 +580,22 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             <span className="font-display text-2xl font-semibold text-gold-deep">{displayCount.toLocaleString()}</span>
           </div>
           {/* prévia é cosmética: se vier 0 (post privado/sem comentários ou prévia
-              falhou) NÃO trava — a coleta real é no sorteio; só avisa e deixa seguir */}
-          {preview?.status === "loaded" && displayCount === 0 && (
+              falhou) NÃO trava — ao continuar a gente confere de verdade */}
+          {preview?.status === "loaded" && displayCount === 0 && comments.length === 0 && !verifyFail && (
             <p className="mt-2 text-xs text-inkSoft">⚠️ {t("s3.zeroHint")}</p>
+          )}
+          {verifyFail && (
+            <p className="mt-2 rounded-lg bg-rose/10 px-3 py-2 text-xs text-rose">{t("errors.noComments")}</p>
           )}
 
           <div className="mt-5 flex items-center justify-between">
             <button onClick={() => setStep("base")} className="text-sm text-inkSoft hover:text-ink">{t("common.back")}</button>
-            <button disabled={!(preview?.status === "loaded" || comments.length > 0)} onClick={() => setStep("unlock")} className="btn-gold py-2.5 disabled:opacity-40">
-              {t("common.continue")}
+            <button
+              disabled={(preview?.status !== "loaded" && comments.length === 0) || verifying}
+              onClick={verifyAndContinue}
+              className="btn-gold py-2.5 disabled:opacity-40"
+            >
+              {verifying ? t("loadingComments") : t("common.continue")}
             </button>
           </div>
         </Card>
