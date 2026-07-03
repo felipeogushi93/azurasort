@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
 import { track } from "@/lib/track";
-import { priceLabels, formatPrice, type Currency, type PlanId } from "@/lib/payments/pricing";
+import { priceLabels, formatPrice, cardPriceForCount, type Currency, type PlanId } from "@/lib/payments/pricing";
 
 // estrutura dos planos; nomes/recursos vêm das traduções (sim.plans.*)
 const PLAN_META: { id: PlanId; nameKey: string; badgeKey?: string; featureKeys: string[] }[] = [
@@ -59,7 +59,8 @@ export function Paywall({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [minTier]);
   const labels = priceLabels(currency, count); // preço pela FAIXA de participantes
-  const priceLabel = labels[plan];
+  const priceLabel = labels[plan]; // base (PIX)
+  const cardLabel = formatPrice(cardPriceForCount(currency, plan, count), currency); // cartão (com taxa)
   const isBrazil = currency === "BRL"; // PIX só no Brasil
 
   return (
@@ -172,7 +173,7 @@ export function Paywall({
           {isBrazil && (
             <PayCard icon="⚡" title="PIX" sub={t("paywall.pixSub")} price={priceLabel} cta={t("paywall.pixCta")} accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
           )}
-          <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={allowTest ? `${formatPrice(100, currency)} (teste)` : priceLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
+          <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={allowTest ? `${formatPrice(100, currency)} (teste)` : cardLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
         </div>
         <p className="mt-3 text-center text-xs text-inkSoft">
           {t("paywall.guarantee")}
@@ -192,7 +193,7 @@ export function Paywall({
       {showCard && (
         <StripeCard
           plan={plan}
-          priceLabel={priceLabel}
+          priceLabel={cardLabel}
           currency={currency}
           count={count}
           test={allowTest}

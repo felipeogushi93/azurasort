@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/payments/stripe";
-import { priceForCount, currencyForCountry, countryFromRequest, stripeCurrency, type PlanId, type Currency } from "@/lib/payments/pricing";
+import { cardPriceForCount, currencyForCountry, countryFromRequest, stripeCurrency, type PlanId, type Currency } from "@/lib/payments/pricing";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 
 export const dynamic = "force-dynamic";
@@ -18,10 +18,10 @@ export async function POST(req: Request) {
       body.currency === "BRL" || body.currency === "EUR" || body.currency === "USD"
         ? body.currency
         : currencyForCountry(countryFromRequest(req));
-    // preço pela FAIXA de participantes (nº vindo da prévia).
+    // preço do CARTÃO = base + taxa do Stripe embutida (PIX fica no base).
     // ⚠️ TESTE: com ?teste=1 cobra só 1,00 (100 centavos) — usado p/ validar o fluxo
     // pago em produção sem gastar. Remover quando o teste acabar.
-    const amount = body.test === true ? 100 : priceForCount(currency, plan, Number(body.count) || 0);
+    const amount = body.test === true ? 100 : cardPriceForCount(currency, plan, Number(body.count) || 0);
 
     const intent = await getStripe().paymentIntents.create({
       amount,

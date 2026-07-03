@@ -49,6 +49,29 @@ export function priceForCount(currency: Currency, plan: PlanId, count: number): 
   return PRICES[currency][plan][tierForCount(count)];
 }
 
+/**
+ * Taxa aproximada do cartão (Stripe) por moeda — % + valor fixo por transação.
+ * Ajuste aqui se a taxa do Stripe mudar.
+ */
+const CARD_FEE: Record<Currency, { pct: number; fixed: number }> = {
+  BRL: { pct: 0.0399, fixed: 39 }, // ~3,99% + R$0,39
+  EUR: { pct: 0.029, fixed: 25 }, // ~2,9% + €0,25
+  USD: { pct: 0.029, fixed: 30 }, // ~2,9% + US$0,30
+};
+
+/**
+ * Preço no CARTÃO (centavos): preço base com a taxa do Stripe embutida (gross-up),
+ * arredondado pra cima em 10 centavos. Assim o valor LÍQUIDO recebido ≈ preço base.
+ * PIX continua no preço base (priceForCount). No Brasil, cobrar diferente no cartão
+ * é permitido (Lei 13.455/2017).
+ */
+export function cardPriceForCount(currency: Currency, plan: PlanId, count: number): number {
+  const base = priceForCount(currency, plan, count);
+  const { pct, fixed } = CARD_FEE[currency];
+  const gross = (base + fixed) / (1 - pct);
+  return Math.ceil(gross / 10) * 10; // arredonda pra cima em 10 centavos
+}
+
 /** Países que cobramos em EUR (Europa UE/EEE + Marrocos, mercado-foco). */
 const EUR_COUNTRIES = new Set([
   "PT", "ES", "FR", "DE", "IT", "NL", "BE", "LU", "IE", "AT", "FI", "GR", "CY",
