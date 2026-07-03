@@ -5,20 +5,20 @@ import Link from "next/link";
 
 /**
  * 🚀 Alavancagem — mapa de crescimento (backlinks/AEO). Estado no navegador
- * (localStorage): checklist marcado, alvos customizados e o registro de presença
- * (IA/Google). Dá pra migrar pro banco depois pra compartilhar com o Lucas.
+ * (localStorage): checklist marcado, alvos adicionados por grupo, e o registro
+ * de citações (IAs/Google). Dá pra migrar pro banco depois (compartilhar c/ Lucas).
  *
- * Exporta: GrowthLeverage (tela cheia, /adminlkgat/alavancagem) e
- * GrowthSummaryCard (cartão compacto no painel principal, com link).
+ * Exporta: GrowthLeverage (tela cheia) e GrowthSummaryCard (cartão no painel).
  */
 
 type Item = { key: string; label: string; link?: string; note?: string; seed?: boolean };
-type Group = { title: string; help: string; items: Item[] };
+type Group = { title: string; help: string; items: Item[]; addable?: boolean };
 
 const GROUPS: Group[] = [
   {
     title: "⚙️ Configuração",
     help: "Ajustes únicos que ligam a máquina. Feito uma vez, não repete.",
+    addable: true,
     items: [
       { key: "cfg-agent", label: "Agente semanal ligado (Vercel)", seed: true },
       { key: "cfg-ig", label: "Perfil Instagram @azurasortofficial", seed: true },
@@ -28,7 +28,8 @@ const GROUPS: Group[] = [
   },
   {
     title: "📁 Diretórios",
-    help: "Sites que listam ferramentas. Cada cadastro = um link pro seu site (autoridade no Google) e um lugar a mais onde a IA te encontra. Submete 1x, fica pra sempre.",
+    help: "Sites que listam ferramentas. Cada cadastro = um link pro seu site (autoridade no Google) e um lugar a mais onde a IA te encontra. Submete 1x, fica pra sempre. Cola aqui os que o agente mandar.",
+    addable: true,
     items: [
       { key: "dir-launchingnext", label: "Launching Next", link: "https://launchingnext.com/submit", seed: true },
       { key: "dir-saashub", label: "SaaSHub", link: "https://www.saashub.com/submit", seed: true },
@@ -43,6 +44,7 @@ const GROUPS: Group[] = [
   {
     title: "📝 Listicles (outreach)",
     help: "Artigos 'melhores sorteadores'. Você manda email pedindo pra te incluírem. É o que a IA MAIS lê pra recomendar — a alavanca nº 1 de AEO.",
+    addable: true,
     items: [
       { key: "lst-reviewraffles", label: "reviewraffles.com", link: "https://reviewraffles.com/instagram-giveaway-tool", seed: true },
       { key: "lst-beyondcomments", label: "beyondcomments.io", link: "https://beyondcomments.io/blog/free-instagram-giveaway-picker" },
@@ -54,6 +56,7 @@ const GROUPS: Group[] = [
   {
     title: "💬 Comunidades",
     help: "Reddit/Quora. Você ajuda de verdade e menciona de leve no fim. A IA cita muito essas respostas. Conta nova: aquece antes (comenta/upvota) pra não tomar spam.",
+    addable: true,
     items: [
       { key: "com-reddit", label: "1ª resposta no Reddit (r/Instagram, r/socialmedia)" },
       { key: "com-quora", label: "1ª resposta no Quora" },
@@ -62,6 +65,7 @@ const GROUPS: Group[] = [
   {
     title: "🏆 Marcos",
     help: "Ações maiores que dão saltos de autoridade — feitas com preparo, não toda semana.",
+    addable: true,
     items: [
       { key: "mrk-wikidata", label: "Wikidata (Q140357518)", link: "https://www.wikidata.org/wiki/Q140357518", seed: true },
       { key: "mrk-producthunt", label: "Lançamento no Product Hunt", link: "https://www.producthunt.com", note: "kit pronto — escolher um dia" },
@@ -80,13 +84,22 @@ const STAGES = [
   { label: "Ads pagos", status: "wait" },
 ] as const;
 
+const AIS = [
+  { id: "chatgpt", label: "ChatGPT" },
+  { id: "claude", label: "Claude" },
+  { id: "perplexity", label: "Perplexity" },
+  { id: "gemini", label: "Gemini" },
+] as const;
+
+const GOOGLE_LEVELS = ["Não aparece", "Além da 2ª página", "2ª página", "1ª página", "Top 3 🎉"];
+
 const KEY_DONE = "azs_growth_v1";
 const KEY_CUSTOM = "azs_growth_custom_v1";
-const KEY_PRESENCE = "azs_growth_presence_v1";
+const KEY_CITE = "azs_growth_citations_v1";
 const BACKLINK_GOAL = 50;
 
-type Custom = { key: string; label: string; link?: string };
-type Presence = { google?: string; ai?: string };
+type Custom = { key: string; group: string; label: string; link?: string };
+type Citations = { ai: Record<string, string | undefined>; googleLevel?: number; googleDate?: string };
 
 function load<T>(key: string, fallback: T): T {
   try {
@@ -111,12 +124,9 @@ export function GrowthSummaryCard() {
     const done = load<Record<string, boolean>>(KEY_DONE, {});
     const custom = load<Custom[]>(KEY_CUSTOM, []);
     const base = GROUPS.flatMap((g) => g.items);
-    // se nunca marcou nada, considera os seeds
     const hasState = Object.keys(done).length > 0;
     const total = base.length + custom.length;
-    const completed = hasState
-      ? [...base, ...custom].filter((it) => done[it.key]).length
-      : base.filter((it) => it.seed).length;
+    const completed = hasState ? [...base, ...custom].filter((it) => done[it.key]).length : base.filter((it) => it.seed).length;
     setPct(total ? Math.round((completed / total) * 100) : 0);
   }, []);
   return (
@@ -126,9 +136,7 @@ export function GrowthSummaryCard() {
           <h2 className="font-display text-xl font-bold text-ink">🚀 Alavancagem</h2>
           <p className="text-sm text-inkSoft">Mapa de crescimento · backlinks & AEO</p>
         </div>
-        <Link href="/adminlkgat/alavancagem" className="rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5">
-          Abrir mapa completo →
-        </Link>
+        <Link href="/adminlkgat/alavancagem" className="rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white transition hover:-translate-y-0.5">Abrir mapa completo →</Link>
       </div>
       {pct !== null && (
         <div className="mt-4">
@@ -149,10 +157,11 @@ export function GrowthSummaryCard() {
 export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7d: number }) {
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [custom, setCustom] = useState<Custom[]>([]);
-  const [presence, setPresence] = useState<Presence>({});
+  const [cite, setCite] = useState<Citations>({ ai: {} });
   const [ready, setReady] = useState(false);
   const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
   const [openHelp, setOpenHelp] = useState<string | null>(null);
+  const [addingGroup, setAddingGroup] = useState<string | null>(null);
   const [newLabel, setNewLabel] = useState("");
   const [newLink, setNewLink] = useState("");
 
@@ -166,8 +175,10 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
       setDone(seed);
       save(KEY_DONE, seed);
     }
-    setCustom(load<Custom[]>(KEY_CUSTOM, []));
-    setPresence(load<Presence>(KEY_PRESENCE, {}));
+    // migra custom antigos (sem group) pra Diretórios
+    const rawCustom = load<Custom[]>(KEY_CUSTOM, []).map((c) => ({ ...c, group: c.group ?? "📁 Diretórios" }));
+    setCustom(rawCustom);
+    setCite(load<Citations>(KEY_CITE, { ai: {} }));
     setReady(true);
   }, []);
 
@@ -178,10 +189,10 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
       return next;
     });
   }
-  function addCustom() {
+  function addTo(group: string) {
     const label = newLabel.trim();
     if (!label) return;
-    const item: Custom = { key: `custom-${Date.now()}`, label, link: newLink.trim() || undefined };
+    const item: Custom = { key: `custom-${Date.now()}`, group, label, link: newLink.trim() || undefined };
     setCustom((prev) => {
       const next = [...prev, item];
       save(KEY_CUSTOM, next);
@@ -189,6 +200,7 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
     });
     setNewLabel("");
     setNewLink("");
+    setAddingGroup(null);
   }
   function removeCustom(key: string) {
     setCustom((prev) => {
@@ -197,11 +209,19 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
       return next;
     });
   }
-  function stamp(which: "google" | "ai") {
-    setPresence((prev) => {
+  function toggleAi(id: string) {
+    setCite((prev) => {
       const today = new Date().toISOString().slice(0, 10);
-      const next = { ...prev, [which]: prev[which] ? undefined : today };
-      save(KEY_PRESENCE, next);
+      const ai = { ...prev.ai, [id]: prev.ai[id] ? undefined : today };
+      const next = { ...prev, ai };
+      save(KEY_CITE, next);
+      return next;
+    });
+  }
+  function setGoogle(level: number) {
+    setCite((prev) => {
+      const next = { ...prev, googleLevel: level, googleDate: new Date().toISOString().slice(0, 10) };
+      save(KEY_CITE, next);
       return next;
     });
   }
@@ -210,11 +230,25 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
   const total = allItems.length;
   const completed = allItems.filter((it) => done[it.key]).length;
   const pct = total ? Math.round((completed / total) * 100) : 0;
-  // "backlinks/menções" = diretórios + listicles + customizados feitos
-  const backlinkItems = [...GROUPS.filter((g) => g.title.includes("Diretórios") || g.title.includes("Listicles")).flatMap((g) => g.items), ...custom];
+  const backlinkGroups = ["📁 Diretórios", "📝 Listicles (outreach)"];
+  const backlinkItems = [...GROUPS.filter((g) => backlinkGroups.includes(g.title)).flatMap((g) => g.items), ...custom.filter((c) => backlinkGroups.includes(c.group))];
   const backlinksDone = backlinkItems.filter((it) => done[it.key]).length;
 
   const showItem = (key: string) => (filter === "all" ? true : filter === "done" ? !!done[key] : !done[key]);
+
+  function renderItem(it: { key: string; label: string; link?: string; note?: string }, removable = false) {
+    const checked = ready && !!done[it.key];
+    return (
+      <li key={it.key} className="flex items-start gap-2">
+        <input type="checkbox" checked={checked} onChange={() => toggle(it.key)} className="mt-0.5 h-4 w-4 shrink-0 accent-gold" />
+        <span className={`flex-1 text-sm ${checked ? "text-inkSoft line-through" : "text-ink"}`}>
+          {it.link ? <a href={it.link} target="_blank" rel="noopener noreferrer" className="hover:underline">{it.label}</a> : it.label}
+          {it.note && <span className="ml-1 text-xs text-gold-deep">· {it.note}</span>}
+        </span>
+        {removable && <button onClick={() => removeCustom(it.key)} className="text-xs text-inkSoft hover:text-rose" title="Remover">✕</button>}
+      </li>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
@@ -234,25 +268,45 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
         <Metric label="Vendas (7d)" value={String(sales7d)} sub="do sistema" />
       </section>
 
-      {/* PRESENÇA (manual, mensal) */}
+      {/* CITAÇÕES — estamos aparecendo? */}
       <section className="mb-6 rounded-3xl border border-ink/5 bg-surface p-5 shadow-card">
-        <p className="mb-1 text-sm font-semibold text-ink">📡 Estamos aparecendo? <span className="font-normal text-inkSoft">(teste mensal, manual)</span></p>
-        <p className="mb-3 text-xs text-inkSoft">Detectar isso automático não é confiável — então você testa e marca aqui uma vez por mês.</p>
-        <div className="flex flex-wrap gap-3">
-          <PresenceToggle
-            label="Citados por uma IA"
-            hint="Pergunte no ChatGPT/Claude: 'melhor site pra sorteio no Instagram' e veja se aparece."
-            on={!!presence.ai}
-            date={presence.ai}
-            onClick={() => stamp("ai")}
-          />
-          <PresenceToggle
-            label="Aparecendo no Google"
-            hint="Veja no Google Search Console (Desempenho) se há cliques/impressões."
-            on={!!presence.google}
-            date={presence.google}
-            onClick={() => stamp("google")}
-          />
+        <p className="mb-1 text-sm font-semibold text-ink">📡 Citações — Estamos aparecendo? <span className="font-normal text-inkSoft">(teste manual, ~1x/mês)</span></p>
+        <p className="mb-3 text-xs text-inkSoft">Pergunte em cada IA &quot;melhor site pra sorteio no Instagram&quot; e marque se o AzuraSort aparece. No Google, veja em que ponto estamos.</p>
+        <div className="mb-4 flex flex-wrap gap-2">
+          {AIS.map((a) => {
+            const on = !!cite.ai[a.id];
+            return (
+              <button key={a.id} onClick={() => toggleAi(a.id)} className={`rounded-xl border px-4 py-2.5 text-left transition ${on ? "border-emerald/40 bg-emerald/5" : "border-ink/10 bg-surface hover:border-gold/40"}`}>
+                <p className="text-sm font-semibold text-ink">{on ? "✅" : "⬜"} {a.label}</p>
+                <p className="text-[11px] text-inkSoft">{on ? `desde ${cite.ai[a.id]}` : "ainda não"}</p>
+              </button>
+            );
+          })}
+        </div>
+        <div className="rounded-xl border border-ink/10 bg-canvasAlt p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-sm font-semibold text-ink">🔎 Google — em que ponto estamos?</p>
+              <p className="text-[11px] text-inkSoft">Veja no Search Console (Desempenho) a posição média. Atualize aqui pra ver a evolução.</p>
+            </div>
+            <select
+              value={cite.googleLevel ?? 0}
+              onChange={(e) => setGoogle(Number(e.target.value))}
+              className="rounded-lg border border-ink/10 bg-surface px-3 py-2 text-sm text-ink"
+            >
+              {GOOGLE_LEVELS.map((lvl, i) => (
+                <option key={i} value={i}>{lvl}</option>
+              ))}
+            </select>
+          </div>
+          {/* barra de evolução do Google */}
+          <div className="mt-3 h-2.5 w-full overflow-hidden rounded-full bg-ink/10">
+            <div
+              className={`h-full rounded-full transition-all ${(cite.googleLevel ?? 0) >= 4 ? "bg-emerald" : (cite.googleLevel ?? 0) >= 3 ? "bg-gold" : "bg-gold/50"}`}
+              style={{ width: `${((cite.googleLevel ?? 0) / (GOOGLE_LEVELS.length - 1)) * 100}%` }}
+            />
+          </div>
+          {cite.googleDate && <p className="mt-1 text-[11px] text-inkSoft">atualizado em {cite.googleDate}</p>}
         </div>
       </section>
 
@@ -278,11 +332,12 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
         ))}
       </div>
 
-      {/* checklist */}
+      {/* checklist por grupo (cada um com adicionar) */}
       <div className="grid gap-5 md:grid-cols-2">
         {GROUPS.map((g) => {
-          const visible = g.items.filter((it) => showItem(it.key));
-          if (!visible.length) return null;
+          const baseVisible = g.items.filter((it) => showItem(it.key));
+          const customVisible = custom.filter((c) => c.group === g.title && showItem(c.key));
+          const isAdding = addingGroup === g.title;
           return (
             <div key={g.title} className="rounded-2xl border border-ink/5 bg-surface p-4 shadow-soft">
               <div className="mb-2 flex items-center gap-2">
@@ -291,53 +346,31 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
               </div>
               {openHelp === g.title && <p className="mb-3 rounded-lg bg-gold/5 px-3 py-2 text-xs text-inkSoft">{g.help}</p>}
               <ul className="space-y-1.5">
-                {visible.map((it) => {
-                  const checked = ready && !!done[it.key];
-                  return (
-                    <li key={it.key} className="flex items-start gap-2">
-                      <input type="checkbox" checked={checked} onChange={() => toggle(it.key)} className="mt-0.5 h-4 w-4 shrink-0 accent-gold" />
-                      <span className={`text-sm ${checked ? "text-inkSoft line-through" : "text-ink"}`}>
-                        {it.link ? <a href={it.link} target="_blank" rel="noopener noreferrer" className="hover:underline">{it.label}</a> : it.label}
-                        {it.note && <span className="ml-1 text-xs text-gold-deep">· {it.note}</span>}
-                      </span>
-                    </li>
-                  );
-                })}
+                {baseVisible.map((it) => renderItem(it))}
+                {customVisible.map((c) => renderItem(c, true))}
               </ul>
+              {/* adicionar neste grupo */}
+              {isAdding ? (
+                <div className="mt-3 space-y-2 rounded-lg bg-canvasAlt p-2">
+                  <input value={newLabel} onChange={(e) => setNewLabel(e.target.value)} placeholder="Nome do site/tarefa" className="w-full rounded-lg border border-ink/10 bg-surface px-3 py-1.5 text-sm" autoFocus />
+                  <input value={newLink} onChange={(e) => setNewLink(e.target.value)} placeholder="Link (opcional)" className="w-full rounded-lg border border-ink/10 bg-surface px-3 py-1.5 text-sm" />
+                  <div className="flex gap-2">
+                    <button onClick={() => addTo(g.title)} className="flex-1 rounded-full bg-ink/90 py-1.5 text-sm font-semibold text-white hover:bg-ink">Adicionar</button>
+                    <button onClick={() => { setAddingGroup(null); setNewLabel(""); setNewLink(""); }} className="rounded-full border border-ink/10 px-3 py-1.5 text-sm text-inkSoft">Cancelar</button>
+                  </div>
+                </div>
+              ) : (
+                <button onClick={() => { setAddingGroup(g.title); setNewLabel(""); setNewLink(""); }} className="mt-3 text-xs font-medium text-gold-deep hover:underline">+ adicionar aqui</button>
+              )}
             </div>
           );
         })}
-
-        {/* meus alvos (customizados) */}
-        <div className="rounded-2xl border border-dashed border-gold/30 bg-surface p-4 shadow-soft">
-          <p className="mb-2 text-sm font-semibold text-ink">➕ Meus alvos <span className="font-normal text-inkSoft">(adicione os que o agente mandar)</span></p>
-          <ul className="mb-3 space-y-1.5">
-            {custom.filter((c) => showItem(c.key)).map((c) => {
-              const checked = ready && !!done[c.key];
-              return (
-                <li key={c.key} className="flex items-start gap-2">
-                  <input type="checkbox" checked={checked} onChange={() => toggle(c.key)} className="mt-0.5 h-4 w-4 shrink-0 accent-gold" />
-                  <span className={`flex-1 text-sm ${checked ? "text-inkSoft line-through" : "text-ink"}`}>
-                    {c.link ? <a href={c.link} target="_blank" rel="noopener noreferrer" className="hover:underline">{c.label}</a> : c.label}
-                  </span>
-                  <button onClick={() => removeCustom(c.key)} className="text-xs text-inkSoft hover:text-rose">✕</button>
-                </li>
-              );
-            })}
-            {!custom.length && <li className="text-xs text-inkSoft">Nenhum ainda. Cola aqui os alvos novos que chegarem no Telegram.</li>}
-          </ul>
-          <div className="space-y-2">
-            <input value={newLabel} onChange={(e) => setNewLabel(e.target.value)} placeholder="Nome do site/tarefa" className="w-full rounded-lg border border-ink/10 bg-canvasAlt px-3 py-2 text-sm" />
-            <input value={newLink} onChange={(e) => setNewLink(e.target.value)} placeholder="Link (opcional)" className="w-full rounded-lg border border-ink/10 bg-canvasAlt px-3 py-2 text-sm" />
-            <button onClick={addCustom} className="w-full rounded-full bg-ink/90 py-2 text-sm font-semibold text-white hover:bg-ink">Adicionar</button>
-          </div>
-        </div>
       </div>
 
       <p className="mt-6 rounded-xl bg-ink/5 px-4 py-3 text-xs text-inkSoft">
         🎯 <b>Onde queremos chegar:</b> que quando alguém pesquisar no Google OU perguntar pra uma IA
         &quot;melhor site pra sorteio no Instagram&quot;, o AzuraSort apareça. Isso vem do grind semanal
-        (o agente manda os alvos toda segunda no Telegram → você faz → marca aqui). A bola de neve cresce. ⛄
+        (o agente manda os alvos toda segunda no Telegram → você adiciona no grupo certo → faz → marca). A bola de neve cresce. ⛄
       </p>
     </div>
   );
@@ -350,14 +383,5 @@ function Metric({ label, value, sub, accent }: { label: string; value: string; s
       <p className="font-display text-2xl font-bold text-ink">{value}</p>
       {sub && <p className="text-[11px] text-inkSoft">{sub}</p>}
     </div>
-  );
-}
-
-function PresenceToggle({ label, hint, on, date, onClick }: { label: string; hint: string; on: boolean; date?: string; onClick: () => void }) {
-  return (
-    <button onClick={onClick} title={hint} className={`rounded-xl border px-4 py-3 text-left transition ${on ? "border-emerald/40 bg-emerald/5" : "border-ink/10 bg-surface hover:border-gold/40"}`}>
-      <p className="text-sm font-semibold text-ink">{on ? "✅" : "⬜"} {label}</p>
-      <p className="text-[11px] text-inkSoft">{on && date ? `confirmado em ${date}` : "ainda não / clique ao confirmar"}</p>
-    </button>
   );
 }
