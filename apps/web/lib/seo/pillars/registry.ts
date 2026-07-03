@@ -11,6 +11,9 @@ import { getVideoPillar } from "./video";
 import { getVsCommentPicker } from "./vs-comment-picker";
 import { getVerifiable } from "./verifiable";
 import { getBestPicker } from "./best-picker";
+import { getVsManualGiveaway } from "./vs-manual-giveaway";
+import { getVsFreeGiveawayTools } from "./vs-free-giveaway-tools";
+import { getVsWheelOfNames } from "./vs-wheel-of-names";
 
 export type PillarDef = {
   slug: string;
@@ -22,6 +25,9 @@ export const PILLARS: PillarDef[] = [
   { slug: "vs-comment-picker", get: getVsCommentPicker },
   { slug: "verifiable-instagram-giveaway", get: getVerifiable },
   { slug: "best-instagram-giveaway-picker", get: getBestPicker },
+  { slug: "vs-manual-giveaway", get: getVsManualGiveaway },
+  { slug: "vs-free-giveaway-tools", get: getVsFreeGiveawayTools },
+  { slug: "vs-wheel-of-names", get: getVsWheelOfNames },
 ];
 
 export const PILLAR_SLUGS = PILLARS.map((p) => p.slug);
