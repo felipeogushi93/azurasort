@@ -93,7 +93,8 @@ export default async function LocaleLayout({
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-3H6JSKZNM5');
-gtag('config', 'AW-18276235962');`}
+gtag('config', 'AW-18276235962');
+gtag('config', 'AW-18240050787');`}
         </Script>
         {/* Meta Pixel (Facebook/Instagram Ads) — base PageView; eventos de conversão (Purchase)
             disparados no GiveawaySimulator junto do GA4/Google Ads */}

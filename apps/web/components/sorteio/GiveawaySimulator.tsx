@@ -291,6 +291,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         currency,
         transaction_id: payment.externalId,
       });
+      // Google Ads Rafflecopter US (conta USD onde roda a campanha AzuraSort BR)
+      gtagFn?.("event", "conversion", {
+        send_to: "AW-18240050787/ybDqCNSMkb8cEOOsxPlD",
+        value,
+        currency,
+        transaction_id: payment.externalId,
+      });
       // Meta Pixel (conversão de compra — otimização das campanhas Facebook/Instagram)
       const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq;
       fbq?.("track", "Purchase", { value, currency });
