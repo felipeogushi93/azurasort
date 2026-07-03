@@ -53,17 +53,27 @@ export async function POST(req: Request) {
 
       // Painel-IA central: notificar conversão pra atribuir lead à origem (AI/Google/etc).
       // Fire-and-forget — falha do painel não derruba o webhook do Stripe.
-      void fetch("https://painel-ia-ten.vercel.app/api/webhook/order", {
+      // URL migrada 2026-07-03: painel-ia rodava em Vercel (painel-ia-ten.vercel.app),
+      // agora no VPS (painel-ia.sorteigram.app). Vercel antigo retornava 500.
+      void fetch("https://painel-ia.sorteigram.app/api/webhook/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           tenant: "azurasort",
           gateway: "stripe",
           external_id: pi.id,
+          order_id: pi.id,
           amount_cents: pi.amount ?? 0,
           currency: (pi.currency ?? "brl").toUpperCase(),
           plan: (pi.metadata?.plan as string) ?? "premium",
+          item_slug: (pi.metadata?.plan as string) ?? "premium",
           session_id: (pi.metadata?.session_id as string) ?? null,
+          visitor_id: (pi.metadata?.visitor_id as string) ?? null,
+          utm_source: (pi.metadata?.utm_source as string) ?? null,
+          utm_medium: (pi.metadata?.utm_medium as string) ?? null,
+          utm_campaign: (pi.metadata?.utm_campaign as string) ?? null,
+          gclid: (pi.metadata?.gclid as string) ?? null,
+          fbclid: (pi.metadata?.fbclid as string) ?? null,
           status: "paid",
         }),
         signal: AbortSignal.timeout(3000),

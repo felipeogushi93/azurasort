@@ -44,6 +44,7 @@ export async function POST(req: Request) {
       } else if (body.payment.provider === "woovi") {
         const v = await getWooviStatus(body.payment.externalId);
         paid = v.paid;
+        paidAmount = v.amount;
         paidCurrency = "BRL"; // PIX é sempre BRL
       }
     }

@@ -37,12 +37,13 @@ export async function createWooviCharge(value: number, comment: string): Promise
 }
 
 /** Consulta o status de uma cobrança pelo correlationID. */
-export async function getWooviStatus(correlationID: string): Promise<{ status: string; paid: boolean }> {
+export async function getWooviStatus(correlationID: string): Promise<{ status: string; paid: boolean; amount: number }> {
   const res = await fetch(`${BASE}/charge/${encodeURIComponent(correlationID)}`, {
     headers: { Authorization: appId() },
   });
   if (!res.ok) throw new Error(`Woovi ${res.status}`);
   const data = await res.json();
-  const status = data.charge?.status ?? "ACTIVE";
-  return { status, paid: status === "COMPLETED" };
+  const charge = data.charge ?? {};
+  const status = charge.status ?? "ACTIVE";
+  return { status, paid: status === "COMPLETED", amount: charge.value ?? 0 };
 }
