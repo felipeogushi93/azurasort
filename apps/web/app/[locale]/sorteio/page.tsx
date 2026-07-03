@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
 import { GiveawaySimulator } from "@/components/sorteio/GiveawaySimulator";
+import { SupportNote } from "@/components/SupportNote";
 import { currencyForLocale } from "@/lib/payments/pricing";
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default async function SorteioPage({
   return (
     <main className="min-h-screen bg-canvas bg-mesh">
       <GiveawaySimulator currency={currency} />
+      <SupportNote locale={locale} />
     </main>
   );
 }

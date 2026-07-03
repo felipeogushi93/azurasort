@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 import { FreeDraw } from "@/components/sorteio/FreeDraw";
+import { SupportNote } from "@/components/SupportNote";
 import { routing } from "@/i18n/routing";
 import { SITE } from "@/lib/seo/content";
 
@@ -27,6 +28,7 @@ export default async function GratisPage({ params }: { params: Promise<{ locale:
   return (
     <main className="min-h-screen bg-canvas bg-mesh">
       <FreeDraw />
+      <SupportNote locale={locale} />
     </main>
   );
 }
