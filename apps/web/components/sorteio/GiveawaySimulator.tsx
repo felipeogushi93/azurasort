@@ -382,6 +382,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         currency,
         transaction_id: payment.externalId,
       });
+      // Google Ads AzuraSort BR (conta BRL — Compra id=7673165170)
+      gtagFn?.("event", "conversion", {
+        send_to: "AW-18290962377/TCaBCPLq7MocEMnf55FE",
+        value,
+        currency,
+        transaction_id: payment.externalId,
+      });
       // Meta Pixel (conversão de compra — otimização das campanhas Facebook/Instagram)
       const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq;
       fbq?.("track", "Purchase", { value, currency });
