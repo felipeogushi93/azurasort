@@ -111,8 +111,18 @@ export async function POST(req: Request) {
     // ⬆️ RESCUE manual
 
     if (prevDraw && Array.isArray(prevDraw.participants) && (prevDraw.participants as string[]).length) {
-      eligibleHandles = prevDraw.participants as string[]; // re-roll: mesma base
+      // re-roll: MESMA base, mas EXCLUINDO quem já venceu (re-sorteia entre os
+      // restantes). A cada novo sorteio o pool diminui: 15 → 14 → 13...
+      const prevWinners = await db.winner.findMany({
+        where: { draw: { giveawayId: giveaway.id }, isBackup: false },
+        select: { handle: true },
+      });
+      const alreadyWon = new Set(prevWinners.map((w) => w.handle));
+      eligibleHandles = (prevDraw.participants as string[]).filter((h) => !alreadyWon.has(h));
       totalForCert = prevDraw.totalCount;
+      if (!eligibleHandles.length) {
+        return NextResponse.json({ error: "Todos os participantes já foram sorteados neste post." }, { status: 400 });
+      }
     } else if (manualPool && Array.isArray(manualPool.handles) && (manualPool.handles as unknown[]).length) {
       // RESCUE manual: pool colado pelo admin (owner já removido na injeção)
       const raw = manualPool.handles as unknown as RawComment[];
