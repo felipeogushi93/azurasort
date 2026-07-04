@@ -21,6 +21,7 @@ export function WooviPix({
   const [copied, setCopied] = useState(false);
   const [paid, setPaid] = useState(false);
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const firedRef = useRef(false); // garante que onSuccess dispara UMA vez só
 
   // cria a cobrança ao abrir
   useEffect(() => {
@@ -41,7 +42,8 @@ export function WooviPix({
       try {
         const r = await fetch(`/api/pay/woovi/status?id=${encodeURIComponent(charge.correlationID)}`);
         const d = await r.json();
-        if (d.paid) {
+        if (d.paid && !firedRef.current) {
+          firedRef.current = true; // trava contra múltiplos disparos
           if (pollRef.current) clearInterval(pollRef.current);
           setPaid(true);
           setTimeout(() => onSuccess(charge.correlationID), 900);

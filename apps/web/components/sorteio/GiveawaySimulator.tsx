@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import type { RevealModule, RevealSpec } from "@prizegram/reveal-spec";
 import { RevealClient } from "@/components/reveal/RevealClient";
@@ -94,6 +94,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [sample, setSample] = useState<{ handle: string; text: string }[]>([]);
   const [certCode, setCertCode] = useState<string | null>(null);
   const [lastPayment, setLastPayment] = useState<{ provider: string; externalId: string; plan?: string; adminKey?: string } | undefined>(undefined);
+  // guarda os pagamentos já processados → conversões (GA/Ads/Meta) disparam 1x só,
+  // mesmo se o onSuccess do PIX chamar handlePaid várias vezes.
+  const handledPayRef = useRef<Set<string>>(new Set());
 
   // passo 2 — base
   const [base, setBase] = useState<Base>("comments");
@@ -352,6 +355,12 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       setLastPayment(payment);
       // Padrão inclui só a animação Contagem → se pagou Padrão, usa ela na revelação
       if (payment.plan === "padrao") setModule("countdown");
+      // dedup: se já processamos este pagamento, não redispara conversões/venda
+      if (payment.externalId && handledPayRef.current.has(payment.externalId)) {
+        setStep("ready");
+        return;
+      }
+      if (payment.externalId) handledPayRef.current.add(payment.externalId);
       savePaidClaim(link, payment); // guarda 5 dias por post → F5/voltar não paga de novo
       // notifica a VENDA no grupo de vendas JÁ no pagamento (cobre o caso F5) —
       // verifica no servidor e registra o Payment (importante p/ PIX sem webhook)
