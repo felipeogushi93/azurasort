@@ -348,6 +348,14 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
     if (payment) {
       setLastPayment(payment);
       savePaidClaim(link, payment); // guarda 5 dias por post → F5/voltar não paga de novo
+      // notifica a VENDA no grupo de vendas JÁ no pagamento (cobre o caso F5) —
+      // verifica no servidor e registra o Payment (importante p/ PIX sem webhook)
+      fetch("/api/pay/confirm", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined }),
+        keepalive: true,
+      }).catch(() => {});
       track("pay_done", { provider: payment.provider, plan: payment.plan });
       // conversão de COMPRA para o GA4 (base das campanhas Google/Meta)
       const planId = (payment.plan === "padrao" || payment.plan === "vip" ? payment.plan : "premium") as PlanId;

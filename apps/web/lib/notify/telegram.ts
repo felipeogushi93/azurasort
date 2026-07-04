@@ -131,3 +131,23 @@ export function saleMessage(opts: {
     .filter(Boolean)
     .join("\n");
 }
+
+/** Mensagem de PAGAMENTO confirmado (no momento do pagamento, antes do sorteio).
+ *  Garante que TODA venda apareça no grupo de vendas — mesmo se o cliente não
+ *  sortear na hora (F5). O sorteio depois manda a saleMessage com o ganhador. */
+export function paymentMessage(opts: { provider: string; plan: string; amountCents: number; currency?: string; campaign?: string }): string {
+  const plan = PLAN_LABEL[opts.plan] ?? opts.plan;
+  const cur = (opts.currency || "BRL").toUpperCase();
+  const valor = (opts.amountCents / 100).toLocaleString(INTL_LOCALE[cur] ?? "en-US", { style: "currency", currency: cur });
+  const metodo = opts.provider === "woovi" ? "PIX" : opts.provider === "stripe" ? "Cartão" : opts.provider;
+  return [
+    "💵 <b>Pagamento confirmado — AzuraSort</b>",
+    "",
+    `Plano: <b>${escapeHtml(plan)}</b> (${valor})`,
+    `Pagamento: ${metodo}`,
+    opts.campaign ? `Campanha: ${escapeHtml(opts.campaign)}` : null,
+    "<i>Aguardando o sorteio…</i>",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
