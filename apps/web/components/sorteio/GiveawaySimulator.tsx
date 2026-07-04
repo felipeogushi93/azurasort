@@ -266,6 +266,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   );
   // exibido ao cliente = total de comentários do post (esconde a filtragem interna)
   const displayCount = preview?.total ?? comments.length;
+  // quando a prévia não leu a contagem (0), mostra "Todos" em vez de "0" — o
+  // sorteio coleta de verdade; se vier vazio mesmo, é o resgate manual.
+  const participantsLabel = displayCount > 0 ? displayCount.toLocaleString() : t("s3.all");
 
   // gera o vídeo do sorteio no navegador (canvas + MediaRecorder) e baixa
   async function exportVideo(ratio: ExportRatio) {
@@ -641,7 +644,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
           <div className="mt-6 flex items-center justify-between rounded-xl border border-ink/5 bg-canvasAlt px-4 py-3">
             <span className="text-sm text-inkSoft">{t("s3.participants")}</span>
-            <span className="font-display text-2xl font-semibold text-gold-deep">{displayCount.toLocaleString()}</span>
+            <span className="font-display text-2xl font-semibold text-gold-deep">{participantsLabel}</span>
           </div>
           {/* prévia é cosmética: se vier 0 (Apify não reportou a contagem) NÃO trava —
               segue pro pagamento; a coleta real é no sorteio */}
@@ -693,7 +696,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
             <div className="grid h-16 w-16 place-items-center rounded-full bg-emerald/15 text-3xl text-emerald">✓</div>
             <div className="rounded-xl border border-ink/5 bg-canvasAlt px-5 py-3">
               <p className="text-xs uppercase tracking-widest text-inkSoft">{t("s3.participants")}</p>
-              <p className="font-display text-3xl font-bold text-gold-deep">{displayCount.toLocaleString()}</p>
+              <p className="font-display text-3xl font-bold text-gold-deep">{participantsLabel}</p>
             </div>
             <button onClick={() => doDraw()} disabled={busy} className="btn-gold px-10 py-4 text-lg disabled:opacity-50">
               {t("ready.drawNow")}
@@ -722,7 +725,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           </div>
 
           <div className="mt-5 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
-            <Stat label={t("result.statParticipants")} value={displayCount.toLocaleString()} />
+            <Stat label={t("result.statParticipants")} value={participantsLabel} />
             <Stat label={t("result.statBase")} value={base === "comments" ? t("result.baseComments") : t("result.baseLikes")} />
             <Stat label={t("result.statLive")} value={liveActive ? t("result.yes") : t("result.no")} />
             <Stat label={t("result.statCert")} value={result.certificateHash.slice(0, 8) + "…"} mono />

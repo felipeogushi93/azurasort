@@ -74,7 +74,7 @@ export function Paywall({
       <div className="rounded-3xl border border-ink/5 bg-surface p-5 shadow-card sm:p-6">
         <div className="mb-4 flex items-center justify-between">
           <p className="text-sm font-medium uppercase tracking-widest text-gold-deep">{t("paywall.sampleTitle")}</p>
-          <span className="text-xs text-inkSoft">5 / {count.toLocaleString()}</span>
+          <span className="text-xs text-inkSoft">5 / {count > 0 ? count.toLocaleString() : t("s3.all")}</span>
         </div>
         <div className="space-y-2">
           {sample.slice(0, 5).map((c, i) => (
@@ -89,15 +89,17 @@ export function Paywall({
             </div>
           ))}
         </div>
-        <p className="mt-3 text-center text-xs text-inkSoft">
-          {t("paywall.unlockMore", { n: Math.max(0, count - 5).toLocaleString() })}
-        </p>
+        {count > 5 && (
+          <p className="mt-3 text-center text-xs text-inkSoft">
+            {t("paywall.unlockMore", { n: (count - 5).toLocaleString() })}
+          </p>
+        )}
       </div>
 
       {/* desbloqueie + preview da cena escolhida */}
       <div className="text-center">
         <h3 className="font-display text-3xl font-semibold text-ink">{t("paywall.unlockTitle")}</h3>
-        <p className="mt-1 text-sm text-inkSoft">{t("paywall.postWith", { count: count.toLocaleString() })}</p>
+        <p className="mt-1 text-sm text-inkSoft">{t("paywall.postWith", { count: count > 0 ? count.toLocaleString() : t("s3.all") })}</p>
       </div>
 
       <div className="relative overflow-hidden rounded-3xl border border-gold/30 bg-void shadow-gold">

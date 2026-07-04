@@ -297,6 +297,7 @@
       "minMentions": "Min. mentions",
       "noDup": "No duplicates",
       "participants": "Participants",
+      "all": "All",
       "zeroHint": "We didn't detect comments in the preview (private post, no comments, or the preview failed). You can continue — the real collection happens at draw time.",
       "example": "example",
       "liveVip": "VIP plan only."

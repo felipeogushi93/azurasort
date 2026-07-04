@@ -297,6 +297,7 @@
       "minMentions": "Mín. de menções",
       "noDup": "Sem duplicados",
       "participants": "Participantes",
+      "all": "Todos",
       "zeroHint": "Não detectamos comentários na prévia (post privado, sem comentários ou a prévia falhou). Pode continuar — a coleta real é no sorteio.",
       "example": "exemplo",
       "liveVip": "Exclusivo do plano VIP."
