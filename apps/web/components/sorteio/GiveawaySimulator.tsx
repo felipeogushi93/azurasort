@@ -344,7 +344,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   }, [showReveal, liveActive, liveRoom.configured, liveStarted, spec, campaign]);
 
   /* ----- pagamento confirmado: NÃO sorteia já; vai pra etapa "pronto" com botão ----- */
-  function handlePaid(payment?: { provider: string; externalId: string; plan?: string }) {
+  function handlePaid(payment?: { provider: string; externalId: string; plan?: string; adminKey?: string }) {
     if (payment) {
       setLastPayment(payment);
       savePaidClaim(link, payment); // guarda 5 dias por post → F5/voltar não paga de novo
