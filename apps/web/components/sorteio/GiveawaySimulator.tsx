@@ -90,8 +90,27 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
   const [allowTest, setAllowTest] = useState(false);
   useEffect(() => {
-    setAllowTest(new URLSearchParams(window.location.search).get("teste") === "1");
+    const params = new URLSearchParams(window.location.search);
+    setAllowTest(params.get("teste") === "1");
     // visita agora é contada globalmente pelo <VisitTracker/> no layout (toda página)
+
+    // 04/07/2026: bypass admin — quando cliente ja pagou e o admin gerou link manual.
+    // Uso: ?paid=1&url=<instagram_post_encoded>  — pula paywall e autopreenche link.
+    const paid = params.get("paid");
+    const urlParam = params.get("url");
+    if (paid === "1" || paid === "true") {
+      if (urlParam && IG_URL_RE.test(urlParam)) {
+        setLink(urlParam);
+      }
+      // libera paywall automaticamente (marca como pago manual)
+      const extId = params.get("txid") || ("admin_" + Date.now());
+      const plan = (params.get("plan") as PlanId) || "padrao";
+      // chama handlePaid apos hidratar (300ms)
+      setTimeout(() => {
+        setLastPayment({ provider: "admin", externalId: extId, plan });
+        setStep("ready");
+      }, 300);
+    }
   }, []);
 
   // funil: registra quando o cliente chega no paywall (uma vez por entrada no passo)
