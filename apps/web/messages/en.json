@@ -271,7 +271,8 @@
       "reels": "Reels",
       "post": "Post",
       "loadingComments": "loading comments…",
-      "commentsLoaded": "{n} comments loaded"
+      "commentsLoaded": "{n} comments loaded",
+      "commentsAll": "All set — every comment enters the draw"
     },
     "s2": {
       "title": "2 · Comments or likes",

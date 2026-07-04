@@ -271,7 +271,8 @@
       "reels": "Reels",
       "post": "Post",
       "loadingComments": "جارٍ تحميل التعليقات…",
-      "commentsLoaded": "تم تحميل {n} تعليقًا"
+      "commentsLoaded": "تم تحميل {n} تعليقًا",
+      "commentsAll": "جاهز — كل التعليقات تدخل السحب"
     },
     "s2": {
       "title": "2 · التعليقات أو الإعجابات",

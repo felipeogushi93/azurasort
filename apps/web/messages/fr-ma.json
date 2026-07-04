@@ -271,7 +271,8 @@
       "reels": "Reels",
       "post": "Post",
       "loadingComments": "chargement des commentaires…",
-      "commentsLoaded": "{n} commentaires chargés"
+      "commentsLoaded": "{n} commentaires chargés",
+      "commentsAll": "Prêt — tous les commentaires entrent dans le tirage"
     },
     "s2": {
       "title": "2 · Commentaires ou mentions J’aime",

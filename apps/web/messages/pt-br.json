@@ -271,7 +271,8 @@
       "reels": "Reels",
       "post": "Post",
       "loadingComments": "carregando comentários…",
-      "commentsLoaded": "{n} comentários carregados"
+      "commentsLoaded": "{n} comentários carregados",
+      "commentsAll": "Prontinho — todos os comentários entram no sorteio"
     },
     "s2": {
       "title": "2 · Comentários ou curtidas",

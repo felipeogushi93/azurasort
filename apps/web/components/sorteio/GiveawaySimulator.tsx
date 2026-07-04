@@ -1093,7 +1093,7 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
         </div>
         <div className="flex items-center gap-3 px-3 py-2 text-xs text-inkSoft">
           <span>❤️ {(preview.likesCount ?? 0).toLocaleString()}</span>
-          <span>💬 {preview.total.toLocaleString()}</span>
+          <span>💬 {preview.total > 0 ? preview.total.toLocaleString() : t("s3.all")}</span>
         </div>
       </div>
 
@@ -1114,7 +1114,7 @@ function PostPreview({ preview, hasManual, manualCount }: { preview: PreviewStat
           </>
         ) : (
           <div className="flex items-center justify-center gap-2 rounded-lg bg-emerald/10 py-2 text-xs text-emerald">
-            <span className="h-2 w-2 rounded-full bg-emerald" /> {t("commentsLoaded", { n: preview.total.toLocaleString() })}
+            <span className="h-2 w-2 rounded-full bg-emerald" /> {preview.total > 0 ? t("commentsLoaded", { n: preview.total.toLocaleString() }) : t("commentsAll")}
           </div>
         )}
       </div>
