@@ -35,12 +35,16 @@ export async function POST(req: Request) {
     let paid = false;
     let paidAmount = 0;
     let paidCurrency = "BRL";
+    let isTest = false; // pagamento de teste (R$1) autorizado por chave → não confere valor
+    let isAdmin = false; // bypass admin → não confere valor
     if (body.payment?.externalId) {
       if (body.payment.provider === "stripe") {
         const v = await verifyStripePayment(body.payment.externalId);
-        paid = v.paid;
+        // 🔒 só aceita PI do NOSSO produto (não um PI de outro fluxo / reusado)
+        paid = v.paid && v.product === "azurasort-sorteio";
         paidAmount = v.amount;
         paidCurrency = v.currency;
+        isTest = v.test;
       } else if (body.payment.provider === "woovi") {
         const v = await getWooviStatus(body.payment.externalId);
         paid = v.paid;
@@ -58,6 +62,7 @@ export async function POST(req: Request) {
           paid = true;
           paidCurrency = "BRL";
           paidAmount = 0;
+          isAdmin = true;
         }
       }
     }
@@ -147,6 +152,18 @@ export async function POST(req: Request) {
     }
     if (!eligibleHandles.length) {
       return NextResponse.json({ error: "Nenhum participante elegível." }, { status: 400 });
+    }
+
+    // 🔒 confere o VALOR pago vs o preço da faixa (fecha "pagou barato, sorteou grande").
+    // Só quando dá pra saber: cartão paga base+taxa (>= base, passa); PIX às vezes vem 0
+    // (não dá pra conferir → confia no paid); teste/admin liberados. Não altera o fluxo normal.
+    if (paid && !isTest && !isAdmin && paidAmount > 0) {
+      const cur: Currency = paidCurrency === "EUR" || paidCurrency === "USD" ? paidCurrency : "BRL";
+      const planId2 = (["padrao", "premium", "vip"].includes(body.plan ?? "") ? body.plan : "premium") as PlanId;
+      const expected = priceForCount(cur, planId2, totalForCert);
+      if (paidAmount < expected) {
+        return NextResponse.json({ error: "Pagamento insuficiente para o tamanho deste sorteio." }, { status: 402 });
+      }
     }
 
     // 3. ganhador forçado (admin)

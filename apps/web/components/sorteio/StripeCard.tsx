@@ -36,7 +36,9 @@ export function StripeCard({
     fetch("/api/pay/stripe/intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan, currency, count, test }),
+      // adminKey (da URL ?key=) só é usado p/ autorizar o teste R$1 no servidor;
+      // sem ela, o teste é ignorado e cobra o valor real.
+      body: JSON.stringify({ plan, currency, count, test, adminKey: typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("key") || undefined : undefined }),
     })
       .then((r) => r.json())
       .then((d) => (d.clientSecret ? setClientSecret(d.clientSecret) : setErr(d.error || t("failStart"))))

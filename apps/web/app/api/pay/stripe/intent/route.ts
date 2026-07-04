@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Muitas tentativas. Aguarde." }, { status: 429 });
   }
   try {
-    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; currency?: Currency; count?: number; test?: boolean };
+    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; currency?: Currency; count?: number; test?: boolean; adminKey?: string };
     const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";
 
     // moeda da localização escolhida (validada); fallback pelo país do visitante
@@ -19,15 +19,18 @@ export async function POST(req: Request) {
         ? body.currency
         : currencyForCountry(countryFromRequest(req));
     // preço do CARTÃO = base + taxa do Stripe embutida (PIX fica no base).
-    // ⚠️ TESTE: com ?teste=1 cobra só 1,00 (100 centavos) — usado p/ validar o fluxo
-    // pago em produção sem gastar. Remover quando o teste acabar.
-    const amount = body.test === true ? 100 : cardPriceForCount(currency, plan, Number(body.count) || 0);
+    // 🔒 TESTE R$1: só vale com a chave admin (AZURA_ADMIN_BYPASS_KEY). Antes o
+    // ?teste=1 sozinho dava R$1 pra QUALQUER cliente → agora sem a chave cobra o
+    // valor real. O PI de teste é marcado (metadata.test="1") p/ o /api/draw liberar.
+    const secret = process.env.AZURA_ADMIN_BYPASS_KEY?.trim();
+    const testOk = body.test === true && !!secret && body.adminKey === secret;
+    const amount = testOk ? 100 : cardPriceForCount(currency, plan, Number(body.count) || 0);
 
     const intent = await getStripe().paymentIntents.create({
       amount,
       currency: stripeCurrency(currency),
       automatic_payment_methods: { enabled: true },
-      metadata: { product: "azurasort-sorteio", plan, currency },
+      metadata: { product: "azurasort-sorteio", plan, currency, test: testOk ? "1" : "0" },
     });
 
     return NextResponse.json({ clientSecret: intent.client_secret, amount, plan, currency });
