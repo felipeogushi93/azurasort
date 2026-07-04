@@ -381,6 +381,7 @@
       "select": "select",
       "planLocked": "Not available for this choice",
       "liveNeedsVip": "Live streaming is only available on the VIP plan.",
+      "padraoScene": "The Standard plan uses the Countdown animation.",
       "sceneNeedsPlan": "The {scene} animation is available from the {plan} plan.",
       "badgeMostChosen": "Most chosen",
       "badgeLuxury": "Luxury",
@@ -455,6 +456,8 @@
       "title": "Payment confirmed!",
       "subtitle": "All set. Run the draw whenever you’re ready.",
       "drawNow": "🎲 Draw now",
+      "drawing": "Collecting comments and drawing…",
+      "dontRefresh": "Don't refresh the page",
       "hint": "The reveal starts as soon as you click."
     }
   },

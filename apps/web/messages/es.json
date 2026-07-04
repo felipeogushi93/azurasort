@@ -381,6 +381,7 @@
       "select": "seleccionar",
       "planLocked": "No disponible para esta opción",
       "liveNeedsVip": "La transmisión en directo solo está disponible en el plan VIP.",
+      "padraoScene": "El plan Estándar usa la animación Cuenta regresiva.",
       "sceneNeedsPlan": "La animación {scene} está disponible a partir del plan {plan}.",
       "badgeMostChosen": "Más elegido",
       "badgeLuxury": "Lujo",
@@ -455,6 +456,8 @@
       "title": "¡Pago confirmado!",
       "subtitle": "Todo listo. Haz el sorteo cuando quieras.",
       "drawNow": "🎲 Sortear ahora",
+      "drawing": "Recopilando los comentarios y sorteando…",
+      "dontRefresh": "No actualices la página",
       "hint": "La revelación empieza en cuanto hagas clic."
     }
   },

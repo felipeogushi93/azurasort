@@ -48,9 +48,10 @@ export function Paywall({
   const t = useTranslations("sim");
   const [showCard, setShowCard] = useState(false);
   const [showPix, setShowPix] = useState(false);
-  // plano mínimo exigido: a animação escolhida define o piso; live força VIP.
+  // sem live, QUALQUER plano pode pagar (Padrão sempre disponível → usa a animação
+  // Contagem). Só a live força VIP. sceneTier fica pra decidir a nota abaixo.
   const RANK: Record<PlanId, number> = { padrao: 0, premium: 1, vip: 2 };
-  const minTier: PlanId = live ? "vip" : sceneTier;
+  const minTier: PlanId = live ? "vip" : "padrao";
   const planAllowed = (id: PlanId) => RANK[id] >= RANK[minTier];
   const [plan, setPlan] = useState<PlanId>(planAllowed("premium") ? "premium" : minTier);
   // se a cena/live exigem um plano maior que o selecionado, sobe automaticamente.
@@ -161,13 +162,11 @@ export function Paywall({
         })}
       </div>
 
-      {minTier !== "padrao" && (
-        <p className="-mt-2 text-center text-xs text-inkSoft">
-          {live
-            ? t("paywall.liveNeedsVip")
-            : t("paywall.sceneNeedsPlan", { scene: sceneName, plan: t(`plans.${minTier}Name`) })}
-        </p>
-      )}
+      {live ? (
+        <p className="-mt-2 text-center text-xs text-inkSoft">{t("paywall.liveNeedsVip")}</p>
+      ) : plan === "padrao" && sceneTier !== "padrao" ? (
+        <p className="-mt-2 text-center text-xs text-inkSoft">{t("paywall.padraoScene")}</p>
+      ) : null}
 
       {/* pagamento */}
       <div>

@@ -381,6 +381,7 @@
       "select": "sélectionner",
       "planLocked": "Indisponible pour ce choix",
       "liveNeedsVip": "La diffusion en direct est disponible uniquement avec le plan VIP.",
+      "padraoScene": "Le plan Standard utilise l'animation Compte à rebours.",
       "sceneNeedsPlan": "L'animation {scene} est disponible à partir du plan {plan}.",
       "badgeMostChosen": "Le plus choisi",
       "badgeLuxury": "Luxe",
@@ -455,6 +456,8 @@
       "title": "Paiement confirmé !",
       "subtitle": "Tout est prêt. Lancez le tirage quand vous voulez.",
       "drawNow": "🎲 Tirer au sort",
+      "drawing": "Collecte des commentaires et tirage…",
+      "dontRefresh": "Ne rafraîchissez pas la page",
       "hint": "La révélation démarre dès que vous cliquez."
     }
   },

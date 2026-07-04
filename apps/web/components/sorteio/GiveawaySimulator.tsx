@@ -350,6 +350,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   function handlePaid(payment?: { provider: string; externalId: string; plan?: string; adminKey?: string }) {
     if (payment) {
       setLastPayment(payment);
+      // Padrão inclui só a animação Contagem → se pagou Padrão, usa ela na revelação
+      if (payment.plan === "padrao") setModule("countdown");
       savePaidClaim(link, payment); // guarda 5 dias por post → F5/voltar não paga de novo
       // notifica a VENDA no grupo de vendas JÁ no pagamento (cobre o caso F5) —
       // verifica no servidor e registra o Payment (importante p/ PIX sem webhook)
@@ -698,10 +700,23 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               <p className="text-xs uppercase tracking-widest text-inkSoft">{t("s3.participants")}</p>
               <p className="font-display text-3xl font-bold text-gold-deep">{participantsLabel}</p>
             </div>
-            <button onClick={() => doDraw()} disabled={busy} className="btn-gold px-10 py-4 text-lg disabled:opacity-50">
-              {t("ready.drawNow")}
-            </button>
-            <p className="text-xs text-inkSoft">{t("ready.hint")}</p>
+            {busy ? (
+              <div className="flex w-full max-w-xs flex-col items-center gap-3">
+                <span className="h-8 w-8 animate-spin rounded-full border-2 border-ink/15 border-t-gold" />
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink/10">
+                  <div className="h-full w-1/2 animate-pulse rounded-full bg-gradient-to-r from-gold to-violet" />
+                </div>
+                <p className="text-sm font-medium text-ink">{t("ready.drawing")}</p>
+                <p className="rounded-lg bg-rose/10 px-3 py-1.5 text-xs font-semibold text-rose">⚠️ {t("ready.dontRefresh")}</p>
+              </div>
+            ) : (
+              <>
+                <button onClick={() => doDraw()} className="btn-gold px-10 py-4 text-lg">
+                  {t("ready.drawNow")}
+                </button>
+                <p className="text-xs text-inkSoft">{t("ready.hint")}</p>
+              </>
+            )}
           </div>
         </Card>
       )}
@@ -763,14 +778,14 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               {t("result.cutsReady")}
             </p>
             <div className="flex gap-2">
-              {(["9:16", "16:9", "1:1"] as ExportRatio[]).map((f) => (
+              {([["9:16", "Story"], ["1:1", "Feed"]] as [ExportRatio, string][]).map(([f, label]) => (
                 <button
                   key={f}
                   disabled={!!videoBusy}
                   onClick={() => exportVideo(f)}
                   className="flex-1 rounded-xl border border-gold/40 bg-surface py-2.5 text-sm font-semibold text-gold-deep shadow-soft transition hover:bg-gold/10 disabled:cursor-wait disabled:opacity-50"
                 >
-                  {videoBusy === f ? `🎬 ${Math.round(videoProgress * 100)}%` : `⬇ ${f}`}
+                  {videoBusy === f ? `🎬 ${Math.round(videoProgress * 100)}%` : `⬇ ${label}`}
                 </button>
               ))}
             </div>
