@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/payments/stripe";
 import { db } from "@/lib/db";
+import { notifyTelegram, paymentMessage } from "@/lib/notify/telegram";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -37,19 +38,33 @@ export async function POST(req: Request) {
   try {
     if (event.type === "payment_intent.succeeded") {
       const pi = event.data.object as Stripe.PaymentIntent;
+      const plan = (pi.metadata?.plan as string) ?? "premium";
+      const currency = (pi.currency ?? "brl").toUpperCase();
+      const isOurs = pi.metadata?.product === "azurasort-sorteio";
+      const isTest = pi.metadata?.test === "1";
+      // já estava pago? (evita notificar 2x se o /api/pay/confirm chegou antes)
+      const existing = await db.payment.findUnique({ where: { externalId: pi.id }, select: { status: true } });
+      const alreadyPaid = existing?.status === "paid";
+
       await db.payment.upsert({
         where: { externalId: pi.id },
         create: {
           provider: "stripe",
           externalId: pi.id,
           amount: pi.amount ?? 0,
-          currency: (pi.currency ?? "brl").toUpperCase(),
-          plan: (pi.metadata?.plan as string) ?? "premium",
+          currency,
+          plan,
           status: "paid",
           paidAt: new Date(),
         },
         update: { status: "paid", paidAt: new Date() },
       });
+
+      // notifica VENDAS pelo webhook (confiável, server-side) — cobre o cartão mesmo
+      // se o cliente fechar a aba. Uma vez só, não em teste, só do nosso produto.
+      if (isOurs && !isTest && !alreadyPaid) {
+        void notifyTelegram(paymentMessage({ provider: "stripe", plan, amountCents: pi.amount ?? 0, currency })).catch(() => {});
+      }
 
       // Painel-IA central: notificar conversão pra atribuir lead à origem (AI/Google/etc).
       // Fire-and-forget — falha do painel não derruba o webhook do Stripe.

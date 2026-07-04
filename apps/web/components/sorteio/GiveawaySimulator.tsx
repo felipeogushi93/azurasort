@@ -363,13 +363,20 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       if (payment.externalId) handledPayRef.current.add(payment.externalId);
       savePaidClaim(link, payment); // guarda 5 dias por post → F5/voltar não paga de novo
       // notifica a VENDA no grupo de vendas JÁ no pagamento (cobre o caso F5) —
-      // verifica no servidor e registra o Payment (importante p/ PIX sem webhook)
-      fetch("/api/pay/confirm", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined }),
-        keepalive: true,
-      }).catch(() => {});
+      // verifica no servidor e registra o Payment (importante p/ PIX sem webhook).
+      // sendBeacon = CONFIÁVEL: dispara mesmo se a pessoa fecha/recarrega a página
+      // logo após pagar (o fetch antigo era cortado → venda não ia pra vendas).
+      try {
+        const confirmBody = JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined });
+        const blob = new Blob([confirmBody], { type: "application/json" });
+        if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+          navigator.sendBeacon("/api/pay/confirm", blob);
+        } else {
+          fetch("/api/pay/confirm", { method: "POST", body: confirmBody, headers: { "Content-Type": "application/json" }, keepalive: true }).catch(() => {});
+        }
+      } catch {
+        /* nunca quebra a UX */
+      }
       track("pay_done", { provider: payment.provider, plan: payment.plan });
       // conversão de COMPRA para o GA4 (base das campanhas Google/Meta)
       const planId = (payment.plan === "padrao" || payment.plan === "vip" ? payment.plan : "premium") as PlanId;
