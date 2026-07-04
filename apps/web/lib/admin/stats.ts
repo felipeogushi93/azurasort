@@ -38,6 +38,7 @@ export type Kpis = {
   draws: number;
   paidCount: number;
   revenueCents: number;
+  revenueByPlan: { plan: string; count: number; cents: number }[];
   funnel: { type: string; label: string; count: number }[];
   conversion: number; // % draws / visits
 };
@@ -56,7 +57,7 @@ export async function getKpis(r: DateRange = {}): Promise<Kpis> {
   const [giveaways, draws, payments, events] = await Promise.all([
     db.giveaway.count({ where: dateWhere }),
     db.draw.count({ where: dateWhere }),
-    db.payment.findMany({ where: { status: "paid", ...dateWhere }, select: { amount: true } }),
+    db.payment.findMany({ where: { status: "paid", ...dateWhere }, select: { amount: true, plan: true } }),
     db.event.groupBy({ by: ["type"], _count: { _all: true }, where: { ...dateWhere, bot: false } }),
   ]);
 
@@ -65,14 +66,36 @@ export async function getKpis(r: DateRange = {}): Promise<Kpis> {
   const visits = counts.get("visit") ?? 0;
   const drawsDone = counts.get("draw_done") ?? draws;
 
+  // receita por plano (padrão/premium/vip) — quantos e quanto cada um rendeu
+  const planMap = new Map<string, { count: number; cents: number }>();
+  for (const p of payments) {
+    const k = p.plan || "premium";
+    const cur = planMap.get(k) ?? { count: 0, cents: 0 };
+    cur.count++;
+    cur.cents += p.amount;
+    planMap.set(k, cur);
+  }
+  const revenueByPlan = [...planMap.entries()].map(([plan, v]) => ({ plan, ...v })).sort((a, b) => b.cents - a.cents);
+
   return {
     giveaways,
     draws,
     paidCount: payments.length,
     revenueCents: payments.reduce((a, p) => a + p.amount, 0),
+    revenueByPlan,
     funnel,
     conversion: visits > 0 ? Math.round((drawsDone / visits) * 1000) / 10 : 0,
   };
+}
+
+/** Pagamentos recentes (pagos) com detalhe: plano, valor, moeda, método, data. */
+export async function getRecentPayments(r: DateRange = {}, limit = 25) {
+  return db.payment.findMany({
+    where: { status: "paid", ...whereCreated(r) },
+    orderBy: { paidAt: "desc" },
+    take: limit,
+    select: { plan: true, amount: true, currency: true, provider: true, paidAt: true, createdAt: true, giveaway: { select: { campaign: true } } },
+  });
 }
 
 export type DrawRow = Awaited<ReturnType<typeof getRecentDraws>>[number];

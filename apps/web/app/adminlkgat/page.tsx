@@ -1,5 +1,5 @@
 import { getAdminUser } from "@/lib/admin/auth";
-import { getKpis, getGiveaways, getRecentDraws, getSourceBreakdown, sourceLabel, resolveRange } from "@/lib/admin/stats";
+import { getKpis, getGiveaways, getRecentDraws, getSourceBreakdown, getRecentPayments, sourceLabel, resolveRange } from "@/lib/admin/stats";
 import { getHealth, type HealthResult } from "@/lib/admin/health";
 import { LoginForm } from "./LoginForm";
 import { ForcedWinnerManager, LogoutButton, DateFilter } from "./AdminClient";
@@ -17,6 +17,17 @@ function fmtDate(d: Date) {
   return new Date(d).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
+// valor com a moeda certa (BRL/EUR/USD)
+const INTL: Record<string, string> = { BRL: "pt-BR", EUR: "de-DE", USD: "en-US" };
+function money(cents: number, currency = "BRL") {
+  const cur = (currency || "BRL").toUpperCase();
+  return (cents / 100).toLocaleString(INTL[cur] ?? "pt-BR", { style: "currency", currency: cur });
+}
+const PLAN_LABEL: Record<string, string> = { padrao: "Padrão", premium: "Premium", vip: "VIP" };
+function payMethod(p: string) {
+  return p === "woovi" ? "PIX" : p === "stripe" ? "Cartão" : p;
+}
+
 export default async function AdminPage({
   searchParams,
 }: {
@@ -28,7 +39,7 @@ export default async function AdminPage({
   const sp = await searchParams;
   const range = sp.range || "all";
   const r = resolveRange(range, sp.from, sp.to);
-  const [kpis, giveaways, draws, sources, health] = await Promise.all([getKpis(r), getGiveaways(r), getRecentDraws(r), getSourceBreakdown(r), getHealth()]);
+  const [kpis, giveaways, draws, sources, payments, health] = await Promise.all([getKpis(r), getGiveaways(r), getRecentDraws(r), getSourceBreakdown(r), getRecentPayments(r), getHealth()]);
   const funnelMax = Math.max(1, ...kpis.funnel.map((f) => f.count));
   const sourcesMax = Math.max(1, ...sources.map((s) => s.visits));
 
@@ -58,6 +69,53 @@ export default async function AdminPage({
         <Kpi label="Pagamentos" value={String(kpis.paidCount)} />
         <Kpi label="Sorteios" value={String(kpis.draws)} />
         <Kpi label="Conversão" value={`${kpis.conversion}%`} />
+      </section>
+
+      {/* 💰 receita por plano + pagamentos recentes */}
+      <section className="mb-8 rounded-3xl border border-ink/5 bg-surface p-6 shadow-card">
+        <h2 className="mb-4 font-display text-lg font-bold text-ink">💰 Receita por plano</h2>
+        <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          {["padrao", "premium", "vip"].map((plan) => {
+            const row = kpis.revenueByPlan.find((p) => p.plan === plan);
+            return (
+              <div key={plan} className="rounded-2xl border border-ink/5 bg-canvasAlt p-4">
+                <p className="text-xs uppercase tracking-widest text-inkSoft">{PLAN_LABEL[plan] ?? plan}</p>
+                <p className="font-display text-xl font-bold text-ink">{brl(row?.cents ?? 0)}</p>
+                <p className="text-[11px] text-inkSoft">{row?.count ?? 0} venda(s)</p>
+              </div>
+            );
+          })}
+        </div>
+
+        <h3 className="mb-2 text-sm font-semibold text-ink">Pagamentos recentes</h3>
+        {payments.length === 0 ? (
+          <p className="text-sm text-inkSoft">Nenhum pagamento no período.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-ink/5 text-left text-xs uppercase tracking-wider text-inkSoft">
+                  <th className="py-2 pr-3">Data</th>
+                  <th className="py-2 pr-3">Plano</th>
+                  <th className="py-2 pr-3">Valor</th>
+                  <th className="py-2 pr-3">Método</th>
+                  <th className="py-2">Campanha</th>
+                </tr>
+              </thead>
+              <tbody>
+                {payments.map((p, i) => (
+                  <tr key={i} className="border-b border-ink/5">
+                    <td className="py-2 pr-3 text-inkSoft">{fmtDate(p.paidAt ?? p.createdAt)}</td>
+                    <td className="py-2 pr-3 font-medium text-ink">{PLAN_LABEL[p.plan] ?? p.plan}</td>
+                    <td className="py-2 pr-3 font-semibold text-ink">{money(p.amount, p.currency)}</td>
+                    <td className="py-2 pr-3 text-inkSoft">{payMethod(p.provider)}</td>
+                    <td className="py-2 truncate text-inkSoft">{p.giveaway?.campaign ?? "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       {/* funil */}
