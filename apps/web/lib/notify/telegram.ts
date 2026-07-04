@@ -93,8 +93,15 @@ export function funnelMessage(opts: {
       const plan = PLAN_LABEL[String(m.plan)] ?? escapeHtml(String(m.plan ?? "—"));
       return `${who} 💳 <b>iniciou pagamento</b> — ${method} · ${plan}`;
     }
-    case "pay_done":
-      return `${who} ✅ <b>PAGOU!</b> 🎉`;
+    case "pay_done": {
+      // VENDA em destaque no feed de atividade — banner grande (Telegram não tem
+      // cor, então usa faixa de 🟢 + negrito pra saltar aos olhos entre os passos)
+      const plan = PLAN_LABEL[String(m.plan)] ?? "";
+      const prov =
+        m.provider === "woovi" || m.method === "pix" ? "PIX" : m.provider === "stripe" || m.method === "card" ? "Cartão" : "";
+      const detail = [plan, prov].filter(Boolean).join(" · ");
+      return `🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢\n💰💰 <b>VENDA CONFIRMADA!</b> 💰💰\n${who}${detail ? " · " + detail : ""} 🎉\n🟢🟢🟢🟢🟢🟢🟢🟢🟢🟢`;
+    }
     default:
       return null;
   }
