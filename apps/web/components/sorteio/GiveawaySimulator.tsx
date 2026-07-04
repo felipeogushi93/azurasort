@@ -94,22 +94,35 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
     setAllowTest(params.get("teste") === "1");
     // visita agora é contada globalmente pelo <VisitTracker/> no layout (toda página)
 
-    // 04/07/2026: bypass admin — quando cliente ja pagou e o admin gerou link manual.
-    // Uso: ?paid=1&url=<instagram_post_encoded>  — pula paywall e autopreenche link.
+    // 04/07/2026: bypass admin — cliente ja pagou, admin gerou link via painel /adminlkgat.
+    // Uso: ?paid=1&url=<ig_url>&plan=padrao|premium|vip&count=352&txid=xxx
     const paid = params.get("paid");
     const urlParam = params.get("url");
     if (paid === "1" || paid === "true") {
-      if (urlParam && IG_URL_RE.test(urlParam)) {
-        setLink(urlParam);
-      }
-      // libera paywall automaticamente (marca como pago manual)
+      const rawPlan = (params.get("plan") || "padrao").toLowerCase();
+      const plan: PlanId = (["padrao", "premium", "vip"].includes(rawPlan) ? rawPlan : "padrao") as PlanId;
       const extId = params.get("txid") || ("admin_" + Date.now());
-      const plan = (params.get("plan") as PlanId) || "padrao";
-      // chama handlePaid apos hidratar (300ms)
-      setTimeout(() => {
-        setLastPayment({ provider: "admin", externalId: extId, plan });
-        setStep("ready");
-      }, 300);
+      const countParam = parseInt(params.get("count") || "0", 10);
+
+      // Sincronamente seta tudo (evita race)
+      if (urlParam && IG_URL_RE.test(urlParam)) setLink(urlParam);
+      if (plan === "vip") setModule("bank_vault"); // vip pode live
+      setLastPayment({ provider: "admin", externalId: extId, plan });
+
+      // Se admin passou count no link, injeta preview sintetico pra displayCount funcionar
+      if (countParam > 0) {
+        setPreview({
+          status: "loaded",
+          total: countParam,
+          loaded: countParam,
+          isReel: false,
+        });
+      }
+
+      // Pula direto pra "ready" (Sortear agora) na proxima tick — depois do render inicial
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setStep("ready"));
+      });
     }
   }, []);
 
