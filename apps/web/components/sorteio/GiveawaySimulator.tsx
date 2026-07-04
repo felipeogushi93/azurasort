@@ -63,7 +63,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [preview, setPreview] = useState<PreviewState | null>(null);
   const [sample, setSample] = useState<{ handle: string; text: string }[]>([]);
   const [certCode, setCertCode] = useState<string | null>(null);
-  const [lastPayment, setLastPayment] = useState<{ provider: string; externalId: string; plan?: string } | undefined>(undefined);
+  const [lastPayment, setLastPayment] = useState<{ provider: string; externalId: string; plan?: string; adminKey?: string } | undefined>(undefined);
 
   // passo 2 — base
   const [base, setBase] = useState<Base>("comments");
@@ -103,11 +103,12 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       const plan: PlanId = (["padrao", "premium", "vip"].includes(rawPlan) ? rawPlan : "padrao") as PlanId;
       const extId = params.get("txid") || ("admin_" + Date.now());
       const countParam = parseInt(params.get("count") || "0", 10);
+      const adminKey = params.get("key") || undefined;
 
       // Sincronamente seta tudo (evita race)
       if (urlParam && IG_URL_RE.test(urlParam)) setLink(urlParam);
       if (plan === "vip") setModule("bank_vault"); // vip pode live
-      setLastPayment({ provider: "admin", externalId: extId, plan });
+      setLastPayment({ provider: "admin", externalId: extId, plan, adminKey });
 
       // Se admin passou count no link, injeta preview sintetico pra displayCount funcionar
       if (countParam > 0) {
@@ -356,7 +357,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           filters: liveFilters,
           totalComments: displayCount,
           plan: pay?.plan ?? "premium",
-          payment: pay ? { provider: pay.provider, externalId: pay.externalId } : undefined,
+          payment: pay
+            ? { provider: pay.provider, externalId: pay.externalId, adminKey: pay.adminKey }
+            : undefined,
           sessionId: getSessionId(),
         }),
       });

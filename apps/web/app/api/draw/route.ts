@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       filters?: Partial<DrawFilters>;
       totalComments?: number;
       plan?: string;
-      payment?: { provider: string; externalId: string };
+      payment?: { provider: string; externalId: string; adminKey?: string };
       sessionId?: string;
       free?: boolean; // sorteio GRÁTIS: só manual (comments colados), sem Apify, sem premium
     };
@@ -46,6 +46,19 @@ export async function POST(req: Request) {
         paid = v.paid;
         paidAmount = v.amount;
         paidCurrency = "BRL"; // PIX é sempre BRL
+      } else if (body.payment.provider === "admin") {
+        // Bypass admin: cliente ja pagou fora do fluxo (Woovi caiu, etc). Admin gera link em /adminlkgat.
+        // Autorizado por env secreta AZURA_ADMIN_BYPASS_KEY. Externa começa com "admin_".
+        const secret = process.env.AZURA_ADMIN_BYPASS_KEY;
+        if (
+          secret &&
+          body.payment.adminKey === secret &&
+          body.payment.externalId.startsWith("admin_")
+        ) {
+          paid = true;
+          paidCurrency = "BRL";
+          paidAmount = 0;
+        }
       }
     }
     // GRÁTIS: libera sem pagamento, MAS só no caminho manual (comments colados) — nunca Apify.
