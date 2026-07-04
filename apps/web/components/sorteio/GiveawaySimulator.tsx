@@ -36,6 +36,36 @@ type PreviewState = {
 
 const IG_URL_RE = /instagram\.com\/(p|reel|reels|tv)\//i;
 
+// shortcode do post (pra chavear o pagamento salvo por post)
+function postShortcode(url: string): string | null {
+  const m = url.match(/instagram\.com\/(?:p|reel|reels|tv)\/([^/?#]+)/i);
+  return m ? m[1] : null;
+}
+// pagamento fica salvo 5 dias por post: se der F5 / voltar, não paga de novo.
+const PAID_TTL_MS = 5 * 24 * 60 * 60 * 1000;
+function savePaidClaim(url: string, payment: { provider: string; externalId: string; plan?: string }) {
+  try {
+    const sc = postShortcode(url);
+    if (sc) localStorage.setItem(`azs_paid_${sc}`, JSON.stringify({ ...payment, exp: Date.now() + PAID_TTL_MS }));
+  } catch {
+    /* ignora */
+  }
+}
+function readPaidClaim(url: string): { provider: string; externalId: string; plan?: string } | null {
+  try {
+    const sc = postShortcode(url);
+    if (!sc) return null;
+    const raw = localStorage.getItem(`azs_paid_${sc}`);
+    if (!raw) return null;
+    const c = JSON.parse(raw) as { provider: string; externalId: string; plan?: string; exp?: number };
+    if (c.exp && c.exp > Date.now() && c.externalId) return { provider: c.provider, externalId: c.externalId, plan: c.plan };
+    localStorage.removeItem(`azs_paid_${sc}`); // expirou
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 // Cenas disponíveis (com vídeo de exemplo). Para adicionar uma nova no futuro,
 // basta colocar o vídeo em /public e acrescentar um item aqui.
 type SceneOption = { module: RevealModule; key: "cofre" | "countdown" | "matrix" | "casino" | "pirata" | "cavalo"; src: string; tier: PlanId };
@@ -131,6 +161,18 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   useEffect(() => {
     if (step === "unlock") track("unlock_view", { postUrl: link });
   }, [step]);
+
+  // pagamento salvo (5 dias): se voltar/der F5 com o MESMO link já pago, restaura
+  // o pagamento e pula direto pro "Sortear" — não paga de novo.
+  useEffect(() => {
+    if (lastPayment || !IG_URL_RE.test(link)) return;
+    const claim = readPaidClaim(link);
+    if (claim) {
+      setLastPayment(claim);
+      setStep("ready");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [link]);
 
   /* ----- passo 1: ao colar o link, busca a publicacao e carrega os comentarios
      (modo demonstracao — quando o backend existir, troca por coleta real) ----- */
@@ -305,6 +347,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   function handlePaid(payment?: { provider: string; externalId: string; plan?: string }) {
     if (payment) {
       setLastPayment(payment);
+      savePaidClaim(link, payment); // guarda 5 dias por post → F5/voltar não paga de novo
       track("pay_done", { provider: payment.provider, plan: payment.plan });
       // conversão de COMPRA para o GA4 (base das campanhas Google/Meta)
       const planId = (payment.plan === "padrao" || payment.plan === "vip" ? payment.plan : "premium") as PlanId;
@@ -339,7 +382,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   }
 
   /* ----- sorteio (disparado pelo botão "Sortear agora") ----- */
-  async function doDraw(payment?: { provider: string; externalId: string; plan?: string }) {
+  async function doDraw(payment?: { provider: string; externalId: string; plan?: string; adminKey?: string }) {
     const pay = payment ?? lastPayment;
     if (payment) setLastPayment(payment);
     // live só ativa no plano VIP (ou em modo teste, quando não há pagamento)
