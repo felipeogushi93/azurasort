@@ -63,7 +63,7 @@ export async function getKpis(r: DateRange = {}): Promise<Kpis> {
   const [giveaways, draws, payments, events] = await Promise.all([
     db.giveaway.count({ where: dateWhere }),
     db.draw.count({ where: dateWhere }),
-    db.payment.findMany({ where: { status: "paid", ...dateWhere }, select: { amount: true, plan: true } }),
+    db.payment.findMany({ where: { status: "paid", amount: { gt: 100 }, ...dateWhere }, select: { amount: true, plan: true } }),
     db.event.groupBy({ by: ["type"], _count: { _all: true }, where: { ...dateWhere, bot: false } }),
   ]);
 
@@ -94,10 +94,11 @@ export async function getKpis(r: DateRange = {}): Promise<Kpis> {
   };
 }
 
-/** Pagamentos recentes (pagos) com detalhe: plano, valor, moeda, método, data. */
+/** Pagamentos recentes (pagos) com detalhe: plano, valor, moeda, método, data.
+ *  amount > 100: ignora testes de R$1 (modo teste) e R$0 pra não sujar o painel. */
 export async function getRecentPayments(r: DateRange = {}, limit = 25) {
   return db.payment.findMany({
-    where: { status: "paid", ...whereCreated(r) },
+    where: { status: "paid", amount: { gt: 100 }, ...whereCreated(r) },
     orderBy: { paidAt: "desc" },
     take: limit,
     select: { plan: true, amount: true, currency: true, provider: true, paidAt: true, createdAt: true, giveaway: { select: { campaign: true } } },
