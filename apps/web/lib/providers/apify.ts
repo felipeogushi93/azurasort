@@ -10,6 +10,9 @@
 
 const APIFY_ACTOR = "apify~instagram-scraper";
 const CACHE_TTL_MS = 15 * 60 * 1000; // 15 min
+// Teto de comentários coletados por sorteio. Mantido baixo DE PROPÓSITO p/ segurar o
+// custo do Apify (pay-per-result). Posts grandes usam o resgate manual + reembolso.
+const COMMENT_LIMIT = 15;
 
 type CacheEntry<T> = { data: T; ts: number };
 const previewCache = new Map<string, CacheEntry<PostPreview>>();
@@ -96,7 +99,7 @@ export async function fetchPostPreview(url: string): Promise<PostPreview> {
 }
 
 /** Lista de comentários (pesada). Roda só no sorteio PAGO (o pagamento cobre o custo). */
-export async function fetchComments(url: string, limit = 100000): Promise<RawCommentDTO[]> {
+export async function fetchComments(url: string, limit = COMMENT_LIMIT): Promise<RawCommentDTO[]> {
   const code = shortcodeFromUrl(url);
   if (!code) throw new Error("Link do Instagram inválido");
 
