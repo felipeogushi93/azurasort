@@ -48,6 +48,8 @@ export async function generateMetadata({
     title: seo.homeTitle,
     description: seo.homeDescription,
     keywords: seo.keywords,
+    // Bing Webmaster Tools — verificação de propriedade do site
+    verification: { other: { "msvalidate.01": "B080399F204BBDCFA7014F02D6A59A19" } },
     alternates: { canonical: `/${locale}`, languages },
     openGraph: {
       title: seo.homeTitle,
