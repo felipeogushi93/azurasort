@@ -100,6 +100,9 @@ const MONITOR = [
   { id: "bing", label: "Bing Webmaster Tools", link: "https://www.bing.com/webmasters", what: "SEO no Bing — que é a base das buscas do ChatGPT. Submeta o sitemap (azurasort.com/sitemap.xml)." },
   { id: "quora", label: "Quora — perguntas do nicho", link: "https://www.quora.com/search?q=instagram+giveaway+picker&type=question", what: "Perguntas tipo 'como sortear no Instagram' pra responder e mencionar o AzuraSort de leve." },
   { id: "reviews", label: "Google Reviews (avaliações ⭐)", link: "https://business.google.com/reviews", what: "As avaliações da marca (página que o Lucas criou). Meta: 5+ estrelas. Peça pros clientes felizes deixarem." },
+  { id: "alerts", label: "Google Alerts — menções da marca", link: "https://www.google.com/alerts", what: "Setup 1x: criar alerta pra \"AzuraSort\". Depois te avisa por email quando alguém cita a marca (= backlink/menção nova pra aproveitar)." },
+  { id: "ahrefs", label: "Ahrefs Webmaster Tools (grátis)", link: "https://ahrefs.com/webmaster-tools", what: "Setup 1x: verificar o site. Mostra o Domain Rating (autoridade 0-100) e a lista de backlinks, melhor que o Google." },
+  { id: "uptime", label: "UptimeRobot — site no ar?", link: "https://uptimerobot.com", what: "Setup 1x: monitorar azurasort.com. Te avisa na hora se o site cair (site fora = venda perdida em silêncio)." },
 ] as const;
 
 const KEY_DONE = "azs_growth_v1";
