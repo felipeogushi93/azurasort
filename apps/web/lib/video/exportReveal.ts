@@ -99,9 +99,10 @@ export async function exportRevealVideo(opts: {
     video.onerror = () => rej(new Error("falha ao carregar o clipe"));
   });
 
-  // duração real do clipe (preferimos o fim de verdade); fallback generoso pra NÃO cortar
-  const rawDur = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : clip.revealAtSec + 6;
-  const duration = Math.min(rawDur, 30);
+  // NUNCA menos que a hora do vencedor + folga (senão corta antes da revelação); teto 30s
+  const minDur = clip.revealAtSec + 2.5;
+  const rawDur = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : minDur;
+  const duration = Math.max(minDur, Math.min(rawDur, 30));
   const { mime, ext } = pickMime();
   const stream = canvas.captureStream(30);
 
@@ -157,11 +158,15 @@ export async function exportRevealVideo(opts: {
     rec.onstop = () => res(new Blob(chunks, { type: mime }));
   });
 
+  // Story/Reel (9:16): "cover" — preenche a tela (clipe já é vertical, encaixa perfeito).
+  // Feed (1:1/4:5): "contain" — mostra o clipe INTEIRO, sem cortar (com fundo escuro nas bordas).
+  const fit: "cover" | "contain" = opts.ratio === "9:16" || opts.ratio === "16:9" ? "cover" : "contain";
   function drawCover() {
-    const vr = (video.videoWidth || 16) / (video.videoHeight || 9);
+    const vr = (video.videoWidth || 9) / (video.videoHeight || 16);
     const cr = W / H;
     let dw: number, dh: number;
-    if (vr > cr) {
+    const limitByHeight = fit === "cover" ? vr > cr : vr <= cr;
+    if (limitByHeight) {
       dh = H;
       dw = H * vr;
     } else {
@@ -262,12 +267,14 @@ export async function exportRevealVideo(opts: {
 
       if (ct > lastCt + 0.01) { lastCt = ct; lastAdvanceWall = now; } // vídeo avançou
 
-      // fim normal — ou travas de segurança que impedem o congelamento eterno:
+      // fim NORMAL: chegou no fim do clipe (o vencedor aparece em revealAtSec, sempre antes)
       const reachedEnd = ct >= duration - 0.05 || video.ended;
-      const neverStarted = ct < 0.05 && now - startWall > 4000; // não começou a tocar
-      const stalledMid = ct >= 0.05 && now - lastAdvanceWall > 3000; // travou no meio
-      const hardCap = now - startWall > (duration + 5) * 1000; // teto absoluto
-      if (reachedEnd || neverStarted || stalledMid || hardCap) return finish();
+      // travas de segurança — desenhadas pra NUNCA cortar antes da revelação:
+      const revealCaptured = ct >= clip.revealAtSec + 1.2; // vencedor já apareceu c/ folga
+      const neverStarted = ct < 0.05 && now - startWall > 5000; // não começou a tocar
+      const stalledAfterReveal = revealCaptured && now - lastAdvanceWall > 3000; // travou, mas já mostrou o ganhador
+      const hardCap = now - startWall > (duration + 8) * 1000; // teto absoluto (nunca antes do fim normal)
+      if (reachedEnd || neverStarted || stalledAfterReveal || hardCap) return finish();
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
