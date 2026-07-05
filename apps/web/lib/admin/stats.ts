@@ -4,11 +4,16 @@ import { db } from "@/lib/db";
 
 export type DateRange = { from?: Date; to?: Date };
 
-/** Converte um preset/datas em {from,to}. Presets: today, yesterday, 7d, 30d, all, custom. */
+/** Converte um preset/datas em {from,to}. Presets: today, yesterday, 7d, 30d, all, custom.
+ *  Fuso: America/Sao_Paulo (UTC-3, sem horário de verão). O servidor roda em UTC,
+ *  então "hoje" é calculado no fuso SP pra os filtros baterem com o relógio do Brasil. */
 export function resolveRange(range?: string, from?: string, to?: string): DateRange {
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const SP = -3; // offset SP em horas
   const day = 24 * 60 * 60 * 1000;
+  const now = new Date();
+  // meia-noite de HOJE (SP) expressa em UTC = 03:00 UTC
+  const spNow = new Date(now.getTime() + SP * 3600 * 1000);
+  const startOfToday = new Date(Date.UTC(spNow.getUTCFullYear(), spNow.getUTCMonth(), spNow.getUTCDate(), -SP, 0, 0));
   switch (range) {
     case "today":
       return { from: startOfToday };
@@ -19,8 +24,9 @@ export function resolveRange(range?: string, from?: string, to?: string): DateRa
     case "30d":
       return { from: new Date(startOfToday.getTime() - 29 * day) };
     case "custom": {
-      const f = from ? new Date(from + "T00:00:00") : undefined;
-      const t = to ? new Date(to + "T23:59:59") : undefined;
+      // datas "YYYY-MM-DD" tratadas como dia no fuso SP
+      const f = from ? new Date(from + "T00:00:00-03:00") : undefined;
+      const t = to ? new Date(to + "T23:59:59-03:00") : undefined;
       return { from: f, to: t };
     }
     default:

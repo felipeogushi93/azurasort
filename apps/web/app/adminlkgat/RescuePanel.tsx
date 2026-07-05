@@ -13,6 +13,9 @@ export function RescuePanel() {
   const [raw, setRaw] = useState("");
   const [owner, setOwner] = useState("");
   const [totalReal, setTotalReal] = useState("");
+  const [plan, setPlan] = useState("premium"); // tipo de sorteio: padrao | premium | vip
+  const [link, setLink] = useState<string | null>(null); // link pronto pro cliente
+  const [copied, setCopied] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
@@ -32,11 +35,13 @@ export function RescuePanel() {
           handles: finalList,
           owner: ownerClean || undefined,
           totalReal: totalReal ? Number(totalReal) : undefined,
+          plan,
         }),
       });
       const d = await r.json();
       if (r.ok) {
-        setMsg({ ok: true, text: `✓ Injetado: ${d.injected} participantes (total exibido: ${d.totalReal}). O cliente sorteia normalmente.` });
+        setLink(d.link ?? null);
+        setMsg({ ok: true, text: `✓ Injetado: ${d.injected} participantes (total exibido: ${d.totalReal}). Copie o link abaixo e mande pro cliente.` });
       } else {
         setMsg({ ok: false, text: d.error || "Falha ao injetar." });
       }
@@ -80,6 +85,15 @@ export function RescuePanel() {
         </div>
       </div>
 
+      <div className="mt-3">
+        <label className="mb-1 block text-xs font-medium text-inkSoft">Tipo de sorteio (vai no link do cliente)</label>
+        <select value={plan} onChange={(e) => setPlan(e.target.value)} className="w-full rounded-lg border border-ink/10 bg-surface px-3 py-2 text-sm outline-none focus:border-gold">
+          <option value="padrao">Padrão — animação Contagem</option>
+          <option value="premium">Cinematográfico (Premium) — cofre, cassino, etc.</option>
+          <option value="vip">VIP — com transmissão ao vivo</option>
+        </select>
+      </div>
+
       <label className="mb-1 mt-3 block text-xs font-medium text-inkSoft">Comentários colados do Instagram</label>
       <textarea value={raw} onChange={(e) => setRaw(e.target.value)} rows={6} placeholder="Cole aqui (Ctrl+V)…" className="w-full rounded-lg border border-ink/10 bg-surface px-3 py-2 font-mono text-xs outline-none focus:border-gold" />
 
@@ -94,6 +108,21 @@ export function RescuePanel() {
 
       {msg && (
         <p className={`mt-3 rounded-lg px-3 py-2 text-sm ${msg.ok ? "bg-emerald/10 text-emerald" : "bg-rose/10 text-rose"}`}>{msg.text}</p>
+      )}
+
+      {link && (
+        <div className="mt-3 rounded-lg border border-gold/30 bg-gold/5 p-3">
+          <p className="mb-1.5 text-xs font-medium text-inkSoft">🔗 Link pronto pro cliente — copie e mande:</p>
+          <div className="flex items-center gap-2">
+            <input readOnly value={link} onFocus={(e) => e.currentTarget.select()} className="flex-1 rounded border border-ink/10 bg-surface px-2 py-1.5 font-mono text-[11px] outline-none" />
+            <button
+              onClick={() => { navigator.clipboard?.writeText(link).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); }).catch(() => {}); }}
+              className="shrink-0 rounded-full bg-ink px-4 py-1.5 text-xs font-semibold text-white hover:bg-ink/90"
+            >
+              {copied ? "✓ Copiado" : "Copiar"}
+            </button>
+          </div>
+        </div>
       )}
 
       <div className="mt-4 flex gap-2">

@@ -14,7 +14,8 @@ function brl(cents: number) {
 }
 
 function fmtDate(d: Date) {
-  return new Date(d).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+  // timeZone SP: o servidor roda em UTC; sem isso os horários apareciam +3h
+  return new Date(d).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
 }
 
 // valor com a moeda certa (BRL/EUR/USD)

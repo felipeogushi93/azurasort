@@ -16,11 +16,13 @@ type Incoming = { handle: string; text?: string };
 export async function POST(req: Request) {
   if (!(await getAdminUser())) return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 
-  const { postUrl, handles, owner, totalReal } = await req.json().catch(() => ({}));
+  const { postUrl, handles, owner, totalReal, plan } = await req.json().catch(() => ({}));
   if (typeof postUrl !== "string" || !shortcodeFromUrl(postUrl)) {
     return NextResponse.json({ error: "Link do Instagram inválido." }, { status: 400 });
   }
   const shortcode = shortcodeFromUrl(postUrl)!;
+  // tipo de sorteio escolhido (padrão/cinematográfico=premium/vip) → vai no link
+  const planId = ["padrao", "premium", "vip"].includes(plan) ? plan : "premium";
 
   const ownerClean = typeof owner === "string" ? owner.replace(/^@/, "").trim().toLowerCase() : null;
 
@@ -46,7 +48,13 @@ export async function POST(req: Request) {
     update: { postUrl, handles: clean, owner: ownerClean, totalReal: total },
   });
 
-  return NextResponse.json({ ok: true, shortcode, injected: clean.length, totalReal: total });
+  // link pronto pro cliente sortear (bypass admin) com o tipo de sorteio escolhido
+  const key = process.env.AZURA_ADMIN_BYPASS_KEY?.trim();
+  const link = key
+    ? `https://azurasort.com/pt-br/sorteio?paid=1&url=${encodeURIComponent(postUrl)}&plan=${planId}&count=${total}&key=${key}`
+    : null;
+
+  return NextResponse.json({ ok: true, shortcode, injected: clean.length, totalReal: total, plan: planId, link });
 }
 
 export async function DELETE(req: Request) {
