@@ -93,10 +93,21 @@ const AIS = [
 
 const GOOGLE_LEVELS = ["Não aparece", "Além da 2ª página", "2ª página", "1ª página", "Top 3 🎉"];
 
+/** 📡 Cockpit — os instrumentos que a gente olha toda semana (dica do Lucas). */
+const MONITOR = [
+  { id: "gsc", label: "Google Search Console", link: "https://search.google.com/search-console", what: "Aba Desempenho: cliques, quais buscas te trazem e sua posição média no Google. É o painel-mãe do SEO." },
+  { id: "backlinks", label: "Backlinks (Links no Search Console)", link: "https://search.google.com/search-console/links", what: "Quem está linkando pra você. Tem que crescer conforme cadastramos diretórios (Indie Hackers, Uneed…)." },
+  { id: "bing", label: "Bing Webmaster Tools", link: "https://www.bing.com/webmasters", what: "SEO no Bing — que é a base das buscas do ChatGPT. Submeta o sitemap (azurasort.com/sitemap.xml)." },
+  { id: "quora", label: "Quora — perguntas do nicho", link: "https://www.quora.com/search?q=instagram+giveaway+picker&type=question", what: "Perguntas tipo 'como sortear no Instagram' pra responder e mencionar o AzuraSort de leve." },
+  { id: "reviews", label: "Google Reviews (avaliações ⭐)", link: "https://business.google.com/reviews", what: "As avaliações da marca (página que o Lucas criou). Meta: 5+ estrelas. Peça pros clientes felizes deixarem." },
+] as const;
+
 const KEY_DONE = "azs_growth_v1";
 const KEY_CUSTOM = "azs_growth_custom_v1";
 const KEY_CITE = "azs_growth_citations_v1";
+const KEY_MONITOR = "azs_growth_monitor_v1";
 const BACKLINK_GOAL = 50;
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
 type Custom = { key: string; group: string; label: string; link?: string };
 type Citations = { ai: Record<string, string | undefined>; googleLevel?: number; googleDate?: string };
@@ -158,6 +169,7 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
   const [done, setDone] = useState<Record<string, boolean>>({});
   const [custom, setCustom] = useState<Custom[]>([]);
   const [cite, setCite] = useState<Citations>({ ai: {} });
+  const [monitor, setMonitor] = useState<Record<string, string>>({}); // id -> última conferida (YYYY-MM-DD)
   const [ready, setReady] = useState(false);
   const [filter, setFilter] = useState<"all" | "pending" | "done">("all");
   const [openHelp, setOpenHelp] = useState<string | null>(null);
@@ -179,6 +191,7 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
     const rawCustom = load<Custom[]>(KEY_CUSTOM, []).map((c) => ({ ...c, group: c.group ?? "📁 Diretórios" }));
     setCustom(rawCustom);
     setCite(load<Citations>(KEY_CITE, { ai: {} }));
+    setMonitor(load<Record<string, string>>(KEY_MONITOR, {}));
     setReady(true);
   }, []);
 
@@ -224,6 +237,19 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
       save(KEY_CITE, next);
       return next;
     });
+  }
+  function markChecked(id: string) {
+    setMonitor((prev) => {
+      const next = { ...prev, [id]: new Date().toISOString().slice(0, 10) };
+      save(KEY_MONITOR, next);
+      return next;
+    });
+  }
+  // "vencido" = nunca conferido ou passou +7 dias
+  function isStale(id: string): boolean {
+    const d = monitor[id];
+    if (!d) return true;
+    return Date.now() - new Date(d + "T12:00:00").getTime() > WEEK_MS;
   }
 
   const allItems = useMemo(() => [...GROUPS.flatMap((g) => g.items), ...custom], [custom]);
@@ -307,6 +333,41 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
             />
           </div>
           {cite.googleDate && <p className="mt-1 text-[11px] text-inkSoft">atualizado em {cite.googleDate}</p>}
+        </div>
+      </section>
+
+      {/* 📡 COCKPIT — instrumentos que a gente olha toda semana (dica do Lucas) */}
+      <section className="mb-6 rounded-3xl border border-ink/5 bg-surface p-5 shadow-card">
+        <div className="mb-1 flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-ink">🛩️ Cockpit — olhar 1x por semana</p>
+          {ready && (
+            <span className="text-xs text-inkSoft">
+              {MONITOR.filter((m) => isStale(m.id)).length === 0
+                ? "✅ tudo em dia"
+                : `⚠️ ${MONITOR.filter((m) => isStale(m.id)).length} pra conferir`}
+            </span>
+          )}
+        </div>
+        <p className="mb-3 text-xs text-inkSoft">Os instrumentos do avião. Abra cada um, veja como está, e marque &quot;conferi&quot;. Fica laranja quando passa 7 dias.</p>
+        <div className="grid gap-2.5 sm:grid-cols-2">
+          {MONITOR.map((m) => {
+            const stale = ready && isStale(m.id);
+            const last = monitor[m.id];
+            return (
+              <div key={m.id} className={`rounded-xl border p-3 transition ${stale ? "border-gold/40 bg-gold/5" : "border-emerald/30 bg-emerald/5"}`}>
+                <div className="flex items-start justify-between gap-2">
+                  <a href={m.link} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-ink hover:underline">
+                    {stale ? "⚠️" : "✅"} {m.label} <span className="text-inkSoft">↗</span>
+                  </a>
+                  <button onClick={() => markChecked(m.id)} className="shrink-0 rounded-full bg-ink px-3 py-1 text-[11px] font-semibold text-white hover:bg-ink/90">
+                    conferi
+                  </button>
+                </div>
+                <p className="mt-1 text-[11px] leading-snug text-inkSoft">{m.what}</p>
+                <p className="mt-1 text-[11px] text-inkSoft">{last ? `conferido em ${last}` : "nunca conferido"}</p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
