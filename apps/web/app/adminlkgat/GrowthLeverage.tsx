@@ -11,7 +11,11 @@ import Link from "next/link";
  * Exporta: GrowthLeverage (tela cheia) e GrowthSummaryCard (cartão no painel).
  */
 
-type Item = { key: string; label: string; link?: string; note?: string; seed?: boolean };
+type Cadence = "daily" | "weekly" | "monthly"; // recorrência; sem cadence = uma vez só
+const CADENCE_MS: Record<Cadence, number> = { daily: 864e5, weekly: 7 * 864e5, monthly: 30 * 864e5 };
+const CADENCE_LABEL: Record<Cadence, string> = { daily: "diário", weekly: "semanal", monthly: "mensal" };
+
+type Item = { key: string; label: string; link?: string; note?: string; seed?: boolean; cadence?: Cadence };
 type Group = { title: string; help: string; items: Item[]; addable?: boolean };
 
 const GROUPS: Group[] = [
@@ -58,8 +62,8 @@ const GROUPS: Group[] = [
     help: "Reddit/Quora. Você ajuda de verdade e menciona de leve no fim. A IA cita muito essas respostas. Conta nova: aquece antes (comenta/upvota) pra não tomar spam.",
     addable: true,
     items: [
-      { key: "com-reddit", label: "1ª resposta no Reddit (r/Instagram, r/socialmedia)" },
-      { key: "com-quora", label: "1ª resposta no Quora" },
+      { key: "com-reddit", label: "Responder no Reddit (r/Instagram, r/socialmedia)", cadence: "weekly" },
+      { key: "com-quora", label: "Responder no Quora", cadence: "weekly" },
     ],
   },
   {
@@ -94,25 +98,25 @@ const AIS = [
 const GOOGLE_LEVELS = ["Não aparece", "Além da 2ª página", "2ª página", "1ª página", "Top 3 🎉"];
 
 /** 📡 Cockpit — os instrumentos que a gente olha toda semana (dica do Lucas). */
-const MONITOR = [
-  { id: "gsc", label: "Google Search Console", link: "https://search.google.com/search-console", what: "Aba Desempenho: cliques, quais buscas te trazem e sua posição média no Google. É o painel-mãe do SEO." },
-  { id: "backlinks", label: "Backlinks (Links no Search Console)", link: "https://search.google.com/search-console/links", what: "Quem está linkando pra você. Tem que crescer conforme cadastramos diretórios (Indie Hackers, Uneed…)." },
-  { id: "bing", label: "Bing Webmaster Tools", link: "https://www.bing.com/webmasters", what: "SEO no Bing — que é a base das buscas do ChatGPT. Submeta o sitemap (azurasort.com/sitemap.xml)." },
-  { id: "quora", label: "Quora — perguntas do nicho", link: "https://www.quora.com/search?q=instagram+giveaway+picker&type=question", what: "Perguntas tipo 'como sortear no Instagram' pra responder e mencionar o AzuraSort de leve." },
-  { id: "reviews", label: "Google Reviews (avaliações ⭐)", link: "https://business.google.com/reviews", what: "As avaliações da marca (página que o Lucas criou). Meta: 5+ estrelas. Peça pros clientes felizes deixarem." },
-  { id: "alerts", label: "Google Alerts — menções da marca", link: "https://www.google.com/alerts", what: "Setup 1x: criar alerta pra \"AzuraSort\". Depois te avisa por email quando alguém cita a marca (= backlink/menção nova pra aproveitar)." },
-  { id: "ahrefs", label: "Ahrefs Webmaster Tools (grátis)", link: "https://ahrefs.com/webmaster-tools", what: "Setup 1x: verificar o site. Mostra o Domain Rating (autoridade 0-100) e a lista de backlinks, melhor que o Google." },
-  { id: "uptime", label: "UptimeRobot — site no ar?", link: "https://uptimerobot.com", what: "Setup 1x: monitorar azurasort.com. Te avisa na hora se o site cair (site fora = venda perdida em silêncio)." },
-] as const;
+const MONITOR: { id: string; label: string; link: string; what: string; every: Cadence }[] = [
+  { id: "gsc", label: "Google Search Console", link: "https://search.google.com/search-console", what: "Aba Desempenho: cliques, quais buscas te trazem e sua posição média no Google. É o painel-mãe do SEO.", every: "weekly" },
+  { id: "backlinks", label: "Backlinks (Links no Search Console)", link: "https://search.google.com/search-console/links", what: "Quem está linkando pra você. Tem que crescer conforme cadastramos diretórios (Indie Hackers, Uneed…).", every: "weekly" },
+  { id: "bing", label: "Bing Webmaster Tools", link: "https://www.bing.com/webmasters", what: "SEO no Bing — que é a base das buscas do ChatGPT. Veja Search Performance e AI Performance.", every: "monthly" },
+  { id: "quora", label: "Quora — perguntas do nicho", link: "https://www.quora.com/search?q=instagram+giveaway+picker&type=question", what: "Perguntas tipo 'como sortear no Instagram' pra responder e mencionar o AzuraSort de leve.", every: "weekly" },
+  { id: "reviews", label: "Google Reviews (avaliações ⭐)", link: "https://business.google.com/reviews", what: "As avaliações da marca (página que o Lucas criou). Meta: 5+ estrelas. Peça pros clientes felizes deixarem.", every: "monthly" },
+  { id: "alerts", label: "Google Alerts — menções da marca", link: "https://www.google.com/alerts", what: "Setup 1x: criar alerta pra \"AzuraSort\". Depois te avisa por email quando alguém cita a marca (= backlink/menção nova pra aproveitar).", every: "monthly" },
+  { id: "ahrefs", label: "Ahrefs Webmaster Tools (grátis)", link: "https://ahrefs.com/webmaster-tools", what: "Setup 1x: verificar o site. Mostra o Domain Rating (autoridade 0-100) e a lista de backlinks, melhor que o Google.", every: "monthly" },
+  { id: "uptime", label: "UptimeRobot — site no ar?", link: "https://uptimerobot.com", what: "Setup 1x: monitorar azurasort.com. Te avisa na hora se o site cair (site fora = venda perdida em silêncio).", every: "monthly" },
+];
 
 const KEY_DONE = "azs_growth_v1";
+const KEY_DONEAT = "azs_growth_doneat_v1"; // key -> data em que foi marcada (p/ recorrência)
 const KEY_CUSTOM = "azs_growth_custom_v1";
 const KEY_CITE = "azs_growth_citations_v1";
 const KEY_MONITOR = "azs_growth_monitor_v1";
 const BACKLINK_GOAL = 50;
-const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 
-type Custom = { key: string; group: string; label: string; link?: string };
+type Custom = { key: string; group: string; label: string; link?: string; cadence?: Cadence };
 type Citations = { ai: Record<string, string | undefined>; googleLevel?: number; googleDate?: string };
 
 function load<T>(key: string, fallback: T): T {
@@ -170,6 +174,7 @@ export function GrowthSummaryCard() {
 /** Tela cheia da Alavancagem. */
 export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7d: number }) {
   const [done, setDone] = useState<Record<string, boolean>>({});
+  const [doneAt, setDoneAt] = useState<Record<string, string>>({}); // key -> data marcada (recorrência)
   const [custom, setCustom] = useState<Custom[]>([]);
   const [cite, setCite] = useState<Citations>({ ai: {} });
   const [monitor, setMonitor] = useState<Record<string, string>>({}); // id -> última conferida (YYYY-MM-DD)
@@ -179,6 +184,7 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
   const [addingGroup, setAddingGroup] = useState<string | null>(null);
   const [newLabel, setNewLabel] = useState("");
   const [newLink, setNewLink] = useState("");
+  const [newCadence, setNewCadence] = useState<Cadence | "once">("once");
 
   useEffect(() => {
     const saved = load<Record<string, boolean> | null>(KEY_DONE, null);
@@ -195,20 +201,38 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
     setCustom(rawCustom);
     setCite(load<Citations>(KEY_CITE, { ai: {} }));
     setMonitor(load<Record<string, string>>(KEY_MONITOR, {}));
+    setDoneAt(load<Record<string, string>>(KEY_DONEAT, {}));
     setReady(true);
   }, []);
 
   function toggle(key: string) {
     setDone((prev) => {
-      const next = { ...prev, [key]: !prev[key] };
+      const nowOn = !prev[key];
+      const next = { ...prev, [key]: nowOn };
       save(KEY_DONE, next);
+      if (nowOn) {
+        // carimba a data ao marcar — é o que faz a recorrência funcionar
+        setDoneAt((p) => {
+          const n = { ...p, [key]: new Date().toISOString().slice(0, 10) };
+          save(KEY_DONEAT, n);
+          return n;
+        });
+      }
       return next;
     });
+  }
+  // feito "de verdade": marcado E (uma vez só OU dentro do prazo da recorrência)
+  function isDone(it: { key: string; cadence?: Cadence }): boolean {
+    if (!done[it.key]) return false;
+    if (!it.cadence) return true;
+    const at = doneAt[it.key];
+    if (!at) return true; // legado sem data → mantém até a próxima marcação
+    return Date.now() - new Date(at + "T12:00:00").getTime() < CADENCE_MS[it.cadence];
   }
   function addTo(group: string) {
     const label = newLabel.trim();
     if (!label) return;
-    const item: Custom = { key: `custom-${Date.now()}`, group, label, link: newLink.trim() || undefined };
+    const item: Custom = { key: `custom-${Date.now()}`, group, label, link: newLink.trim() || undefined, cadence: newCadence === "once" ? undefined : newCadence };
     setCustom((prev) => {
       const next = [...prev, item];
       save(KEY_CUSTOM, next);
@@ -216,6 +240,7 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
     });
     setNewLabel("");
     setNewLink("");
+    setNewCadence("once");
     setAddingGroup(null);
   }
   function removeCustom(key: string) {
@@ -248,30 +273,33 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
       return next;
     });
   }
-  // "vencido" = nunca conferido ou passou +7 dias
-  function isStale(id: string): boolean {
+  // "vencido" = nunca conferido ou passou o prazo da frequência dele
+  function isStale(id: string, every: Cadence): boolean {
     const d = monitor[id];
     if (!d) return true;
-    return Date.now() - new Date(d + "T12:00:00").getTime() > WEEK_MS;
+    return Date.now() - new Date(d + "T12:00:00").getTime() > CADENCE_MS[every];
   }
 
   const allItems = useMemo(() => [...GROUPS.flatMap((g) => g.items), ...custom], [custom]);
   const total = allItems.length;
-  const completed = allItems.filter((it) => done[it.key]).length;
+  const completed = allItems.filter((it) => isDone(it)).length;
   const pct = total ? Math.round((completed / total) * 100) : 0;
   const backlinkGroups = ["📁 Diretórios", "📝 Listicles (outreach)"];
   const backlinkItems = [...GROUPS.filter((g) => backlinkGroups.includes(g.title)).flatMap((g) => g.items), ...custom.filter((c) => backlinkGroups.includes(c.group))];
-  const backlinksDone = backlinkItems.filter((it) => done[it.key]).length;
+  const backlinksDone = backlinkItems.filter((it) => isDone(it)).length;
 
-  const showItem = (key: string) => (filter === "all" ? true : filter === "done" ? !!done[key] : !done[key]);
+  const showItem = (it: { key: string; cadence?: Cadence }) => (filter === "all" ? true : filter === "done" ? isDone(it) : !isDone(it));
 
-  function renderItem(it: { key: string; label: string; link?: string; note?: string }, removable = false) {
-    const checked = ready && !!done[it.key];
+  function renderItem(it: { key: string; label: string; link?: string; note?: string; cadence?: Cadence }, removable = false) {
+    const checked = ready && isDone(it);
+    const recurred = ready && !!it.cadence && !!done[it.key] && !checked; // já foi feito, mas venceu — refazer
     return (
       <li key={it.key} className="flex items-start gap-2">
         <input type="checkbox" checked={checked} onChange={() => toggle(it.key)} className="mt-0.5 h-4 w-4 shrink-0 accent-gold" />
         <span className={`flex-1 text-sm ${checked ? "text-inkSoft line-through" : "text-ink"}`}>
           {it.link ? <a href={it.link} target="_blank" rel="noopener noreferrer" className="hover:underline">{it.label}</a> : it.label}
+          {it.cadence && <span className="ml-1 rounded-full bg-ink/5 px-1.5 py-0.5 text-[10px] font-medium text-inkSoft">🔁 {CADENCE_LABEL[it.cadence]}</span>}
+          {recurred && <span className="ml-1 text-[10px] font-semibold text-gold-deep">fazer de novo!</span>}
           {it.note && <span className="ml-1 text-xs text-gold-deep">· {it.note}</span>}
         </span>
         {removable && <button onClick={() => removeCustom(it.key)} className="text-xs text-inkSoft hover:text-rose" title="Remover">✕</button>}
@@ -345,16 +373,16 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
           <p className="text-sm font-semibold text-ink">🛩️ Cockpit — olhar 1x por semana</p>
           {ready && (
             <span className="text-xs text-inkSoft">
-              {MONITOR.filter((m) => isStale(m.id)).length === 0
+              {MONITOR.filter((m) => isStale(m.id, m.every)).length === 0
                 ? "✅ tudo em dia"
-                : `⚠️ ${MONITOR.filter((m) => isStale(m.id)).length} pra conferir`}
+                : `⚠️ ${MONITOR.filter((m) => isStale(m.id, m.every)).length} pra conferir`}
             </span>
           )}
         </div>
-        <p className="mb-3 text-xs text-inkSoft">Os instrumentos do avião. Abra cada um, veja como está, e marque &quot;conferi&quot;. Fica laranja quando passa 7 dias.</p>
+        <p className="mb-3 text-xs text-inkSoft">Os instrumentos do avião. Abra cada um, veja como está, e marque &quot;conferi&quot;. Fica laranja quando vence a frequência de cada um.</p>
         <div className="grid gap-2.5 sm:grid-cols-2">
           {MONITOR.map((m) => {
-            const stale = ready && isStale(m.id);
+            const stale = ready && isStale(m.id, m.every);
             const last = monitor[m.id];
             return (
               <div key={m.id} className={`rounded-xl border p-3 transition ${stale ? "border-gold/40 bg-gold/5" : "border-emerald/30 bg-emerald/5"}`}>
@@ -367,7 +395,10 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
                   </button>
                 </div>
                 <p className="mt-1 text-[11px] leading-snug text-inkSoft">{m.what}</p>
-                <p className="mt-1 text-[11px] text-inkSoft">{last ? `conferido em ${last}` : "nunca conferido"}</p>
+                <p className="mt-1 text-[11px] text-inkSoft">
+                  <span className="rounded-full bg-ink/5 px-1.5 py-0.5 font-medium">🔁 {CADENCE_LABEL[m.every]}</span>
+                  <span className="ml-1.5">{last ? `conferido em ${last}` : "nunca conferido"}</span>
+                </p>
               </div>
             );
           })}
@@ -399,8 +430,8 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
       {/* checklist por grupo (cada um com adicionar) */}
       <div className="grid gap-5 md:grid-cols-2">
         {GROUPS.map((g) => {
-          const baseVisible = g.items.filter((it) => showItem(it.key));
-          const customVisible = custom.filter((c) => c.group === g.title && showItem(c.key));
+          const baseVisible = g.items.filter((it) => showItem(it));
+          const customVisible = custom.filter((c) => c.group === g.title && showItem(c));
           const isAdding = addingGroup === g.title;
           return (
             <div key={g.title} className="rounded-2xl border border-ink/5 bg-surface p-4 shadow-soft">
@@ -418,13 +449,19 @@ export function GrowthLeverage({ visits7d, sales7d }: { visits7d: number; sales7
                 <div className="mt-3 space-y-2 rounded-lg bg-canvasAlt p-2">
                   <input value={newLabel} onChange={(e) => setNewLabel(e.target.value)} placeholder="Nome do site/tarefa" className="w-full rounded-lg border border-ink/10 bg-surface px-3 py-1.5 text-sm" autoFocus />
                   <input value={newLink} onChange={(e) => setNewLink(e.target.value)} placeholder="Link (opcional)" className="w-full rounded-lg border border-ink/10 bg-surface px-3 py-1.5 text-sm" />
+                  <select value={newCadence} onChange={(e) => setNewCadence(e.target.value as Cadence | "once")} className="w-full rounded-lg border border-ink/10 bg-surface px-3 py-1.5 text-sm text-ink" title="Frequência">
+                    <option value="once">Uma vez só</option>
+                    <option value="daily">🔁 Repetir diário</option>
+                    <option value="weekly">🔁 Repetir semanal</option>
+                    <option value="monthly">🔁 Repetir mensal</option>
+                  </select>
                   <div className="flex gap-2">
                     <button onClick={() => addTo(g.title)} className="flex-1 rounded-full bg-ink/90 py-1.5 text-sm font-semibold text-white hover:bg-ink">Adicionar</button>
-                    <button onClick={() => { setAddingGroup(null); setNewLabel(""); setNewLink(""); }} className="rounded-full border border-ink/10 px-3 py-1.5 text-sm text-inkSoft">Cancelar</button>
+                    <button onClick={() => { setAddingGroup(null); setNewLabel(""); setNewLink(""); setNewCadence("once"); }} className="rounded-full border border-ink/10 px-3 py-1.5 text-sm text-inkSoft">Cancelar</button>
                   </div>
                 </div>
               ) : (
-                <button onClick={() => { setAddingGroup(g.title); setNewLabel(""); setNewLink(""); }} className="mt-3 text-xs font-medium text-gold-deep hover:underline">+ adicionar aqui</button>
+                <button onClick={() => { setAddingGroup(g.title); setNewLabel(""); setNewLink(""); setNewCadence("once"); }} className="mt-3 text-xs font-medium text-gold-deep hover:underline">+ adicionar aqui</button>
               )}
             </div>
           );
