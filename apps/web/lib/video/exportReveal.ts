@@ -7,12 +7,13 @@
  * navegador (Safari iOS / Chrome recentes ✔). Ideal testar no celular.
  */
 
-export type ExportRatio = "9:16" | "16:9" | "1:1";
+export type ExportRatio = "9:16" | "16:9" | "1:1" | "4:5";
 
 const DIMS: Record<ExportRatio, [number, number]> = {
-  "9:16": [1080, 1920],
+  "9:16": [1080, 1920], // Story/Reel
   "16:9": [1920, 1080],
   "1:1": [1080, 1080],
+  "4:5": [1080, 1350], // Feed do Instagram (retrato que cabe inteiro, sem corte)
 };
 
 // clipe + segundo em que o nome aparece, por módulo de cena
@@ -98,7 +99,9 @@ export async function exportRevealVideo(opts: {
     video.onerror = () => rej(new Error("falha ao carregar o clipe"));
   });
 
-  const duration = Math.min(video.duration || clip.revealAtSec + 5, 25);
+  // duração real do clipe (preferimos o fim de verdade); fallback generoso pra NÃO cortar
+  const rawDur = Number.isFinite(video.duration) && video.duration > 0 ? video.duration : clip.revealAtSec + 6;
+  const duration = Math.min(rawDur, 30);
   const { mime, ext } = pickMime();
   const stream = canvas.captureStream(30);
 
@@ -229,32 +232,42 @@ export async function exportRevealVideo(opts: {
     c.restore();
   }
 
+  video.currentTime = 0;
   await video.play().catch(() => {});
   rec.start();
   startAudio();
 
   await new Promise<void>((resolve) => {
+    const startWall = performance.now();
+    let lastCt = -1;
+    let lastAdvanceWall = startWall;
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      try { rec.stop(); } catch {}
+      resolve();
+    };
     function loop() {
-      if (opts.signal?.aborted) {
-        try { rec.stop(); } catch {}
-        resolve();
-        return;
-      }
+      if (opts.signal?.aborted) return finish();
+      const now = performance.now();
       const ct = video.currentTime;
+
       ctx!.fillStyle = "#05060A";
       ctx!.fillRect(0, 0, W, H);
       if (video.readyState >= 2) drawCover();
-      if (ct >= clip.revealAtSec) {
-        const a = Math.min(1, (ct - clip.revealAtSec) / 0.6);
-        drawWinner(a);
-      }
+      if (ct >= clip.revealAtSec) drawWinner(Math.min(1, (ct - clip.revealAtSec) / 0.6));
       drawWatermark();
       opts.onProgress?.(Math.min(1, ct / duration));
-      if (ct >= duration || video.ended) {
-        try { rec.stop(); } catch {}
-        resolve();
-        return;
-      }
+
+      if (ct > lastCt + 0.01) { lastCt = ct; lastAdvanceWall = now; } // vídeo avançou
+
+      // fim normal — ou travas de segurança que impedem o congelamento eterno:
+      const reachedEnd = ct >= duration - 0.05 || video.ended;
+      const neverStarted = ct < 0.05 && now - startWall > 4000; // não começou a tocar
+      const stalledMid = ct >= 0.05 && now - lastAdvanceWall > 3000; // travou no meio
+      const hardCap = now - startWall > (duration + 5) * 1000; // teto absoluto
+      if (reachedEnd || neverStarted || stalledMid || hardCap) return finish();
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);

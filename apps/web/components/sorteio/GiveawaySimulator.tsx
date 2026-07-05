@@ -794,7 +794,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
               {t("result.cutsReady")}
             </p>
             <div className="flex gap-2">
-              {([["9:16", "Story"], ["1:1", "Feed"]] as [ExportRatio, string][]).map(([f, label]) => (
+              {([["9:16", "Story"], ["4:5", "Feed"]] as [ExportRatio, string][]).map(([f, label]) => (
                 <button
                   key={f}
                   disabled={!!videoBusy}
