@@ -101,7 +101,7 @@ export async function getRecentPayments(r: DateRange = {}, limit = 25) {
     where: { status: "paid", amount: { gt: 100 }, ...whereCreated(r) },
     orderBy: { paidAt: "desc" },
     take: limit,
-    select: { plan: true, amount: true, currency: true, provider: true, paidAt: true, createdAt: true, giveaway: { select: { campaign: true } } },
+    select: { plan: true, amount: true, currency: true, provider: true, paidAt: true, createdAt: true, giveaway: { select: { campaign: true, postUrl: true } } },
   });
 }
 

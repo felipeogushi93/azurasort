@@ -4,6 +4,7 @@ import { verifyStripePayment } from "@/lib/payments/stripe";
 import { getWooviStatus } from "@/lib/payments/woovi";
 import { priceForCount, type Currency, type PlanId } from "@/lib/payments/pricing";
 import { notifyTelegram, paymentMessage } from "@/lib/notify/telegram";
+import { shortcodeFromUrl } from "@/lib/providers/apify";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
 
 export const runtime = "nodejs";
@@ -27,6 +28,7 @@ export async function POST(req: Request) {
       currency?: string;
       count?: number;
       campaign?: string;
+      postUrl?: string;
     };
     const provider = body.provider;
     const externalId = body.externalId;
@@ -60,11 +62,26 @@ export async function POST(req: Request) {
     const existing = await db.payment.findUnique({ where: { externalId }, select: { status: true } });
     const alreadyPaid = existing?.status === "paid";
 
+    // Link do post → cria/acha o Giveaway JÁ no pagamento. Assim a venda E o link
+    // aparecem no painel na hora, sem depender de a pessoa rodar o sorteio.
+    // (mesmo padrão do /api/draw; se ela sortear depois, reusa este giveaway)
+    let giveawayId: string | undefined;
+    const shortcode = body.postUrl ? shortcodeFromUrl(body.postUrl) : null;
+    if (shortcode && body.postUrl) {
+      let gv = await db.giveaway.findFirst({ where: { shortcode } });
+      if (!gv) {
+        gv = await db.giveaway
+          .create({ data: { postUrl: body.postUrl, shortcode, campaign: body.campaign?.trim() || "Sorteio", totalComments: Number(body.count) || 0 } })
+          .catch(() => null);
+      }
+      giveawayId = gv?.id;
+    }
+
     await db.payment
       .upsert({
         where: { externalId },
-        create: { provider, externalId, amount, currency: cur, plan: planId, status: "paid", paidAt: new Date() },
-        update: { status: "paid" },
+        create: { provider, externalId, amount, currency: cur, plan: planId, status: "paid", paidAt: new Date(), ...(giveawayId ? { giveawayId } : {}) },
+        update: { status: "paid", ...(giveawayId ? { giveawayId } : {}) },
       })
       .catch(() => {});
 

@@ -367,7 +367,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       // sendBeacon = CONFIÁVEL: dispara mesmo se a pessoa fecha/recarrega a página
       // logo após pagar (o fetch antigo era cortado → venda não ia pra vendas).
       try {
-        const confirmBody = JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined });
+        const confirmBody = JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined, postUrl: link || undefined });
         const blob = new Blob([confirmBody], { type: "application/json" });
         if (typeof navigator !== "undefined" && navigator.sendBeacon) {
           navigator.sendBeacon("/api/pay/confirm", blob);

@@ -100,7 +100,8 @@ export default async function AdminPage({
                   <th className="py-2 pr-3">Plano</th>
                   <th className="py-2 pr-3">Valor</th>
                   <th className="py-2 pr-3">Método</th>
-                  <th className="py-2">Campanha</th>
+                  <th className="py-2 pr-3">Campanha</th>
+                  <th className="py-2">Post</th>
                 </tr>
               </thead>
               <tbody>
@@ -110,7 +111,14 @@ export default async function AdminPage({
                     <td className="py-2 pr-3 font-medium text-ink">{PLAN_LABEL[p.plan] ?? p.plan}</td>
                     <td className="py-2 pr-3 font-semibold text-ink">{money(p.amount, p.currency)}</td>
                     <td className="py-2 pr-3 text-inkSoft">{payMethod(p.provider)}</td>
-                    <td className="py-2 truncate text-inkSoft">{p.giveaway?.campaign ?? "—"}</td>
+                    <td className="py-2 pr-3 truncate text-inkSoft">{p.giveaway?.campaign ?? "—"}</td>
+                    <td className="py-2 truncate">
+                      {p.giveaway?.postUrl ? (
+                        <a href={p.giveaway.postUrl} target="_blank" rel="noreferrer" className="text-violet hover:underline">abrir ↗</a>
+                      ) : (
+                        <span className="text-inkSoft">—</span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
