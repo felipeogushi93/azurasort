@@ -5,6 +5,7 @@ import { LoginForm } from "./LoginForm";
 import { ForcedWinnerManager, LogoutButton, DateFilter } from "./AdminClient";
 import { RescuePanel } from "./RescuePanel";
 import { GrowthSummaryCard } from "./GrowthLeverage";
+import { AutoRefresh } from "./AutoRefresh";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -52,7 +53,10 @@ export default async function AdminPage({
           <h1 className="font-display text-2xl font-bold text-ink">Painel AzuraSort</h1>
           <p className="text-sm text-inkSoft">Olá, {user}</p>
         </div>
-        <LogoutButton />
+        <div className="flex items-center gap-3">
+          <AutoRefresh seconds={5} />
+          <LogoutButton />
+        </div>
       </header>
 
       {/* 🩺 saúde / alertas automáticos */}
