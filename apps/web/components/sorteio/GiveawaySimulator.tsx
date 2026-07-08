@@ -415,7 +415,27 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       // sendBeacon = CONFIÁVEL: dispara mesmo se a pessoa fecha/recarrega a página
       // logo após pagar (o fetch antigo era cortado → venda não ia pra vendas).
       try {
-        const confirmBody = JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined, postUrl: link || undefined });
+        // Captura gclid (Google Ads click id) do cookie _gcl_aw ou URL — usado pra
+        // server-side offline conversion upload (não depende de pixel client-side).
+        const readGclid = (): string | null => {
+          if (typeof document === "undefined") return null;
+          // 1) URL ?gclid=
+          try {
+            const u = new URL(window.location.href);
+            const g = u.searchParams.get("gclid");
+            if (g) return g;
+          } catch { /* noop */ }
+          // 2) cookie _gcl_aw (formato: GCL.timestamp.<gclid>)
+          const m = document.cookie.match(/(?:^|;\s*)_gcl_aw=([^;]+)/);
+          if (m?.[1]) {
+            const parts = decodeURIComponent(m[1]).split(".");
+            if (parts.length >= 3) return parts.slice(2).join(".");
+          }
+          // 3) localStorage backup (setado no landing)
+          try { return window.localStorage.getItem("gclid"); } catch { return null; }
+        };
+        const gclid = readGclid();
+        const confirmBody = JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined, postUrl: link || undefined, gclid });
         const blob = new Blob([confirmBody], { type: "application/json" });
         if (typeof navigator !== "undefined" && navigator.sendBeacon) {
           navigator.sendBeacon("/api/pay/confirm", blob);

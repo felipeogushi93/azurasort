@@ -10,10 +10,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Muitas tentativas. Aguarde." }, { status: 429 });
   }
   try {
-    const body = (await req.json().catch(() => ({}))) as { plan?: PlanId; count?: number };
+    const body = (await req.json().catch(() => ({}))) as {
+      plan?: PlanId; count?: number;
+      gclid?: string; utm_source?: string; utm_campaign?: string;
+    };
     const plan: PlanId = body.plan === "padrao" || body.plan === "vip" ? body.plan : "premium";
     // PIX é exclusivo do Brasil → sempre em BRL; preço pela faixa de participantes
-    const charge = await createWooviCharge(priceForCount("BRL", plan, Number(body.count) || 0), `AzuraSort sorteio ${plan}`);
+    const charge = await createWooviCharge(
+      priceForCount("BRL", plan, Number(body.count) || 0),
+      `AzuraSort sorteio ${plan}`,
+      { gclid: body.gclid, utm_source: body.utm_source, utm_campaign: body.utm_campaign }
+    );
     return NextResponse.json(charge);
   } catch (e) {
     console.error("[/api/pay/woovi/charge] erro:", e);

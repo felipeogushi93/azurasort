@@ -3,6 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/payments/stripe";
 import { db } from "@/lib/db";
 import { notifyTelegram, paymentMessage } from "@/lib/notify/telegram";
+import { uploadOfflineConversion } from "@/lib/googleAds/uploadConversion";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -46,6 +47,11 @@ export async function POST(req: Request) {
       const existing = await db.payment.findUnique({ where: { externalId: pi.id }, select: { status: true } });
       const alreadyPaid = existing?.status === "paid";
 
+      const gclid = (pi.metadata?.gclid as string) || null;
+      const email = (pi.metadata?.email as string) || null;
+      const phone = (pi.metadata?.phone as string) || null;
+      const paidAt = new Date();
+
       await db.payment.upsert({
         where: { externalId: pi.id },
         create: {
@@ -55,15 +61,36 @@ export async function POST(req: Request) {
           currency,
           plan,
           status: "paid",
-          paidAt: new Date(),
+          paidAt,
+          gclid, email, phone,
         },
-        update: { status: "paid", paidAt: new Date() },
+        update: {
+          status: "paid",
+          paidAt,
+          ...(gclid ? { gclid } : {}),
+          ...(email ? { email } : {}),
+          ...(phone ? { phone } : {}),
+        },
       });
 
       // notifica VENDAS pelo webhook (confiável, server-side) — cobre o cartão mesmo
       // se o cliente fechar a aba. Uma vez só, não em teste, só do nosso produto.
       if (isOurs && !isTest && !alreadyPaid) {
         void notifyTelegram(paymentMessage({ provider: "stripe", plan, amountCents: pi.amount ?? 0, currency })).catch(() => {});
+      }
+
+      // Google Ads offline conversion — server-side (não depende de pixel client-side)
+      if (isOurs && !isTest && !alreadyPaid && (gclid || email || phone)) {
+        void uploadOfflineConversion({
+          gclid, email, phone,
+          amountBRL: (pi.amount ?? 0) / 100,
+          externalId: pi.id,
+          paidAt,
+        }).then(async (ok) => {
+          if (ok) {
+            await db.payment.update({ where: { externalId: pi.id }, data: { conversionUploaded: true } }).catch(() => {});
+          }
+        });
       }
 
       // Painel-IA central: notificar conversão pra atribuir lead à origem (AI/Google/etc).

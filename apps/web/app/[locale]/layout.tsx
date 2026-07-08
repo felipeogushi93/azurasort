@@ -95,9 +95,13 @@ export default async function LocaleLayout({
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-3H6JSKZNM5');
-gtag('config', 'AW-18276235962');
-gtag('config', 'AW-18240050787');
-gtag('config', 'AW-18290962377');`}
+// allow_enhanced_conversions=true → Google Ads auto-detecta email/phone digitados
+// no site e usa como user identifier hasheado, elevando o match rate quando o
+// browser bloqueia cookies / o cliente fecha aba antes do simulator carregar.
+// Precisa Enhanced Conversions ligado no dashboard Google Ads.
+gtag('config', 'AW-18276235962', { 'allow_enhanced_conversions': true });
+gtag('config', 'AW-18240050787', { 'allow_enhanced_conversions': true });
+gtag('config', 'AW-18290962377', { 'allow_enhanced_conversions': true });`}
         </Script>
         {/* Meta Pixel (Facebook/Instagram Ads) — base PageView; eventos de conversão (Purchase)
             disparados no GiveawaySimulator junto do GA4/Google Ads */}

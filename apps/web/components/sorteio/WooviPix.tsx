@@ -25,10 +25,32 @@ export function WooviPix({
 
   // cria a cobrança ao abrir
   useEffect(() => {
+    // Captura tracking IDs pra passar ao Woovi (webhook retorna → server-side
+    // Google Ads offline conversion + Data Manager quando ativado).
+    const readGclid = (): string | null => {
+      if (typeof document === "undefined") return null;
+      try {
+        const g = new URL(window.location.href).searchParams.get("gclid");
+        if (g) return g;
+      } catch { /* noop */ }
+      const m = document.cookie.match(/(?:^|;\s*)_gcl_aw=([^;]+)/);
+      if (m?.[1]) {
+        const parts = decodeURIComponent(m[1]).split(".");
+        if (parts.length >= 3) return parts.slice(2).join(".");
+      }
+      try { return window.localStorage.getItem("gclid"); } catch { return null; }
+    };
+    const readParam = (name: string): string | null => {
+      try { return new URL(window.location.href).searchParams.get(name); } catch { return null; }
+    };
+    const gclid = readGclid();
+    const utm_source = readParam("utm_source");
+    const utm_campaign = readParam("utm_campaign");
+
     fetch("/api/pay/woovi/charge", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan, count }),
+      body: JSON.stringify({ plan, count, gclid, utm_source, utm_campaign }),
     })
       .then((r) => r.json())
       .then((d) => (d.brCode ? setCharge(d) : setErr(d.error || "Falha ao gerar o PIX")))

@@ -6,6 +6,7 @@ import { priceForCount, type Currency, type PlanId } from "@/lib/payments/pricin
 import { notifyTelegram, paymentMessage } from "@/lib/notify/telegram";
 import { shortcodeFromUrl } from "@/lib/providers/apify";
 import { rateLimit, clientIp } from "@/lib/rateLimit";
+import { uploadOfflineConversion } from "@/lib/googleAds/uploadConversion";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -29,6 +30,9 @@ export async function POST(req: Request) {
       count?: number;
       campaign?: string;
       postUrl?: string;
+      gclid?: string;
+      email?: string;
+      phone?: string;
     };
     const provider = body.provider;
     const externalId = body.externalId;
@@ -77,16 +81,46 @@ export async function POST(req: Request) {
       giveawayId = gv?.id;
     }
 
+    const gclid = body.gclid?.trim() || null;
+    const email = body.email?.trim().toLowerCase() || null;
+    const phone = body.phone?.trim() || null;
+    const paidAt = new Date();
+
     await db.payment
       .upsert({
         where: { externalId },
-        create: { provider, externalId, amount, currency: cur, plan: planId, status: "paid", paidAt: new Date(), ...(giveawayId ? { giveawayId } : {}) },
-        update: { status: "paid", ...(giveawayId ? { giveawayId } : {}) },
+        create: {
+          provider, externalId, amount, currency: cur, plan: planId,
+          status: "paid", paidAt,
+          gclid, email, phone,
+          ...(giveawayId ? { giveawayId } : {}),
+        },
+        update: {
+          status: "paid",
+          ...(gclid ? { gclid } : {}),
+          ...(email ? { email } : {}),
+          ...(phone ? { phone } : {}),
+          ...(giveawayId ? { giveawayId } : {}),
+        },
       })
       .catch(() => {});
 
     if (!alreadyPaid) {
       await notifyTelegram(paymentMessage({ provider, plan: planId, amountCents: amount, currency: cur, campaign: body.campaign })).catch(() => {});
+    }
+
+    // Google Ads offline conversion — só se ainda não foi enviado (dedup)
+    if (!alreadyPaid && (gclid || email || phone)) {
+      void uploadOfflineConversion({
+        gclid, email, phone,
+        amountBRL: cur === "BRL" ? amount / 100 : amount / 100,
+        externalId,
+        paidAt,
+      }).then(async (ok) => {
+        if (ok) {
+          await db.payment.update({ where: { externalId }, data: { conversionUploaded: true } }).catch(() => {});
+        }
+      });
     }
 
     return NextResponse.json({ ok: true, paid: true });

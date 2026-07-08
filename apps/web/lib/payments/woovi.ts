@@ -15,12 +15,25 @@ export interface WooviCharge {
 }
 
 /** Cria uma cobrança PIX. `value` em centavos. */
-export async function createWooviCharge(value: number, comment: string): Promise<WooviCharge> {
+export async function createWooviCharge(
+  value: number,
+  comment: string,
+  meta?: { gclid?: string | null; utm_source?: string | null; utm_campaign?: string | null }
+): Promise<WooviCharge> {
   const correlationID = `azurasort-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  // additionalInfo é livre; Woovi devolve tudo no webhook — útil pra atribuição.
+  const additionalInfo: Array<{ key: string; value: string }> = [];
+  if (meta?.gclid) additionalInfo.push({ key: "gclid", value: meta.gclid });
+  if (meta?.utm_source) additionalInfo.push({ key: "utm_source", value: meta.utm_source });
+  if (meta?.utm_campaign) additionalInfo.push({ key: "utm_campaign", value: meta.utm_campaign });
+
+  const body: Record<string, unknown> = { correlationID, value, comment };
+  if (additionalInfo.length) body.additionalInfo = additionalInfo;
+
   const res = await fetch(`${BASE}/charge?return_existing=true`, {
     method: "POST",
     headers: { Authorization: appId(), "Content-Type": "application/json" },
-    body: JSON.stringify({ correlationID, value, comment }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     const t = await res.text().catch(() => "");

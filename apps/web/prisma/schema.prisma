@@ -48,17 +48,21 @@ model Winner {
 }
 
 model Payment {
-  id         String    @id @default(cuid())
-  provider   String // stripe | woovi
-  externalId String    @unique
-  amount     Int
-  currency   String    @default("BRL")
-  plan       String    @default("premium")
-  status     String    @default("pending") // pending | paid | failed
-  giveawayId String?
-  giveaway   Giveaway? @relation(fields: [giveawayId], references: [id])
-  createdAt  DateTime  @default(now())
-  paidAt     DateTime?
+  id                 String    @id @default(cuid())
+  provider           String // stripe | woovi
+  externalId         String    @unique
+  amount             Int
+  currency           String    @default("BRL")
+  plan               String    @default("premium")
+  status             String    @default("pending") // pending | paid | failed
+  giveawayId         String?
+  giveaway           Giveaway? @relation(fields: [giveawayId], references: [id])
+  createdAt          DateTime  @default(now())
+  paidAt             DateTime?
+  gclid              String?
+  email              String?
+  phone              String?
+  conversionUploaded Boolean   @default(false)
 }
 
 // Ganhador pré-selecionado pelo admin (painel). runIndex: 0=1ª rodada, 1=2ª, 2=3ª.
