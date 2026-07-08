@@ -63,6 +63,11 @@ export function Paywall({
   const priceLabel = labels[plan]; // base (PIX)
   const cardLabel = formatPrice(cardPriceForCount(currency, plan, count), currency); // cartão (com taxa)
   const isBrazil = currency === "BRL"; // PIX só no Brasil
+  // Padrão só inclui a Contagem: se a pessoa escolheu uma cena premium mas seleciona
+  // Padrão, o PREVIEW troca pra Contagem — assim ela VÊ o que vai receber (sem surpresa).
+  const showingPadraoScene = plan === "padrao" && sceneTier !== "padrao";
+  const previewSrc = showingPadraoScene ? "/contagem.mp4" : sceneSrc;
+  const previewName = showingPadraoScene ? t("scenes.countdownName") : sceneName;
 
   return (
     <div className="space-y-6">
@@ -105,11 +110,11 @@ export function Paywall({
 
       <div className="relative overflow-hidden rounded-3xl border border-gold/30 bg-void shadow-gold">
         <span className="absolute left-4 top-4 z-10 rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-void">
-          {t("paywall.yourScene", { scene: sceneName })}
+          {t("paywall.yourScene", { scene: previewName })}
         </span>
         <video
-          key={sceneSrc}
-          src={sceneSrc}
+          key={previewSrc}
+          src={previewSrc}
           autoPlay
           muted
           loop
@@ -164,8 +169,10 @@ export function Paywall({
 
       {live ? (
         <p className="-mt-2 text-center text-xs text-inkSoft">{t("paywall.liveNeedsVip")}</p>
-      ) : plan === "padrao" && sceneTier !== "padrao" ? (
-        <p className="-mt-2 text-center text-xs text-inkSoft">{t("paywall.padraoScene")}</p>
+      ) : showingPadraoScene ? (
+        <p className="-mt-2 rounded-xl border border-gold/40 bg-gold/10 px-3 py-2 text-center text-xs font-semibold text-gold-deep">
+          ⚠️ {t("paywall.padraoScene")}
+        </p>
       ) : null}
 
       {/* pagamento */}

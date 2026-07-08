@@ -66,6 +66,33 @@ function readPaidClaim(url: string): { provider: string; externalId: string; pla
   }
 }
 
+// RESULTADO do sorteio salvo 5 dias por post: se a pessoa esquecer de baixar o
+// certificado e voltar depois, restauramos o resultado dela (com o certificado)
+// em vez de mandá-la sortear de novo (que mudaria o ganhador / daria "já sorteado").
+type SavedResult = { certCode: string; module: RevealModule; campaign: string; totalCount: number; eligibleCount: number; winners: { position: number; handle: string; isBackup: boolean }[] };
+function saveResultClaim(url: string, r: SavedResult) {
+  try {
+    const sc = postShortcode(url);
+    if (sc) localStorage.setItem(`azs_result_${sc}`, JSON.stringify({ ...r, exp: Date.now() + PAID_TTL_MS }));
+  } catch {
+    /* ignora */
+  }
+}
+function readResultClaim(url: string): SavedResult | null {
+  try {
+    const sc = postShortcode(url);
+    if (!sc) return null;
+    const raw = localStorage.getItem(`azs_result_${sc}`);
+    if (!raw) return null;
+    const c = JSON.parse(raw) as SavedResult & { exp?: number };
+    if (c.exp && c.exp > Date.now() && c.certCode) return c;
+    localStorage.removeItem(`azs_result_${sc}`); // expirou
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 // Cenas disponíveis (com vídeo de exemplo). Para adicionar uma nova no futuro,
 // basta colocar o vídeo em /public e acrescentar um item aqui.
 type SceneOption = { module: RevealModule; key: "cofre" | "countdown" | "matrix" | "casino" | "pirata" | "cavalo"; src: string; tier: PlanId };
@@ -168,7 +195,28 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   // pagamento salvo (5 dias): se voltar/der F5 com o MESMO link já pago, restaura
   // o pagamento e pula direto pro "Sortear" — não paga de novo.
   useEffect(() => {
-    if (lastPayment || !IG_URL_RE.test(link)) return;
+    if (lastPayment || result || !IG_URL_RE.test(link)) return;
+    // 1) já sorteou este post? restaura o RESULTADO + certificado (não força re-sorteio)
+    const saved = readResultClaim(link);
+    if (saved) {
+      const r: DrawResult = {
+        seed: "",
+        algorithm: "sha256-commit-reveal-fisher-yates",
+        totalCount: saved.totalCount,
+        eligibleCount: saved.eligibleCount,
+        winners: saved.winners.map((w) => ({ position: w.position, isBackup: w.isBackup, handle: w.handle, text: "" })),
+        certificateHash: saved.certCode,
+        drawnAtIso: "",
+      };
+      setModule(saved.module);
+      setResult(r);
+      setSpec(buildRevealSpecFromDraw(r, { module: saved.module, campaignName: saved.campaign, locale: "pt-BR" }));
+      setCertCode(saved.certCode);
+      if (saved.campaign) setCampaign(saved.campaign);
+      setStep("result");
+      return;
+    }
+    // 2) pagou mas ainda não sorteou → volta pro botão de sortear
     const claim = readPaidClaim(link);
     if (claim) {
       setLastPayment(claim);
@@ -466,6 +514,17 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       setResult(r);
       setSpec(s);
       setCertCode(data.certificateCode ?? null);
+      // guarda o resultado 5 dias → se voltar sem baixar o certificado, restauramos
+      if (data.certificateCode && link) {
+        saveResultClaim(link, {
+          certCode: data.certificateCode,
+          module,
+          campaign: campaign.trim(),
+          totalCount: r.totalCount,
+          eligibleCount: r.eligibleCount,
+          winners: r.winners.map((w) => ({ position: w.position, handle: w.handle, isBackup: w.isBackup })),
+        });
+      }
       setStep("result");
       setLiveStarted(false); // na live, primeiro a tela ao vivo; só dá START depois
       setShowReveal(true); // abre a revelacao automaticamente (suspense antes do vencedor)
