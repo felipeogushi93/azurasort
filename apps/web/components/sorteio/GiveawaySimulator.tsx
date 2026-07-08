@@ -690,7 +690,8 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
                 name={t(`scenes.${s.key}Name`)}
                 desc={t(`scenes.${s.key}Desc`)}
                 exampleLabel={t("s3.example")}
-                tierBadge={s.tier === "padrao" ? null : "Premium"}
+                tierLabel={s.tier === "padrao" ? t("plans.padraoName") : t("plans.premiumName")}
+                isPremium={s.tier !== "padrao"}
                 active={module === s.module}
                 onClick={() => setModule(s.module)}
               />
@@ -1100,7 +1101,7 @@ function BaseCard({ active, onClick, icon, title, desc }: { active: boolean; onC
   );
 }
 
-function ScenePreviewCard({ scene, name, desc, exampleLabel, tierBadge, active, onClick }: { scene: SceneOption; name: string; desc: string; exampleLabel: string; tierBadge: string | null; active: boolean; onClick: () => void }) {
+function ScenePreviewCard({ scene, name, desc, exampleLabel, tierLabel, isPremium, active, onClick }: { scene: SceneOption; name: string; desc: string; exampleLabel: string; tierLabel: string; isPremium: boolean; active: boolean; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -1115,9 +1116,7 @@ function ScenePreviewCard({ scene, name, desc, exampleLabel, tierBadge, active, 
           <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-gold text-xs font-bold text-void">✓</span>
         )}
         <span className="absolute bottom-2 left-2 rounded-md bg-black/45 px-2 py-0.5 text-[10px] text-white backdrop-blur">{exampleLabel}</span>
-        {tierBadge && (
-          <span className="absolute left-2 top-2 rounded-full bg-gold px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-void shadow">{tierBadge}</span>
-        )}
+        <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider shadow ${isPremium ? "bg-gold text-void" : "bg-emerald text-white"}`}>{tierLabel}</span>
       </div>
       <div className="p-3">
         <p className="text-sm font-bold text-ink">{name}</p>
