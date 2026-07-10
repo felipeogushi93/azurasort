@@ -370,6 +370,11 @@
       "thank": "¡Sorteo completado! Agradece a tu audiencia y finaliza cuando quieras."
     },
     "paywall": {
+      "videoHeroSub": "Tu sorteo se convierte en un Reel cinematográfico que capta la atención — más interacción, más seguidores.",
+      "trust1": "Sorteo 100% auditable",
+      "trust2": "Certificado público verificable",
+      "trust3": "Sin registro",
+      "trust4": "Pago seguro",
       "sampleTitle": "Muestra de quién participó",
       "unlockMore": "🔒 + {n} más liberados al desbloquear",
       "unlockTitle": "Desbloquea este sorteo",

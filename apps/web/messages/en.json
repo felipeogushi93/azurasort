@@ -370,6 +370,11 @@
       "thank": "Draw complete! Thank your audience and end the live whenever you want."
     },
     "paywall": {
+      "videoHeroSub": "Your giveaway becomes a cinematic Reel that grabs attention — more engagement, more followers.",
+      "trust1": "100% auditable draw",
+      "trust2": "Public verifiable certificate",
+      "trust3": "No sign-up",
+      "trust4": "Secure payment",
       "sampleTitle": "Sample of who participated",
       "unlockMore": "🔒 + {n} more unlocked when you upgrade",
       "unlockTitle": "Unlock this giveaway",

@@ -105,7 +105,8 @@ export function Paywall({
       {/* desbloqueie + preview da cena escolhida */}
       <div className="text-center">
         <h3 className="font-display text-3xl font-semibold text-ink">{t("paywall.unlockTitle")}</h3>
-        <p className="mt-1 text-sm text-inkSoft">{t("paywall.postWith", { count: count > 0 ? count.toLocaleString() : t("s3.all") })}</p>
+        <p className="mx-auto mt-2 max-w-md text-sm font-medium text-ink/80">🎬 {t("paywall.videoHeroSub")}</p>
+        <p className="mt-1 text-xs text-inkSoft">{t("paywall.postWith", { count: count > 0 ? count.toLocaleString() : t("s3.all") })}</p>
       </div>
 
       <div className="relative overflow-hidden rounded-3xl border border-gold/30 bg-void shadow-gold">
@@ -174,6 +175,14 @@ export function Paywall({
           ⚠️ {t("paywall.padraoScene")}
         </p>
       ) : null}
+
+      {/* faixa de confiança — reduz o atrito na hora de pagar */}
+      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 rounded-2xl border border-emerald/20 bg-emerald/5 px-4 py-3 text-xs font-medium text-ink/80">
+        <span className="inline-flex items-center gap-1.5">🔒 {t("paywall.trust1")}</span>
+        <span className="inline-flex items-center gap-1.5">📜 {t("paywall.trust2")}</span>
+        <span className="inline-flex items-center gap-1.5">⚡ {t("paywall.trust3")}</span>
+        <span className="inline-flex items-center gap-1.5">💳 {t("paywall.trust4")}</span>
+      </div>
 
       {/* pagamento */}
       <div>

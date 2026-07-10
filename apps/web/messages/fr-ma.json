@@ -370,6 +370,11 @@
       "thank": "Tirage terminé ! Remerciez votre audience et terminez quand vous voulez."
     },
     "paywall": {
+      "videoHeroSub": "Votre tirage devient un Reel cinématographique qui capte l'attention — plus d'engagement, plus d'abonnés.",
+      "trust1": "Tirage 100% vérifiable",
+      "trust2": "Certificat public vérifiable",
+      "trust3": "Sans inscription",
+      "trust4": "Paiement sécurisé",
       "sampleTitle": "Échantillon des participants",
       "unlockMore": "🔒 + {n} autres débloqués au déverrouillage",
       "unlockTitle": "Déverrouillez ce tirage",
