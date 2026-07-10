@@ -86,24 +86,32 @@ export async function POST(req: Request) {
     const phone = body.phone?.trim() || null;
     const paidAt = new Date();
 
-    await db.payment
-      .upsert({
+    // Salvar o pagamento é CRÍTICO (é a venda). NUNCA engolir a falha em silêncio:
+    // 1) tenta o registro completo; 2) se falhar, grava só o essencial (a venda não
+    // pode se perder por um campo extra); 3) se nem isso, ALERTA no Telegram.
+    let saved = false;
+    try {
+      await db.payment.upsert({
         where: { externalId },
-        create: {
-          provider, externalId, amount, currency: cur, plan: planId,
-          status: "paid", paidAt,
-          gclid, email, phone,
-          ...(giveawayId ? { giveawayId } : {}),
-        },
-        update: {
-          status: "paid",
-          ...(gclid ? { gclid } : {}),
-          ...(email ? { email } : {}),
-          ...(phone ? { phone } : {}),
-          ...(giveawayId ? { giveawayId } : {}),
-        },
-      })
-      .catch(() => {});
+        create: { provider, externalId, amount, currency: cur, plan: planId, status: "paid", paidAt, gclid, email, phone, ...(giveawayId ? { giveawayId } : {}) },
+        update: { status: "paid", ...(gclid ? { gclid } : {}), ...(email ? { email } : {}), ...(phone ? { phone } : {}), ...(giveawayId ? { giveawayId } : {}) },
+      });
+      saved = true;
+    } catch {
+      try {
+        // fallback: só o núcleo da venda (sem gclid/email/phone) — dinheiro não some
+        await db.payment.upsert({
+          where: { externalId },
+          create: { provider, externalId, amount, currency: cur, plan: planId, status: "paid", paidAt, ...(giveawayId ? { giveawayId } : {}) },
+          update: { status: "paid", ...(giveawayId ? { giveawayId } : {}) },
+        });
+        saved = true;
+        void notifyTelegram(`⚠️ Pagamento salvo em MODO DE SEGURANÇA (campos extras falharam — confira deploy/schema).\n${externalId} · ${provider} · ${(amount / 100).toFixed(2)} ${cur}`).catch(() => {});
+      } catch (e2) {
+        void notifyTelegram(`🚨🚨 FALHA AO SALVAR PAGAMENTO — VENDA EM RISCO!\n${externalId} · ${provider} · ${(amount / 100).toFixed(2)} ${cur} · ${planId}\nErro: ${e2 instanceof Error ? e2.message.slice(0, 160) : "?"}`).catch(() => {});
+      }
+    }
+    void saved;
 
     if (!alreadyPaid) {
       await notifyTelegram(paymentMessage({ provider, plan: planId, amountCents: amount, currency: cur, campaign: body.campaign })).catch(() => {});
