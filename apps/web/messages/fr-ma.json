@@ -463,7 +463,13 @@
       "drawNow": "🎲 Tirer au sort",
       "drawing": "Collecte des commentaires et tirage…",
       "dontRefresh": "Ne rafraîchissez pas la page",
-      "hint": "La révélation démarre dès que vous cliquez."
+      "hint": "La révélation démarre dès que vous cliquez.",
+      "pasteTitle": "Nous n'avons pas pu lire les commentaires de cette publication",
+      "pasteDesc": "Instagram limite la lecture automatique sur certaines publications (fréquent avec les Reels). Pas de souci : collez les commentaires ci-dessous et nous lançons votre tirage normalement — avec la vidéo et le certificat que vous avez déjà payés.",
+      "pastePlaceholder": "Collez les commentaires ici (Ctrl+V)…",
+      "pasteHelp": "Ouvrez la publication sur Instagram, sélectionnez la zone des commentaires, copiez (Ctrl+C) et collez ci-dessus.",
+      "pasteCta": "🎲 Tirer au sort avec ces commentaires",
+      "pasteEmpty": "Collez au moins quelques commentaires pour lancer le tirage."
     }
   },
   "free": {

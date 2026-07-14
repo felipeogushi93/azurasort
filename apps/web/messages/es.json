@@ -463,7 +463,13 @@
       "drawNow": "🎲 Sortear ahora",
       "drawing": "Recopilando los comentarios y sorteando…",
       "dontRefresh": "No actualices la página",
-      "hint": "La revelación empieza en cuanto hagas clic."
+      "hint": "La revelación empieza en cuanto hagas clic.",
+      "pasteTitle": "No pudimos leer los comentarios de esta publicación",
+      "pasteDesc": "Instagram limita la lectura automática en algunas publicaciones (común en Reels). Sin problema: pega los comentarios abajo y hacemos tu sorteo normalmente — con el vídeo y el certificado que ya pagaste.",
+      "pastePlaceholder": "Pega los comentarios aquí (Ctrl+V)…",
+      "pasteHelp": "Abre la publicación en Instagram, selecciona el área de comentarios, copia (Ctrl+C) y pega arriba.",
+      "pasteCta": "🎲 Sortear con estos comentarios",
+      "pasteEmpty": "Pega al menos algunos comentarios para sortear."
     }
   },
   "free": {

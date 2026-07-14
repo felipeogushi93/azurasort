@@ -463,7 +463,13 @@
       "drawNow": "🎲 Draw now",
       "drawing": "Collecting comments and drawing…",
       "dontRefresh": "Don't refresh the page",
-      "hint": "The reveal starts as soon as you click."
+      "hint": "The reveal starts as soon as you click.",
+      "pasteTitle": "We couldn't read this post's comments",
+      "pasteDesc": "Instagram limits automatic reading on some posts (common with Reels). No problem: paste the comments below and we'll run your draw as normal — with the video and certificate you already paid for.",
+      "pastePlaceholder": "Paste the comments here (Ctrl+V)…",
+      "pasteHelp": "Open the post on Instagram, select the comments area, copy (Ctrl+C) and paste above.",
+      "pasteCta": "🎲 Draw with these comments",
+      "pasteEmpty": "Paste at least a few comments to run the draw."
     }
   },
   "free": {

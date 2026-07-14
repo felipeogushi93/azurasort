@@ -145,6 +145,10 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [liveRoomId, setLiveRoomId] = useState<string | null>(null); // sala da live REAL (Ably)
   const [liveHostToken, setLiveHostToken] = useState<string | null>(null); // prova de host (publish)
   const [busy, setBusy] = useState(false);
+  // PLANO B: quando o Instagram não libera os comentários pela coleta automática
+  // (comum em Reels), o cliente — que já pagou — cola os comentários e sorteia.
+  const [needsComments, setNeedsComments] = useState(false);
+  const [fallbackRaw, setFallbackRaw] = useState("");
   const [videoBusy, setVideoBusy] = useState<ExportRatio | null>(null);
   const [videoProgress, setVideoProgress] = useState(0);
   // modo teste só aparece com ?teste=1 na URL (não fica aberto ao público)
@@ -486,9 +490,13 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   }
 
   /* ----- sorteio (disparado pelo botão "Sortear agora") ----- */
-  async function doDraw(payment?: { provider: string; externalId: string; plan?: string; adminKey?: string }) {
+  async function doDraw(
+    payment?: { provider: string; externalId: string; plan?: string; adminKey?: string },
+    commentsOverride?: { handle: string; text?: string }[], // plano B: comentários colados
+  ) {
     const pay = payment ?? lastPayment;
     if (payment) setLastPayment(payment);
+    const cmts = commentsOverride ?? comments;
     // live só ativa no plano VIP (ou em modo teste, quando não há pagamento)
     setLiveActive(live && (!pay || pay.plan === "vip"));
     setBusy(true);
@@ -498,7 +506,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           postUrl: link || undefined,
-          comments: comments.length ? comments.map((c) => ({ handle: c.handle, text: c.text })) : undefined,
+          comments: cmts.length ? cmts.map((c) => ({ handle: c.handle, text: c.text ?? "" })) : undefined,
           campaign: campaign.trim() || undefined,
           module,
           filters: liveFilters,
@@ -512,10 +520,17 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
       });
       const data = await res.json();
       if (!res.ok || data.error) {
+        // Coleta automática veio vazia → não falha: abre o PLANO B (colar comentários)
+        if (data.needsComments) {
+          setNeedsComments(true);
+          setBusy(false);
+          return;
+        }
         alert(data.error || "Falha no sorteio. Tente novamente.");
         setBusy(false);
         return;
       }
+      setNeedsComments(false);
       const r: DrawResult = {
         seed: "",
         algorithm: "sha256-commit-reveal-fisher-yates",
@@ -557,6 +572,17 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
     setShowReveal(false);
     setLiveStarted(false);
     await doDraw();
+  }
+
+  /** PLANO B: sorteia com os comentários que o cliente colou (coleta automática falhou). */
+  function drawWithPastedComments() {
+    const parsed = parsePastedComments(fallbackRaw);
+    if (!parsed.length) {
+      alert(t("ready.pasteEmpty"));
+      return;
+    }
+    setComments(parsed as unknown as Comment[]);
+    doDraw(undefined, parsed);
   }
 
   function newGiveaway() {
@@ -804,6 +830,31 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
                 </div>
                 <p className="text-sm font-medium text-ink">{t("ready.drawing")}</p>
                 <p className="rounded-lg bg-rose/10 px-3 py-1.5 text-xs font-semibold text-rose">⚠️ {t("ready.dontRefresh")}</p>
+              </div>
+            ) : needsComments ? (
+              /* PLANO B — a coleta automática veio vazia (comum em Reels).
+                 O cliente já pagou: ele cola os comentários e sorteia normalmente. */
+              <div className="w-full space-y-3 text-left">
+                <div className="rounded-xl border border-gold/40 bg-gold/5 p-4">
+                  <p className="font-semibold text-ink">⚠️ {t("ready.pasteTitle")}</p>
+                  <p className="mt-1 text-sm text-inkSoft">{t("ready.pasteDesc")}</p>
+                </div>
+                <textarea
+                  value={fallbackRaw}
+                  onChange={(e) => setFallbackRaw(e.target.value)}
+                  rows={7}
+                  placeholder={t("ready.pastePlaceholder")}
+                  className="w-full rounded-xl border border-ink/10 bg-surface px-3 py-2 font-mono text-xs outline-none focus:border-gold"
+                />
+                <p className="text-xs text-inkSoft">{t("ready.pasteHelp")}</p>
+                {parsePastedComments(fallbackRaw).length > 0 && (
+                  <p className="text-xs font-semibold text-emerald">
+                    ✓ {parsePastedComments(fallbackRaw).length} {t("s3.participants").toLowerCase()}
+                  </p>
+                )}
+                <button onClick={drawWithPastedComments} className="btn-gold w-full py-3.5 text-base">
+                  {t("ready.pasteCta")}
+                </button>
               </div>
             ) : (
               <>

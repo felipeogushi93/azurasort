@@ -105,6 +105,7 @@ export async function POST(req: Request) {
     //    anterior, SEM nova coleta no Apify. Primeiro sorteio coleta de verdade.
     let eligibleHandles: string[];
     let totalForCert: number;
+    let fromApify = false; // true = tentamos a coleta automática (habilita o plano B)
     const prevDraw =
       shortcode && runIndex > 0
         ? await db.draw.findFirst({ where: { giveawayId: giveaway.id }, orderBy: { createdAt: "desc" } })
@@ -140,6 +141,7 @@ export async function POST(req: Request) {
         raw = body.comments; // caminho manual/CSV/grátis (lista do cliente)
       } else if (body.postUrl && !body.free) {
         raw = await fetchComments(body.postUrl); // coleta real (1ª vez) — NUNCA no grátis
+        fromApify = true;
       } else {
         return NextResponse.json(
           { error: body.free ? "Cole os @ ou comentários para sortear." : "Informe um link ou uma lista de comentários." },
@@ -151,6 +153,15 @@ export async function POST(req: Request) {
       totalForCert = body.totalComments && body.totalComments > 0 ? body.totalComments : raw.length;
     }
     if (!eligibleHandles.length) {
+      // O Instagram às vezes não libera os comentários pela coleta automática (comum
+      // em Reels). O cliente JÁ PAGOU — em vez de falhar, ligamos o PLANO B: ele cola
+      // os comentários e sorteia normalmente. needsComments aciona essa tela no front.
+      if (fromApify) {
+        return NextResponse.json(
+          { error: "Não conseguimos ler os comentários deste post automaticamente.", needsComments: true },
+          { status: 422 },
+        );
+      }
       return NextResponse.json({ error: "Nenhum participante elegível." }, { status: 400 });
     }
 
