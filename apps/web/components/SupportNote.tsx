@@ -2,7 +2,8 @@
  * Nota de suporte (WhatsApp do Lucas) pras páginas da ferramenta (/sorteio,
  * /gratis) — onde o cliente mais precisa de ajuda (carregar post, pagar).
  */
-const WA = "https://wa.me/5548991420313";
+export const SUPPORT_WA = "https://wa.me/5548991420313";
+const WA = SUPPORT_WA;
 
 const LABEL: Record<string, string> = {
   "pt-br": "Precisa de ajuda? Falar com o suporte",

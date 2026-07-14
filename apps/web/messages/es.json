@@ -469,7 +469,10 @@
       "pastePlaceholder": "Pega los comentarios aquí (Ctrl+V)…",
       "pasteHelp": "Abre la publicación en Instagram, selecciona el área de comentarios, copia (Ctrl+C) y pega arriba.",
       "pasteCta": "🎲 Sortear con estos comentarios",
-      "pasteEmpty": "Pega al menos algunos comentarios para sortear."
+      "pasteEmpty": "Pega al menos algunos comentarios para sortear.",
+      "pasteOr": "o",
+      "pasteSupport": "💬 Hablar con un agente",
+      "pasteSupportMsg": "¡Hola! No pude leer los comentarios de mi sorteo y necesito ayuda. Publicación: "
     }
   },
   "free": {

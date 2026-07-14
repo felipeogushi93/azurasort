@@ -469,7 +469,10 @@
       "pastePlaceholder": "Collez les commentaires ici (Ctrl+V)…",
       "pasteHelp": "Ouvrez la publication sur Instagram, sélectionnez la zone des commentaires, copiez (Ctrl+C) et collez ci-dessus.",
       "pasteCta": "🎲 Tirer au sort avec ces commentaires",
-      "pasteEmpty": "Collez au moins quelques commentaires pour lancer le tirage."
+      "pasteEmpty": "Collez au moins quelques commentaires pour lancer le tirage.",
+      "pasteOr": "ou",
+      "pasteSupport": "💬 Parler à un conseiller",
+      "pasteSupportMsg": "Bonjour ! Je n'ai pas pu lire les commentaires de mon tirage et j'ai besoin d'aide. Publication : "
     }
   },
   "free": {

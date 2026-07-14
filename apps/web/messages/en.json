@@ -469,7 +469,10 @@
       "pastePlaceholder": "Paste the comments here (Ctrl+V)…",
       "pasteHelp": "Open the post on Instagram, select the comments area, copy (Ctrl+C) and paste above.",
       "pasteCta": "🎲 Draw with these comments",
-      "pasteEmpty": "Paste at least a few comments to run the draw."
+      "pasteEmpty": "Paste at least a few comments to run the draw.",
+      "pasteOr": "or",
+      "pasteSupport": "💬 Talk to a human",
+      "pasteSupportMsg": "Hi! I couldn't read the comments for my giveaway and need help. Post: "
     }
   },
   "free": {

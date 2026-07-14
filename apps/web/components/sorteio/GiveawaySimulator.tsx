@@ -16,6 +16,7 @@ import { buildRevealSpecFromDraw } from "@/lib/draw/toRevealSpec";
 import { track, getSessionId } from "@/lib/track";
 import { exportRevealVideo, downloadBlob, exportSupported, mp4Supported, type ExportRatio } from "@/lib/video/exportReveal";
 import { useLiveRoom } from "@/lib/live/useLiveRoom";
+import { SUPPORT_WA } from "@/components/SupportNote";
 import { priceForCount, type Currency, type PlanId } from "@/lib/payments/pricing";
 import { DEFAULT_FILTERS, type Comment, type DrawFilters, type DrawResult } from "@/lib/draw/types";
 
@@ -855,6 +856,20 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
                 <button onClick={drawWithPastedComments} className="btn-gold w-full py-3.5 text-base">
                   {t("ready.pasteCta")}
                 </button>
+                {/* airbag do airbag: se ela não quiser/conseguir colar, fala com humano */}
+                <div className="flex items-center gap-3 pt-1">
+                  <span className="h-px flex-1 bg-ink/10" />
+                  <span className="text-xs text-inkSoft">{t("ready.pasteOr")}</span>
+                  <span className="h-px flex-1 bg-ink/10" />
+                </div>
+                <a
+                  href={`${SUPPORT_WA}?text=${encodeURIComponent(t("ready.pasteSupportMsg") + (link || ""))}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full rounded-full border border-emerald/40 bg-emerald/5 py-3 text-center text-sm font-semibold text-emerald transition hover:bg-emerald/10"
+                >
+                  {t("ready.pasteSupport")}
+                </a>
               </div>
             ) : (
               <>
