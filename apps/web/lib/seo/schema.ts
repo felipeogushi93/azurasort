@@ -50,9 +50,9 @@ export function softwareAppSchema(seo: SeoContent) {
       "5 native languages: EN, PT-BR, ES, FR-MA, AR-MA",
     ],
     offers: [
-      { "@type": "Offer", price: "14.90", priceCurrency: "BRL", description: "Padrão (Standard) — sorteio com resultado estático" },
-      { "@type": "Offer", price: "23.90", priceCurrency: "BRL", description: "Cinematográfico — inclui vídeo MP4 do reveal" },
-      { "@type": "Offer", price: "35.76", priceCurrency: "BRL", description: "VIP — MP4 4K + customização de marca" },
+      { "@type": "Offer", price: "19.90", priceCurrency: "BRL", description: "Padrão (Standard) — sorteio com resultado estático" },
+      { "@type": "Offer", price: "34.90", priceCurrency: "BRL", description: "Cinematográfico — inclui vídeo MP4 do reveal" },
+      { "@type": "Offer", price: "54.90", priceCurrency: "BRL", description: "VIP — sorteio ao vivo + MP4 4K" },
     ],
     publisher: {
       "@type": "Organization",

@@ -11,10 +11,15 @@ export type Currency = "BRL" | "EUR" | "USD";
 export type PlanId = "padrao" | "premium" | "vip";
 
 /**
- * Preços por FAIXA de participantes (modelo Simplers).
+ * Preços por FAIXA de participantes.
  * Faixas (limite superior): 100 · 500 · 1.000 · 3.000 · 10.000 · 30.000 · ∞
  * Cada array tem 7 valores (índice = faixa), em centavos.
- *   Padrão = tabela base (Simplers −R$1) · Cinematográfico ≈ ×1,6 · VIP ≈ ×2,4
+ *
+ * BRL = tabela alinhada ao SorteiGram (jul/2026):
+ *   Padrão:  até 500 R$19,90 · 501–3.000 R$24,90 · 3.001–10.000 R$34,90 · 10.001+ R$44,90
+ *   Premium: até 500 R$34,90 · 501–3.000 R$44,90 · 3.001+ R$59,90
+ *   VIP (ao vivo): até 500 R$54,90 · 501–3.000 R$64,90 · 3.001+ R$79,90
+ * EUR/USD mantidos (mercado internacional ainda em ramp-up).
  * 💡 Para ajustar, edite só os arrays abaixo.
  */
 const TIER_MAX = [100, 500, 1000, 3000, 10000, 30000, Infinity];
@@ -28,9 +33,9 @@ export function tierForCount(count: number): number {
 
 export const PRICES: Record<Currency, Record<PlanId, number[]>> = {
   BRL: {
-    padrao:  [1490, 1490, 1590, 1790, 2590, 3590, 4890],
-    premium: [2390, 2390, 2590, 2890, 4190, 5790, 7790],
-    vip:     [3590, 3590, 3790, 4290, 6190, 8590, 11690],
+    padrao:  [1990, 1990, 2490, 2490, 3490, 4490, 4490],
+    premium: [3490, 3490, 4490, 4490, 5990, 5990, 5990],
+    vip:     [5490, 5490, 6490, 6490, 7990, 7990, 7990],
   },
   EUR: {
     padrao:  [490, 490, 590, 690, 990, 1390, 1690],
