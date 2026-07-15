@@ -47,20 +47,29 @@ function token(): string {
   return t;
 }
 
-async function runActor(input: Record<string, unknown>): Promise<any[]> {
-  const res = await fetch(
-    `https://api.apify.com/v2/acts/${APIFY_ACTOR}/run-sync-get-dataset-items?token=${token()}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(input),
+async function runActor(input: Record<string, unknown>, timeoutMs = 25000): Promise<any[]> {
+  // timeout: o Apify roda o actor de forma síncrona e às vezes demora; sem isso a
+  // request fica pendurada. Aborta e devolve erro limpo em vez de travar o cliente.
+  const ctrl = new AbortController();
+  const to = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(
+      `https://api.apify.com/v2/acts/${APIFY_ACTOR}/run-sync-get-dataset-items?token=${token()}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+        signal: ctrl.signal,
+      }
+    );
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      throw new Error(`Apify ${res.status}: ${body.slice(0, 200)}`);
     }
-  );
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`Apify ${res.status}: ${body.slice(0, 200)}`);
+    return res.json();
+  } finally {
+    clearTimeout(to);
   }
-  return res.json();
 }
 
 /** Prévia barata do post (imagem + contagem). */
@@ -71,7 +80,7 @@ export async function fetchPostPreview(url: string): Promise<PostPreview> {
   const cached = previewCache.get(code);
   if (cached && Date.now() - cached.ts < CACHE_TTL_MS) return cached.data;
 
-  const items = await runActor({ directUrls: [url], resultsType: "posts", resultsLimit: 1 });
+  const items = await runActor({ directUrls: [url], resultsType: "posts", resultsLimit: 1 }, 15000);
   const x = items?.[0];
   if (!x) throw new Error("Publicação não encontrada ou privada");
 

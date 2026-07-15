@@ -242,9 +242,14 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
     const debounce = setTimeout(async () => {
       setPreview({ status: "loading", total: 0, loaded: 0, isReel: /\/reels?\//i.test(link) });
+      // timeout de rede: em sinal ruim / Apify lento, NÃO trava o cliente — deixa seguir
+      // (o sorteio faz a coleta na hora, e o plano B cobre se vier vazio).
+      const ctrl = new AbortController();
+      const to = setTimeout(() => ctrl.abort(), 12000);
       try {
         // prévia barata: imagem + contagem + amostra (a coleta completa só roda no sorteio pago)
-        const pr = await fetch(`/api/instagram/preview?url=${encodeURIComponent(link)}`);
+        const pr = await fetch(`/api/instagram/preview?url=${encodeURIComponent(link)}`, { signal: ctrl.signal });
+        clearTimeout(to);
         const p = await pr.json();
         if (cancelled) return;
         if (!pr.ok || p.error) {
@@ -265,10 +270,10 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           caption: p.caption,
         });
 
-        // barra de "preparando" (cosmética — não gasta Apify; a coleta real é no sorteio)
+        // barra RÁPIDA (~400ms, cosmética — não gasta Apify; a coleta real é no sorteio)
         let cur = 0;
         progress = setInterval(() => {
-          cur += Math.max(1, Math.ceil((total || 100) / 30));
+          cur += Math.max(1, Math.ceil((total || 100) / 8));
           if (cur >= total) {
             cur = total;
             if (progress) clearInterval(progress);
@@ -279,11 +284,15 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           } else if (!cancelled) {
             setPreview((s) => (s ? { ...s, loaded: cur } : s));
           }
-        }, 60);
-      } catch (e) {
-        if (!cancelled) setPreview({ status: "error", total: 0, loaded: 0, isReel: false, error: e instanceof Error ? e.message : "Erro de rede" });
+        }, 50);
+      } catch {
+        clearTimeout(to);
+        if (cancelled) return;
+        // timeout/sinal ruim → segue com "Todos"; o botão Continuar libera e o sorteio resolve
+        setPreview({ status: "loaded", total: 0, loaded: 0, isReel: /\/reels?\//i.test(link) });
+        track("link_loaded", { total: 0, postUrl: link });
       }
-    }, 700);
+    }, 350);
 
     return () => {
       cancelled = true;
