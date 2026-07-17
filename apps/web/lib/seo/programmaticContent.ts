@@ -306,6 +306,66 @@ export const PROGRAMMATIC: Record<string, Record<string, ProgrammaticTopic>> = {
       ],
       "cta": "Começar meu sorteio",
       "keywords": ["ideias de sorteio instagram", "dicas de sorteio instagram", "como fazer sorteio instagram", "sorteio para crescer instagram", "regras de sorteio instagram", "melhores sorteios instagram", "sorteio instagram sucesso"]
+    },
+    "ferramenta": {
+      "slug": "ferramenta-de-sorteio-para-instagram",
+      "title": "Ferramenta de sorteio para Instagram: qual escolher | AzuraSort",
+      "description": "Comparativo honesto pra escolher a ferramenta de sorteio do Instagram: o que olhar em justiça, prova, vídeo e preço. E por que o certificado verificável faz diferença.",
+      "h1": "Ferramenta de sorteio para Instagram: qual escolher",
+      "intro": "Tem dezenas de ferramentas de sorteio por aí, e quase todas fazem o básico: pegam os comentários e escolhem um nome. A diferença que importa aparece depois — quando sua audiência pergunta se foi justo. Aqui vai o que realmente olhar antes de escolher, sem enrolação.",
+      "sections": [
+        { "h2": "O básico todas fazem", "body": "Ler comentários, remover duplicados e sortear aleatoriamente é o mínimo. Se uma ferramenta não faz nem isso, descarte. Mas não pare aí: o básico não te diferencia nem convence seu público." },
+        { "h2": "O que separa as boas das comuns", "body": "Três coisas: prova pública (um certificado verificável que acaba com o 'foi armado'), saída que vale postar (um vídeo cinematográfico, não um print) e preço honesto que você vê antes de pagar. É aí que a maioria falha." },
+        { "h2": "Por que o AzuraSort", "body": "O AzuraSort entrega justamente esses três: sorteio auditável com certificado público (hash SHA-256), vídeo de revelação pronto pra Stories/Reels e preço único via PIX, sem assinatura. Sem login, em vários idiomas." }
+      ],
+      "faq": [
+        { "q": "Qual a coisa mais importante numa ferramenta de sorteio?", "a": "Prova de que o resultado é justo. Um certificado público verificável é o que realmente evita acusação de fraude." },
+        { "q": "Ferramenta grátis serve?", "a": "Pra sorteio simples, sim. Pra prova pública, vídeo e coleta automática, os planos pagos entregam mais." },
+        { "q": "Preciso criar conta?", "a": "No AzuraSort não. Você cola o link do post e sorteia direto." },
+        { "q": "Tem mensalidade?", "a": "Não. É pagamento único por sorteio (PIX ou cartão), sem assinatura." }
+      ],
+      "cta": "Testar o AzuraSort",
+      "keywords": ["ferramenta de sorteio instagram", "melhor ferramenta sorteio instagram", "app de sorteio instagram", "qual sorteador instagram usar", "programa de sorteio instagram", "site de sorteio instagram", "sorteador instagram"]
+    },
+    "lojas": {
+      "slug": "sorteio-no-instagram-para-lojas",
+      "title": "Sorteio no Instagram para lojas e pequenos negócios | AzuraSort",
+      "description": "Como lojas e pequenos negócios podem usar sorteio no Instagram pra ganhar seguidores e clientes — com regras que funcionam e um sorteio justo e comprovável.",
+      "h1": "Sorteio no Instagram para lojas e pequenos negócios",
+      "intro": "Pra loja pequena, sorteio é uma das formas mais baratas de alcançar gente nova e virar seguidor em cliente. Mas mal feito, vira dor de cabeça e desconfiança. Veja como rodar um sorteio que traz resultado de verdade pro seu negócio — e ainda passa credibilidade.",
+      "sections": [
+        { "h2": "Por que sorteio funciona pra loja", "body": "Um prêmio simples (um produto seu) atrai seguidores interessados no seu nicho — exatamente o público que compra depois. Com a regra de marcar um amigo, cada participante te apresenta a contas novas, de graça." },
+        { "h2": "Regras que trazem cliente, não caçador de prêmio", "body": "Peça pra seguir o perfil e marcar um amigo, e escolha um prêmio ligado ao seu produto (não um iPhone genérico). Assim você atrai quem realmente tem a ver com a loja, e não só quem entra em todo sorteio." },
+        { "h2": "Credibilidade que vira venda", "body": "Cliente que confia, compra. Sortear com certificado público e anunciar o ganhador num vídeo profissional passa seriedade — e faz o próximo sorteio (e a próxima venda) render mais. O AzuraSort entrega os dois." }
+      ],
+      "faq": [
+        { "q": "Que prêmio dá mais resultado pra loja?", "a": "Um produto ou vale da própria loja: atrai quem tem interesse real no que você vende, não caçadores de prêmio." },
+        { "q": "Quanto tempo deixar o sorteio no ar?", "a": "De três a sete dias costuma ser o ideal pra juntar gente sem perder a urgência." },
+        { "q": "Como não parecer que foi armado?", "a": "Sorteie com uma ferramenta que gera certificado público verificável e anuncie o ganhador com transparência." },
+        { "q": "Preciso de um perfil grande?", "a": "Não. Sorteio com regra de marcar amigo funciona bem justamente pra crescer perfis pequenos." }
+      ],
+      "cta": "Fazer o sorteio da minha loja",
+      "keywords": ["sorteio instagram para lojas", "sorteio para pequenos negocios", "sorteio instagram loja", "sorteio para vender mais instagram", "sorteio negocio instagram", "como fazer sorteio loja instagram", "sorteio empresa instagram"]
+    },
+    "divulgar": {
+      "slug": "como-divulgar-sorteio-no-instagram",
+      "title": "Como divulgar seu sorteio no Instagram (participar mais gente) | AzuraSort",
+      "description": "Táticas pra mais gente participar do seu sorteio no Instagram: horário, stories, regras que espalham e o anúncio do ganhador que puxa o próximo sorteio.",
+      "h1": "Como divulgar seu sorteio no Instagram",
+      "intro": "Um sorteio só cresce sua conta se as pessoas o virem. Postar e torcer não basta. Veja como divulgar o seu sorteio pra puxar o máximo de participantes — sem gastar em anúncio — e como o anúncio do ganhador alimenta o próximo.",
+      "sections": [
+        { "h2": "Poste na hora certa e lembre nos stories", "body": "Publique quando sua audiência está mais ativa e reforce nos stories ao longo dos dias, principalmente um dia antes de fechar. Um sticker de contagem regressiva cria urgência sem parecer insistente." },
+        { "h2": "Deixe as regras espalharem por você", "body": "Marcar um amigo faz cada participante levar o post pra contas novas; pedir pra compartilhar nos stories multiplica o alcance. Regras simples e claras convertem visitante em participante." },
+        { "h2": "O anúncio do ganhador é divulgação", "body": "Um vídeo cinematográfico de revelação, com o certificado público, vira conteúdo que engaja e mostra que seu sorteio é sério. É a melhor propaganda pro próximo — e o AzuraSort gera esse vídeo pronto." }
+      ],
+      "faq": [
+        { "q": "Qual o melhor horário pra postar o sorteio?", "a": "Quando sua audiência está mais ativa (veja nos insights do seu perfil); reforce nos stories nos dias seguintes." },
+        { "q": "Como faço mais gente participar?", "a": "Regras que espalham (marcar amigo, compartilhar), lembretes nos stories e um prêmio desejável pro seu público." },
+        { "q": "Vale a pena anunciar o ganhador com vídeo?", "a": "Sim. O vídeo de revelação engaja muito mais que um print e divulga o próximo sorteio." },
+        { "q": "Preciso pagar anúncio pra divulgar?", "a": "Não necessariamente. Boas regras e uso dos stories já trazem muito alcance orgânico." }
+      ],
+      "cta": "Criar meu sorteio",
+      "keywords": ["como divulgar sorteio instagram", "divulgar sorteio instagram", "como fazer sorteio bombar instagram", "aumentar participantes sorteio", "sorteio instagram alcance", "promover sorteio instagram", "sorteio instagram engajamento"]
     }
   },
   "es": {
