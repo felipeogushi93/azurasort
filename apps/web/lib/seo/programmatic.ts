@@ -2,8 +2,9 @@
  * SEO programático: páginas de cauda longa por idioma e caso de uso.
  * Cada (locale, slug) vira uma landing page indexável em /[locale]/[slug].
  *
- * Estratégia: focar mercados internacionais (ES, FR-MA, AR-MA, EN). O pt-br é
- * intencionalmente deixado de fora para não canibalizar o produto irmão (SorteiGram).
+ * Estratégia: pt-br INCLUÍDO — AzuraSort e SorteiGram crescem juntos (sócios nos
+ * dois). AzuraSort mira o ângulo premium (prova/certificado/vídeo/ao vivo) pra
+ * complementar, não canibalizar. Também ES, FR-MA, AR-MA, EN (internacional).
  *
  * Os textos ficam em ./programmaticContent (gerado). Aqui ficam os tipos e helpers.
  */
@@ -21,7 +22,7 @@ export type ProgrammaticTopic = {
   keywords: string[];
 };
 
-/** Locales que possuem páginas programáticas (pt-br fica de fora de propósito). */
+/** Locales que possuem páginas programáticas (inclui pt-br). */
 export const PROGRAMMATIC_LOCALES = Object.keys(PROGRAMMATIC);
 
 /** Todos os pares { locale, slug } para generateStaticParams. */

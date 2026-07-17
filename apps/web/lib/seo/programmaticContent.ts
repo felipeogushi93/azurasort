@@ -3,6 +3,106 @@
 import type { ProgrammaticTopic } from "./programmatic";
 
 export const PROGRAMMATIC: Record<string, Record<string, ProgrammaticTopic>> = {
+  "pt-br": {
+    "no-rigging": {
+      "slug": "como-provar-que-seu-sorteio-nao-e-manipulado",
+      "title": "Como provar que seu sorteio do Instagram não é manipulado | AzuraSort",
+      "description": "Todo sorteio recebe o comentário 'foi armado'. Veja como fazer um sorteio com resultado auditável e certificado público que qualquer um confere — e acabe com a acusação de 'manipulado'.",
+      "h1": "Como provar que seu sorteio do Instagram não é manipulado",
+      "intro": "No instante em que você anuncia o ganhador, alguém comenta 'isso foi armado'. Não importa que você tenha sido honesto — se o seu público não consegue conferir o resultado, a desconfiança se espalha e o próximo sorteio engaja menos. A solução não é ser justo; é PROVAR que foi. O AzuraSort sorteia com um algoritmo auditável e te entrega um certificado público que qualquer pessoa confere em segundos.",
+      "sections": [
+        {
+          "h2": "Por que sortear na mão sempre parece suspeito",
+          "body": "Tirar print dos comentários e usar um gerador de número aleatório, ou girar uma roleta de nomes fora da câmera, não dá nenhuma prova pro seu público. Ele só tem a sua palavra — e na internet a sua palavra nunca basta. Até um sorteio 100% justo parece armado quando o ganhador é alguém que você segue. O que a comunidade reage é à transparência, não só à honestidade."
+        },
+        {
+          "h2": "Sorteio auditável, explicado sem complicação",
+          "body": "Um sorteio auditável 'tranca' uma semente secreta (um hash SHA-256) e a publica ANTES de o ganhador ser conhecido, revelando a semente depois. Como o resultado nasce dessa semente, qualquer pessoa reproduz o mesmo ganhador e confirma que nada foi mudado depois. Você não precisa entender a matemática — o AzuraSort faz esse processo automaticamente em todo sorteio."
+        },
+        {
+          "h2": "O certificado público que encerra a discussão",
+          "body": "Cada sorteio no AzuraSort gera um certificado público com um código único e um link de verificação. Você coloca ele no anúncio do ganhador e qualquer um abre, vê os participantes, o algoritmo e confirma o resultado sozinho. O comentário 'foi armado?' simplesmente para de aparecer, porque a prova está a um toque de distância."
+        }
+      ],
+      "faq": [
+        {
+          "q": "O que significa 'sorteio auditável'?",
+          "a": "Significa que o resultado nasce de uma semente travada antes do sorteio e revelada depois, então qualquer pessoa reproduz o resultado e confirma que não houve manipulação."
+        },
+        {
+          "q": "Meu público consegue mesmo conferir o resultado?",
+          "a": "Sim. Todo sorteio gera um certificado público com link de verificação; seu público abre e confere sem precisar confiar em você nem na gente."
+        },
+        {
+          "q": "Uma roleta de nomes já não resolve?",
+          "a": "A roleta é divertida mas não deixa prova — você poderia girar no privado e escolher qualquer um. O certificado verificável é o que realmente acaba com a acusação."
+        },
+        {
+          "q": "Preciso ser técnico pra usar?",
+          "a": "Não. O AzuraSort roda o processo auditável sozinho; você só cola o link do post, sorteia e compartilha o certificado."
+        }
+      ],
+      "cta": "Fazer um sorteio auditável",
+      "keywords": [
+        "sorteio instagram manipulado",
+        "como provar sorteio nao foi armado",
+        "sorteio justo instagram",
+        "sorteio auditavel",
+        "certificado de sorteio",
+        "sorteio confiavel instagram",
+        "sorteio transparente"
+      ]
+    },
+    "tag-friend": {
+      "slug": "sorteio-marque-um-amigo-instagram",
+      "title": "Sorteio 'marque um amigo' no Instagram: regras + sorteador justo | AzuraSort",
+      "description": "Faça um sorteio 'marque um amigo' que realmente aumenta seu alcance. Defina as regras, filtre os participantes válidos e sorteie um ganhador com certificado verificável.",
+      "h1": "Sorteio 'marque um amigo' no Instagram: regras e um sorteador justo",
+      "intro": "'Marque um amigo pra participar' é o formato de sorteio mais popular por um motivo — cada marcação coloca seu post na frente de uma pessoa nova. Mas só funciona quando as regras são claras e o ganhador é sorteado de forma justa entre os participantes válidos. O AzuraSort lê os comentários, mantém só os que realmente marcam um amigo e sorteia um ganhador que você consegue provar que é legítimo.",
+      "sections": [
+        {
+          "h2": "Por que 'marque um amigo' aumenta seu alcance",
+          "body": "Cada marcação notifica uma conta nova e joga seu post no feed dela, então um único participante pode te trazer vários espectadores novos. É alcance orgânico e cumulativo que um simples 'curta pra participar' nunca entrega. Junte com a regra de seguir o perfil e esse alcance emprestado vira seguidor de verdade."
+        },
+        {
+          "h2": "Defina regras justas e que dá pra fiscalizar",
+          "body": "Decida o essencial antes: pelo menos um amigo marcado por comentário, se cada conta entra uma vez ou pode marcar várias, e se seguir é obrigatório. Deixe tudo claro na legenda pra ninguém se sentir passado pra trás depois. Regras claras também são o que permite ao sorteador separar participante válido de spam."
+        },
+        {
+          "h2": "Sorteie só entre os participantes válidos",
+          "body": "O AzuraSort mantém só os comentários que realmente marcam outra conta, remove entradas duplicadas da mesma pessoa se você quiser, e então sorteia um ganhador aleatório. Você recebe um vídeo cinematográfico da revelação e um certificado público, então o resultado é compartilhável e impossível de contestar."
+        }
+      ],
+      "faq": [
+        {
+          "q": "Quantos amigos a pessoa deve marcar?",
+          "a": "Um já basta pra participar e aumentar o alcance; alguns criadores premiam mais alcance permitindo várias marcações como várias entradas. Decida antes de postar e deixe claro."
+        },
+        {
+          "q": "Posso exigir marcar um amigo E seguir o perfil?",
+          "a": "Sim. Juntar a regra de marcação com a de seguir é a melhor forma de transformar alcance emprestado em novos seguidores."
+        },
+        {
+          "q": "Como evito que uma pessoa entre vinte vezes?",
+          "a": "O AzuraSort pode contar cada conta uma única vez, então quem comenta várias vezes não aumenta as chances de forma injusta."
+        },
+        {
+          "q": "Como sorteio de forma justa?",
+          "a": "O AzuraSort filtra os participantes válidos que marcaram alguém e sorteia aleatoriamente com um certificado público que qualquer um verifica — sem print, sem dúvida."
+        }
+      ],
+      "cta": "Começar meu sorteio de marcar amigo",
+      "keywords": [
+        "sorteio marque um amigo instagram",
+        "regras sorteio marcar amigo",
+        "sorteio marca um amigo",
+        "como fazer sorteio marque um amigo",
+        "sorteador de comentarios",
+        "sorteio instagram comentarios",
+        "sorteio justo instagram"
+      ]
+    }
+  },
   "es": {
     "comentarios": {
       "slug": "sorteo-comentarios-instagram",
