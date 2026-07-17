@@ -83,10 +83,6 @@ export const PROGRAMMATIC: Record<string, Record<string, ProgrammaticTopic>> = {
           "a": "Sim. Juntar a regra de marcação com a de seguir é a melhor forma de transformar alcance emprestado em novos seguidores."
         },
         {
-          "q": "Como evito que uma pessoa entre vinte vezes?",
-          "a": "O AzuraSort pode contar cada conta uma única vez, então quem comenta várias vezes não aumenta as chances de forma injusta."
-        },
-        {
           "q": "Como sorteio de forma justa?",
           "a": "O AzuraSort filtra os participantes válidos que marcaram alguém e sorteia aleatoriamente com um certificado público que qualquer um verifica — sem print, sem dúvida."
         }
@@ -2546,10 +2542,6 @@ export const PROGRAMMATIC: Record<string, Record<string, ProgrammaticTopic>> = {
         {
           "q": "Can I require people to tag a friend and follow me?",
           "a": "Yes. Combining a tag rule with a follow requirement is the best way to turn borrowed reach into new followers."
-        },
-        {
-          "q": "How do I stop one person entering twenty times?",
-          "a": "AzuraSort can count each account once, so someone commenting repeatedly doesn't unfairly increase their odds."
         },
         {
           "q": "How do I pick the winner fairly?",
