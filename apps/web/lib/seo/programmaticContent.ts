@@ -101,6 +101,215 @@ export const PROGRAMMATIC: Record<string, Record<string, ProgrammaticTopic>> = {
         "sorteio instagram comentarios",
         "sorteio justo instagram"
       ]
+    },
+    "comentarios": {
+      "slug": "sorteador-de-comentarios-do-instagram",
+      "title": "Sorteador de comentários do Instagram | AzuraSort",
+      "description": "Sorteie um ganhador aleatório entre os comentários do seu post do Instagram. Resultado justo, vídeo pra compartilhar e certificado verificável. Comece agora.",
+      "h1": "Sorteador de comentários do Instagram, justo e aleatório",
+      "intro": "Se você fez um sorteio pedindo pra galera comentar, o AzuraSort lê os comentários do seu post e escolhe um ganhador realmente aleatório em segundos. Sem planilha, sem viés, e com uma prova pública de que o resultado não foi manipulado.",
+      "sections": [
+        {
+          "h2": "Importe os comentários sem esforço",
+          "body": "Você só cola o link do post. O AzuraSort coleta os comentários e mostra pra você conferir o tamanho do sorteio antes de sortear. Funciona igual com 50 ou com dezenas de milhares de comentários."
+        },
+        {
+          "h2": "Filtros pra um sorteio limpo",
+          "body": "Dá pra exigir menção a um amigo, remover comentários repetidos da mesma conta ou manter só quem cumpriu as condições. Assim você premia participante de verdade, não conta que comenta vinte vezes pra trapacear."
+        },
+        {
+          "h2": "Resultado com vídeo e certificado",
+          "body": "No fim você recebe um vídeo cinematográfico do ganhador pronto pra stories ou reels, e um certificado público com hash SHA-256 que qualquer um confere. A transparência faz sua comunidade confiar no sorteio."
+        }
+      ],
+      "faq": [
+        { "q": "Quantos comentários o sorteio aguenta?", "a": "Não há limite prático: o AzuraSort lida de dezenas a dezenas de milhares de comentários sem problema." },
+        { "q": "Posso exigir que marquem um amigo?", "a": "Sim. Ative o filtro de menção e só entram no sorteio os comentários que marcam pelo menos uma pessoa." },
+        { "q": "Comentários repetidos da mesma conta contam?", "a": "Você escolhe: contar cada participante uma vez ou permitir várias entradas. As regras são suas, definidas antes de sortear." },
+        { "q": "O resultado é confiável?", "a": "Sim. Cada sorteio gera um certificado público verificável, então o ganhador não pode ser contestado." }
+      ],
+      "cta": "Sortear comentários agora",
+      "keywords": ["sorteador de comentarios instagram", "sorteio comentarios instagram", "sortear comentario instagram", "ferramenta de sorteio instagram", "sorteio post instagram", "sortear ganhador comentarios", "sorteio justo instagram"]
+    },
+    "elegir-ganador": {
+      "slug": "como-sortear-um-ganhador-aleatorio-no-instagram",
+      "title": "Como sortear um ganhador aleatório no Instagram | AzuraSort",
+      "description": "Passo a passo pra escolher um ganhador de forma justa e aleatória no Instagram — com resultado auditável e certificado público que qualquer um verifica.",
+      "h1": "Como sortear um ganhador aleatório no Instagram",
+      "intro": "Escolher o ganhador na mão dá trabalho e sempre levanta suspeita. O AzuraSort faz isso por você: cola o link, ele coleta os participantes e sorteia de forma aleatória e auditável — em segundos, sem print e sem discussão.",
+      "sections": [
+        { "h2": "1. Cole o link do post", "body": "O AzuraSort abre a publicação e coleta os comentários (ou as curtidas) automaticamente. Você vê quantos participantes entraram antes de sortear." },
+        { "h2": "2. Ajuste as regras", "body": "Defina quantos ganhadores quer, se exige menção a um amigo, e se conta cada conta uma vez. Regras claras deixam o sorteio justo e fácil de fiscalizar." },
+        { "h2": "3. Sorteie e compartilhe a prova", "body": "O sorteio roda com algoritmo auditável, gera o vídeo da revelação e um certificado público. Você posta e a sua audiência confere sozinha que foi legítimo." }
+      ],
+      "faq": [
+        { "q": "Preciso instalar algo?", "a": "Não. É tudo online, sem cadastro. Você cola o link e sorteia direto pelo navegador." },
+        { "q": "Como garanto que é aleatório de verdade?", "a": "O AzuraSort usa um sorteio auditável (hash SHA-256) e emite um certificado que qualquer um verifica." },
+        { "q": "Posso sortear mais de um ganhador?", "a": "Sim, e ainda dá pra escolher suplentes caso o primeiro não responda." },
+        { "q": "Serve pra sorteio grande?", "a": "Sim, de poucas até dezenas de milhares de participantes." }
+      ],
+      "cta": "Sortear um ganhador agora",
+      "keywords": ["como sortear no instagram", "sortear ganhador instagram", "sorteio aleatorio instagram", "como escolher ganhador sorteio", "fazer sorteio instagram", "sorteador instagram", "sorteio justo"]
+    },
+    "gratis-online": {
+      "slug": "sorteador-de-instagram-online-e-gratis",
+      "title": "Sorteador de Instagram online e grátis | AzuraSort",
+      "description": "Sorteie no Instagram online, sem instalar nada. Modo grátis pra sorteios simples e planos com vídeo cinematográfico e certificado verificável quando quiser mais.",
+      "h1": "Sorteador de Instagram online e grátis",
+      "intro": "Precisa sortear rápido e sem complicação? O AzuraSort roda 100% no navegador — sem baixar nada, sem cadastro. Tem um modo grátis pra sorteios simples e, quando quiser prova pública e vídeo cinematográfico, é só subir de plano.",
+      "sections": [
+        { "h2": "Grátis pra começar na hora", "body": "No modo grátis você cola os participantes, sorteia e já recebe o resultado com um certificado verificável — sem pagar nada e sem instalar programa." },
+        { "h2": "Quando vale a pena o plano pago", "body": "Se você quer coleta automática dos comentários, vídeo cinematográfico da revelação pra stories e o sorteio ao vivo, os planos entregam tudo isso a partir de um pagamento único via PIX." },
+        { "h2": "Online, seguro e transparente", "body": "Tudo acontece no navegador, o resultado é auditável e o certificado é público. Ninguém precisa confiar na sua palavra — a prova está lá pra qualquer um conferir." }
+      ],
+      "faq": [
+        { "q": "É realmente grátis?", "a": "Sim, o modo manual é grátis: você cola os participantes e sorteia com certificado, sem custo." },
+        { "q": "Preciso criar conta?", "a": "Não. É só abrir o site e usar." },
+        { "q": "O que o plano pago adiciona?", "a": "Coleta automática dos comentários, vídeo cinematográfico da revelação e o sorteio ao vivo." },
+        { "q": "Como pago?", "a": "PIX único (ou cartão). Nunca mensalidade nem assinatura." }
+      ],
+      "cta": "Sortear online agora",
+      "keywords": ["sorteador instagram online", "sorteio instagram gratis", "sorteador online gratis", "sortear instagram online", "ferramenta sorteio online", "sorteio instagram sem cadastro", "sorteador de comentarios gratis"]
+    },
+    "reels": {
+      "slug": "sorteio-em-reels-do-instagram",
+      "title": "Sorteio em Reels do Instagram: escolha o ganhador | AzuraSort",
+      "description": "Fez o sorteio num Reel? O AzuraSort lê os comentários do Reel e sorteia um ganhador justo, com vídeo cinematográfico e certificado verificável pra compartilhar.",
+      "h1": "Sorteio em Reels do Instagram, justo e com prova",
+      "intro": "Reels são o formato que mais alcança gente nova — e por isso ótimos pra sorteio. O AzuraSort lê os comentários do seu Reel e escolhe um ganhador aleatório, com um vídeo de revelação que combina com o formato e um certificado que a audiência confere.",
+      "sections": [
+        { "h2": "Aproveite o alcance dos Reels", "body": "Como o Reel entrega pra fora dos seus seguidores, o sorteio traz participante novo. O AzuraSort coleta os comentários desse Reel e transforma em pool do sorteio automaticamente." },
+        { "h2": "Sorteio justo, do jeito certo", "body": "Filtre por menção a um amigo, remova entradas repetidas e sorteie aleatoriamente. Nada de escolher na mão — o resultado é auditável e à prova de contestação." },
+        { "h2": "Revelação que combina com Reels", "body": "Você recebe um vídeo cinematográfico vertical, perfeito pra postar como Reel ou story, junto do certificado público. A revelação vira conteúdo — e mais engajamento." }
+      ],
+      "faq": [
+        { "q": "Dá pra sortear pelos comentários de um Reel?", "a": "Sim. É só colar o link do Reel que o AzuraSort coleta os comentários e sorteia." },
+        { "q": "O vídeo da revelação serve pra Reel?", "a": "Sim, sai em formato vertical, pronto pra Reels e stories." },
+        { "q": "Posso exigir marcar um amigo no Reel?", "a": "Sim, o filtro de menção mantém só quem marcou alguém." },
+        { "q": "E se o Reel tiver muitos comentários?", "a": "Sem problema, o AzuraSort lida de dezenas a milhares." }
+      ],
+      "cta": "Sortear no meu Reel",
+      "keywords": ["sorteio reels instagram", "sortear ganhador reels", "sorteio em reel", "sorteador reels", "sorteio video instagram", "ganhador sorteio reels", "sorteio instagram reels"]
+    },
+    "video": {
+      "slug": "video-de-revelacao-do-ganhador-do-sorteio",
+      "title": "Vídeo de revelação do ganhador do sorteio | AzuraSort",
+      "description": "Anuncie o ganhador com um vídeo cinematográfico em vez de um print. Mais engajamento, mais credibilidade — com certificado verificável junto. Crie o seu.",
+      "h1": "Vídeo de revelação do ganhador do sorteio",
+      "intro": "Anunciar o ganhador com um print é jogar fora o momento mais engajado do seu sorteio. O AzuraSort transforma a revelação num vídeo cinematográfico pronto pra stories e reels — que prende a atenção, parece profissional e ainda vem com a prova de que o resultado é legítimo.",
+      "sections": [
+        { "h2": "Por que vídeo bate print de longe", "body": "Um print é estático e fácil de duvidar. Um vídeo de revelação cria suspense, gera muito mais visualização e compartilhamento, e faz o seu sorteio parecer de marca grande." },
+        { "h2": "Cenas cinematográficas prontas", "body": "Cofre, cassino, contagem regressiva e mais — você escolhe a cena e o AzuraSort monta o vídeo com o @ do ganhador, pronto pra postar em segundos." },
+        { "h2": "Vídeo + certificado = zero dúvida", "body": "Junto do vídeo vai o certificado público. A audiência assiste à revelação e, se quiser, confere o resultado no link. Espetáculo e prova no mesmo anúncio." }
+      ],
+      "faq": [
+        { "q": "Em que formato o vídeo sai?", "a": "Vertical, pronto pra stories e reels do Instagram." },
+        { "q": "Posso escolher a cena da revelação?", "a": "Sim, tem várias cenas cinematográficas pra escolher." },
+        { "q": "O @ do ganhador aparece no vídeo?", "a": "Sim, o vídeo já sai com o nome do ganhador em destaque." },
+        { "q": "Preciso saber editar?", "a": "Não. O AzuraSort gera o vídeo pronto, é só baixar e postar." }
+      ],
+      "cta": "Criar o vídeo da revelação",
+      "keywords": ["video revelacao ganhador", "video sorteio instagram", "anunciar ganhador sorteio", "video ganhador sorteio", "revelacao ganhador instagram", "sorteio com video", "video de sorteio"]
+    },
+    "likes": {
+      "slug": "sortear-ganhador-pelas-curtidas-do-instagram",
+      "title": "Sortear ganhador pelas curtidas do Instagram | AzuraSort",
+      "description": "Prefere sortear entre quem curtiu em vez de quem comentou? O AzuraSort sorteia um ganhador aleatório pelas curtidas, com resultado auditável e certificado público.",
+      "h1": "Sortear um ganhador pelas curtidas do Instagram",
+      "intro": "Nem todo sorteio é por comentário — às vezes você quer premiar quem curtiu o post. O AzuraSort sorteia um ganhador aleatório entre as curtidas, de forma justa e auditável, com o mesmo certificado público que acaba com qualquer dúvida.",
+      "sections": [
+        { "h2": "Sorteio por curtidas, simples e justo", "body": "Cole o link do post e o AzuraSort usa as curtidas como pool do sorteio. Sem planilha, sem escolher na mão — um ganhador aleatório em segundos." },
+        { "h2": "Quando faz sentido sortear por curtida", "body": "É ótimo pra sorteio de baixa fricção, em que participar é só curtir. Mais gente participa porque é fácil, e você ainda mantém tudo transparente." },
+        { "h2": "Mesma prova pública", "body": "Assim como no sorteio por comentário, você recebe um certificado verificável e pode gerar o vídeo da revelação. Justiça comprovável, seja por curtida ou comentário." }
+      ],
+      "faq": [
+        { "q": "Dá pra sortear só entre quem curtiu?", "a": "Sim. O AzuraSort usa as curtidas do post como participantes do sorteio." },
+        { "q": "É justo do mesmo jeito?", "a": "Sim, o sorteio é auditável e gera certificado público, igual ao de comentários." },
+        { "q": "Posso combinar curtida e comentário?", "a": "Você escolhe a base do sorteio; o importante é deixar a regra clara pro público." },
+        { "q": "Serve pra muitos likes?", "a": "Sim, de poucas a muitas curtidas sem problema." }
+      ],
+      "cta": "Sortear pelas curtidas",
+      "keywords": ["sortear por curtidas instagram", "sorteio por likes instagram", "sortear ganhador curtidas", "sorteio curtidas instagram", "sortear entre quem curtiu", "sorteio like instagram", "ganhador por curtida"]
+    },
+    "multiganadores": {
+      "slug": "sorteio-com-varios-ganhadores-e-suplentes",
+      "title": "Sorteio com vários ganhadores e suplentes | AzuraSort",
+      "description": "Sorteie vários ganhadores de uma vez e ainda escolha suplentes pra quando alguém não responder. Tudo num sorteio só, justo e com certificado verificável.",
+      "h1": "Sorteio com vários ganhadores e suplentes",
+      "intro": "Vai dar mais de um prêmio? Não precisa fazer vários sorteios. O AzuraSort sorteia todos os ganhadores de uma vez e ainda escolhe suplentes — pra você não travar quando um ganhador some sem responder.",
+      "sections": [
+        { "h2": "Vários ganhadores num sorteio só", "body": "Defina quantos ganhadores quer e o AzuraSort seleciona todos de uma vez, sem repetir ninguém. Um único sorteio, um único certificado, tudo organizado." },
+        { "h2": "Suplentes salvam o seu sorteio", "body": "Sempre tem ganhador que não responde. Com suplentes já sorteados na mesma hora, você chama o próximo da fila sem precisar refazer nada — e sem suspeita." },
+        { "h2": "Justo e comprovável", "body": "Todos os ganhadores e suplentes saem do mesmo sorteio auditável, no mesmo certificado público. Ninguém pode dizer que você escolheu depois quem quis." }
+      ],
+      "faq": [
+        { "q": "Quantos ganhadores posso sortear?", "a": "Quantos quiser, todos de uma vez no mesmo sorteio." },
+        { "q": "Como funcionam os suplentes?", "a": "São ganhadores reserva já sorteados; se o principal não responder, você chama o próximo." },
+        { "q": "Vai tudo no mesmo certificado?", "a": "Sim, ganhadores e suplentes no mesmo certificado público verificável." },
+        { "q": "Isso evita acusação de fraude?", "a": "Sim, porque os suplentes são definidos na hora do sorteio, não escolhidos depois." }
+      ],
+      "cta": "Sortear vários ganhadores",
+      "keywords": ["sorteio varios ganhadores", "sorteio multiplos ganhadores", "sorteio com suplentes", "sortear mais de um ganhador", "ganhadores reserva sorteio", "sorteio instagram varios premios", "sorteio suplente"]
+    },
+    "verificable": {
+      "slug": "sorteio-do-instagram-justo-e-verificavel",
+      "title": "Sorteio do Instagram justo e verificável | AzuraSort",
+      "description": "Um sorteio que qualquer um pode conferir. Resultado auditável com hash SHA-256 e certificado público — a transparência que faz a sua audiência confiar de verdade.",
+      "h1": "Sorteio do Instagram justo e verificável",
+      "intro": "Ser justo não basta se ninguém consegue verificar. O AzuraSort torna cada sorteio verificável: o resultado nasce de uma semente auditável e vira um certificado público que a sua audiência confere sozinha — sem precisar acreditar em você.",
+      "sections": [
+        { "h2": "O que torna um sorteio verificável", "body": "Uma semente (hash SHA-256) é travada antes do sorteio e revelada depois. Como o ganhador nasce dessa semente, qualquer pessoa reproduz e confirma que nada mudou. É a diferença entre 'confia em mim' e prova." },
+        { "h2": "Certificado público em todo sorteio", "body": "Cada resultado ganha um certificado com código único e link de verificação. Você compartilha e a discussão acaba, porque a prova está a um clique." },
+        { "h2": "Confiança vira mais engajamento", "body": "Quando a comunidade sabe que o seu sorteio é comprovadamente justo, participa mais e reclama menos. Transparência é o melhor marketing pro seu próximo sorteio." }
+      ],
+      "faq": [
+        { "q": "O que significa verificável?", "a": "Que qualquer pessoa consegue reproduzir e confirmar o resultado, sem confiar na sua palavra." },
+        { "q": "Como funciona a verificação?", "a": "Pelo certificado público, com o código e a semente do sorteio — a audiência confere no link." },
+        { "q": "Preciso entender de tecnologia?", "a": "Não. O AzuraSort faz tudo automático; você só compartilha o certificado." },
+        { "q": "Isso acaba com acusação de fraude?", "a": "Sim, porque o resultado é matematicamente comprovável e público." }
+      ],
+      "cta": "Fazer um sorteio verificável",
+      "keywords": ["sorteio verificavel", "sorteio justo instagram", "sorteio auditavel", "sorteio transparente instagram", "certificado sorteio", "sorteio confiavel", "prova de sorteio"]
+    },
+    "en-vivo": {
+      "slug": "sorteio-ao-vivo-no-instagram",
+      "title": "Sorteio ao vivo no Instagram | AzuraSort",
+      "description": "Faça o sorteio ao vivo, na frente da sua audiência, com resultado auditável em tempo real e certificado público. A forma mais transparente de anunciar o ganhador.",
+      "h1": "Sorteio ao vivo no Instagram",
+      "intro": "Não tem prova de transparência maior do que sortear ao vivo, na frente de todo mundo. Com o AzuraSort você roda o sorteio em tempo real, a audiência assiste o ganhador ser revelado na hora — e ainda leva o certificado público pra conferir depois.",
+      "sections": [
+        { "h2": "Sorteie na frente de todos", "body": "No modo ao vivo, você abre a sala e o ganhador é revelado em tempo real pra quem está assistindo. Ninguém pode dizer que você escolheu depois — aconteceu diante dos olhos deles." },
+        { "h2": "Transparência que engaja", "body": "Sorteio ao vivo prende a audiência, gera comentário e compartilhamento na hora, e transmite seriedade. É o formato que mais constrói confiança na sua marca." },
+        { "h2": "Ao vivo + certificado", "body": "Além do momento ao vivo, o resultado vira um certificado público auditável. Quem não assistiu confere depois, e ninguém tem do que reclamar." }
+      ],
+      "faq": [
+        { "q": "Como funciona o sorteio ao vivo?", "a": "Você abre uma sala e o ganhador é revelado em tempo real pra quem está acompanhando." },
+        { "q": "Preciso de plano específico?", "a": "O sorteio ao vivo faz parte do plano VIP." },
+        { "q": "Gera certificado também?", "a": "Sim, além do momento ao vivo, sai o certificado público verificável." },
+        { "q": "É mais confiável que um vídeo gravado?", "a": "É o mais transparente, porque acontece diante da audiência, sem edição." }
+      ],
+      "cta": "Fazer um sorteio ao vivo",
+      "keywords": ["sorteio ao vivo instagram", "sortear ao vivo", "sorteio live instagram", "sorteio em tempo real", "sortear na live", "sorteio ao vivo transparente", "live sorteio instagram"]
+    },
+    "ideas": {
+      "slug": "ideias-e-dicas-de-sorteio-no-instagram",
+      "title": "Ideias e dicas de sorteio no Instagram que funcionam | AzuraSort",
+      "description": "Ideias de sorteio, regras que aumentam o alcance e o passo a passo pra anunciar o ganhador do jeito certo — sem parecer armado. Guia prático do AzuraSort.",
+      "h1": "Ideias e dicas de sorteio no Instagram que funcionam",
+      "intro": "Um bom sorteio não é só dar um prêmio — é crescer o perfil e ganhar a confiança da audiência. Aqui vão as regras que mais aumentam alcance, o tempo ideal e como anunciar o ganhador sem receber o temido 'foi armado'.",
+      "sections": [
+        { "h2": "Escolha regras que aumentam alcance", "body": "Marcar um amigo espalha o post pra contas novas; pedir pra seguir converte esse alcance em seguidor. Combine as duas e mantenha simples — regra complicada afasta participante." },
+        { "h2": "Acerte o tempo e a divulgação", "body": "Poste quando sua audiência está ativa e deixe o sorteio rodar de três a sete dias: tempo pra juntar gente, curto pra manter urgência. Lembre nos stories um dia antes de fechar." },
+        { "h2": "Anuncie o ganhador como profissional", "body": "Nada de legenda seca com print. Poste um vídeo cinematográfico da revelação, marque o ganhador e inclua o link do certificado. Anúncio transparente é a melhor propaganda pro próximo sorteio." }
+      ],
+      "faq": [
+        { "q": "Quanto tempo o sorteio deve durar?", "a": "De três a sete dias costuma ser o ideal: junta gente sem perder a urgência." },
+        { "q": "Qual regra cresce mais o perfil?", "a": "Marcar um amigo aumenta alcance; junto com seguir, vira seguidor de verdade." },
+        { "q": "Como manter o sorteio confiável?", "a": "Use um sorteador auditável e anuncie com certificado público pra audiência conferir." },
+        { "q": "Qual o maior erro em sorteio?", "a": "Sortear na mão e anunciar com print, o que parece injusto e convida acusação de fraude." }
+      ],
+      "cta": "Começar meu sorteio",
+      "keywords": ["ideias de sorteio instagram", "dicas de sorteio instagram", "como fazer sorteio instagram", "sorteio para crescer instagram", "regras de sorteio instagram", "melhores sorteios instagram", "sorteio instagram sucesso"]
     }
   },
   "es": {
