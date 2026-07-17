@@ -2159,6 +2159,104 @@ export const PROGRAMMATIC: Record<string, Record<string, ProgrammaticTopic>> = {
         "grow instagram with giveaways",
         "successful instagram giveaway"
       ]
+    },
+    "no-rigging": {
+      "slug": "prove-instagram-giveaway-not-rigged",
+      "title": "How to Prove Your Instagram Giveaway Isn't Rigged | AzuraSort",
+      "description": "Followers always suspect giveaways are fixed. Learn how to run a provably-fair Instagram draw with a public certificate anyone can verify — and silence the 'rigged' comments for good.",
+      "h1": "How to prove your Instagram giveaway isn't rigged",
+      "intro": "The moment you announce a winner, someone comments 'this is rigged.' It doesn't matter that you were honest — if your audience can't verify the result, the doubt spreads and your next giveaway gets less engagement. The fix isn't being fair; it's proving it. AzuraSort draws winners with a provably-fair algorithm and hands you a public certificate anyone can check in seconds.",
+      "sections": [
+        {
+          "h2": "Why manual picks always look suspicious",
+          "body": "Screenshotting the comments and using a random number generator, or spinning a name wheel off-camera, gives your audience zero proof. They only have your word — and on the internet, your word is never enough. Even a genuinely fair draw looks rigged when the winner happens to be someone you follow back. Transparency, not honesty alone, is what your community actually reacts to."
+        },
+        {
+          "h2": "Provably-fair draws, explained simply",
+          "body": "A provably-fair draw commits to a secret seed (a SHA-256 hash) and publishes it before the winner is known, then reveals the seed afterward. Because the result is generated from that seed, anyone can reproduce the exact same winner and confirm nothing was changed after the fact. You do not need to understand the math to use it — AzuraSort handles the commit-reveal automatically on every draw."
+        },
+        {
+          "h2": "The public certificate that ends the argument",
+          "body": "Each AzuraSort draw generates a public certificate with a unique code and a verification link. Share it in your winner announcement and anyone can open it, see the participants, the algorithm, and confirm the outcome themselves. The 'is this rigged?' comment simply stops appearing, because the proof is one tap away."
+        }
+      ],
+      "faq": [
+        {
+          "q": "What does 'provably fair' actually mean?",
+          "a": "It means the result is generated from a seed that is locked in before the draw and revealed after, so anyone can reproduce the outcome and confirm it wasn't tampered with."
+        },
+        {
+          "q": "Can my followers really verify the result themselves?",
+          "a": "Yes. Every draw gets a public certificate with a verification link; your audience opens it and checks the outcome without trusting you or us."
+        },
+        {
+          "q": "Is a random name wheel good enough?",
+          "a": "A wheel looks fun but leaves no proof — you could spin it privately and pick anyone. A verifiable certificate is what actually stops accusations."
+        },
+        {
+          "q": "Do I need to be technical to use this?",
+          "a": "No. AzuraSort runs the provably-fair process automatically; you just paste your post link, draw, and share the certificate."
+        }
+      ],
+      "cta": "Run a provably-fair draw",
+      "keywords": [
+        "prove instagram giveaway not rigged",
+        "is my giveaway rigged",
+        "fair instagram giveaway",
+        "provably fair giveaway",
+        "verifiable giveaway winner",
+        "instagram giveaway certificate",
+        "transparent giveaway picker"
+      ]
+    },
+    "tag-friend": {
+      "slug": "tag-a-friend-instagram-giveaway",
+      "title": "Tag-a-Friend Instagram Giveaway: Rules + Fair Winner Picker | AzuraSort",
+      "description": "Run a tag-a-friend Instagram giveaway that actually grows your reach. Set clear rules, filter valid entries, and pick a random winner with a verifiable certificate.",
+      "h1": "Tag-a-friend Instagram giveaway: rules and a fair picker",
+      "intro": "'Tag a friend to enter' is the most popular giveaway format for a reason — every tag puts your post in front of a brand-new person. But it only works when your rules are clear and your winner is picked fairly from the valid entries. AzuraSort reads the comments, keeps only the ones that actually tag a friend, and draws a random winner you can prove is legit.",
+      "sections": [
+        {
+          "h2": "Why tag-a-friend giveaways grow your reach",
+          "body": "Each tag notifies a new account and drops your post into their feed, so a single participant can bring you several fresh viewers. It is organic, compounding reach that a simple 'like to win' never delivers. Pair it with a follow requirement and that borrowed reach turns into real followers."
+        },
+        {
+          "h2": "Set rules that are fair and enforceable",
+          "body": "Decide the essentials up front: at least one friend tagged per comment, whether each account enters once or can tag multiple times, and whether following is required. State them plainly in your caption so no one feels cheated later. Clear rules are also what let a picker separate valid entries from spam."
+        },
+        {
+          "h2": "Pick the winner only from valid entries",
+          "body": "AzuraSort keeps only the comments that genuinely mention another account, removes duplicate entries from the same person if you choose, and then draws a random winner. You get a cinematic reveal video and a public certificate, so the result is both shareable and impossible to dispute."
+        }
+      ],
+      "faq": [
+        {
+          "q": "How many friends should people tag?",
+          "a": "One is enough to enter and boost reach; some creators reward extra reach by allowing multiple tags as multiple entries. Decide before you post and state it clearly."
+        },
+        {
+          "q": "Can I require people to tag a friend and follow me?",
+          "a": "Yes. Combining a tag rule with a follow requirement is the best way to turn borrowed reach into new followers."
+        },
+        {
+          "q": "How do I stop one person entering twenty times?",
+          "a": "AzuraSort can count each account once, so someone commenting repeatedly doesn't unfairly increase their odds."
+        },
+        {
+          "q": "How do I pick the winner fairly?",
+          "a": "AzuraSort filters to valid tagged entries and draws randomly with a public certificate anyone can verify — no screenshots, no doubts."
+        }
+      ],
+      "cta": "Start my tag-a-friend giveaway",
+      "keywords": [
+        "tag a friend instagram giveaway",
+        "tag a friend giveaway rules",
+        "mention a friend giveaway",
+        "instagram giveaway tag rules",
+        "how to run tag a friend giveaway",
+        "comment giveaway picker",
+        "fair giveaway winner"
+      ]
     }
   }
 };
