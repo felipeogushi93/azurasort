@@ -2,9 +2,8 @@
  * SEO programático: páginas de cauda longa por idioma e caso de uso.
  * Cada (locale, slug) vira uma landing page indexável em /[locale]/[slug].
  *
- * Estratégia: pt-br INCLUÍDO — AzuraSort e SorteiGram crescem juntos (sócios nos
- * dois). AzuraSort mira o ângulo premium (prova/certificado/vídeo/ao vivo) pra
- * complementar, não canibalizar. Também ES, FR-MA, AR-MA, EN (internacional).
+ * Estratégia: todos os idiomas incluídos (pt-br + ES, FR-MA, AR-MA, EN).
+ * AzuraSort cresce no seu próprio ângulo premium: prova/certificado/vídeo/ao vivo.
  *
  * Os textos ficam em ./programmaticContent (gerado). Aqui ficam os tipos e helpers.
  */
