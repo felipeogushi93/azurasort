@@ -59,6 +59,62 @@ export async function GET(req: Request) {
     } else {
       oauth = { ok: false, erro: "faltam env vars pra testar o OAuth" };
     }
+    // diag=2: faz um upload em modo VALIDATE (não grava nada) e devolve o erro cru
+    if (searchParams.get("deep") === "1" && oauth.ok) {
+      const tk = await fetch("https://oauth2.googleapis.com/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          client_id: process.env.GOOGLE_ADS_CLIENT_ID!.trim(),
+          client_secret: process.env.GOOGLE_ADS_CLIENT_SECRET!.trim(),
+          refresh_token: process.env.GOOGLE_ADS_REFRESH_TOKEN!.trim(),
+          grant_type: "refresh_token",
+        }),
+      }).then((r) => r.json() as Promise<{ access_token?: string }>);
+
+      const one = await db.payment.findFirst({
+        where: { status: "paid", amount: { gt: 100 }, gclid: { not: null } },
+        orderBy: { paidAt: "desc" },
+        select: { externalId: true, gclid: true, amount: true, paidAt: true },
+      });
+      if (!one) return NextResponse.json({ envs, oauth, deep: "sem venda com gclid" });
+
+      const dt = one.paidAt ?? new Date();
+      const pad = (n: number) => String(n).padStart(2, "0");
+      const when =
+        `${dt.getUTCFullYear()}-${pad(dt.getUTCMonth() + 1)}-${pad(dt.getUTCDate())} ` +
+        `${pad(dt.getUTCHours())}:${pad(dt.getUTCMinutes())}:${pad(dt.getUTCSeconds())}+00:00`;
+
+      const res = await fetch(
+        "https://googleads.googleapis.com/v22/customers/1569133219:uploadClickConversions",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${tk.access_token}`,
+            "developer-token": process.env.GOOGLE_ADS_DEVELOPER_TOKEN!.trim(),
+            "login-customer-id": "9527888609",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            conversions: [
+              {
+                conversionAction: "customers/1569133219/conversionActions/7677276602",
+                conversionDateTime: when,
+                conversionValue: one.amount / 100,
+                currencyCode: "BRL",
+                orderId: one.externalId,
+                gclid: one.gclid,
+              },
+            ],
+            partialFailure: true,
+            validateOnly: true,
+          }),
+        },
+      );
+      const raw = await res.text();
+      return NextResponse.json({ envs, oauth, deep: { status: res.status, resposta: raw.slice(0, 1200) } });
+    }
+
     return NextResponse.json({ envs, oauth });
   }
 
