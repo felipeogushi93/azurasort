@@ -29,6 +29,39 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
+  // 🔎 DIAGNÓSTICO: mostra o que está faltando/quebrando (sem vazar os valores)
+  if (searchParams.get("diag") === "1") {
+    const has = (k: string) => Boolean(process.env[k]?.trim());
+    const envs = {
+      GOOGLE_ADS_CLIENT_ID: has("GOOGLE_ADS_CLIENT_ID"),
+      GOOGLE_ADS_CLIENT_SECRET: has("GOOGLE_ADS_CLIENT_SECRET"),
+      GOOGLE_ADS_DEVELOPER_TOKEN: has("GOOGLE_ADS_DEVELOPER_TOKEN"),
+      GOOGLE_ADS_REFRESH_TOKEN: has("GOOGLE_ADS_REFRESH_TOKEN"),
+    };
+    let oauth: { ok: boolean; status?: number; erro?: string } = { ok: false, erro: "nao testado" };
+    if (envs.GOOGLE_ADS_CLIENT_ID && envs.GOOGLE_ADS_CLIENT_SECRET && envs.GOOGLE_ADS_REFRESH_TOKEN) {
+      try {
+        const r = await fetch("https://oauth2.googleapis.com/token", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            client_id: process.env.GOOGLE_ADS_CLIENT_ID!.trim(),
+            client_secret: process.env.GOOGLE_ADS_CLIENT_SECRET!.trim(),
+            refresh_token: process.env.GOOGLE_ADS_REFRESH_TOKEN!.trim(),
+            grant_type: "refresh_token",
+          }),
+        });
+        const txt = await r.text();
+        oauth = r.ok ? { ok: true, status: r.status } : { ok: false, status: r.status, erro: txt.slice(0, 300) };
+      } catch (e) {
+        oauth = { ok: false, erro: e instanceof Error ? e.message : String(e) };
+      }
+    } else {
+      oauth = { ok: false, erro: "faltam env vars pra testar o OAuth" };
+    }
+    return NextResponse.json({ envs, oauth });
+  }
+
   const run = searchParams.get("run") === "1";
   const limit = Math.min(Math.max(Number(searchParams.get("limit")) || 1, 1), 200);
 
