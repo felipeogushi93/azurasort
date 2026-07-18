@@ -117,18 +117,25 @@ export async function POST(req: Request) {
       await notifyTelegram(paymentMessage({ provider, plan: planId, amountCents: amount, currency: cur, campaign: body.campaign })).catch(() => {});
     }
 
-    // Google Ads offline conversion — só se ainda não foi enviado (dedup)
+    // Google Ads offline conversion — só se ainda não foi enviado (dedup).
+    // ⚠️ AWAIT obrigatório: em serverless a promessa solta é MORTA quando a resposta
+    // retorna (mesmo bug que matava o tracking). O upload faz 2 chamadas de rede
+    // (OAuth + Google Ads), então nunca completava. Confirm é chamado por sendBeacon
+    // → o cliente não espera a resposta, logo awaitar aqui não atrasa ninguém.
     if (!alreadyPaid && (gclid || email || phone)) {
-      void uploadOfflineConversion({
-        gclid, email, phone,
-        amountBRL: cur === "BRL" ? amount / 100 : amount / 100,
-        externalId,
-        paidAt,
-      }).then(async (ok) => {
+      try {
+        const ok = await uploadOfflineConversion({
+          gclid, email, phone,
+          amountBRL: amount / 100,
+          externalId,
+          paidAt,
+        });
         if (ok) {
           await db.payment.update({ where: { externalId }, data: { conversionUploaded: true } }).catch(() => {});
         }
-      });
+      } catch {
+        /* nunca derruba o pagamento */
+      }
     }
 
     return NextResponse.json({ ok: true, paid: true });
