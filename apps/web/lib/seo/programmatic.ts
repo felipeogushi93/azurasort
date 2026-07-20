@@ -68,11 +68,19 @@ export function topicsForLocale(locale: string): ProgrammaticTopic[] {
   return byLocale ? Object.values(byLocale) : [];
 }
 
-/** Alguns "irmãos" para links internos (exclui o próprio slug). */
+/**
+ * Alguns "irmãos" para links internos (exclui o próprio slug).
+ * Janela ROTATIVA a partir da posição do próprio tópico: o `.slice(0, n)` fixo que
+ * havia aqui fazia TODAS as páginas linkarem só os 4 primeiros tópicos — o resto
+ * ficava órfão (zero links internos) e o Google praticamente não os alcançava.
+ */
 export function siblingTopics(locale: string, slug: string, n = 4): ProgrammaticTopic[] {
-  return topicsForLocale(locale)
-    .filter((t) => t.slug !== slug)
-    .slice(0, n);
+  const all = topicsForLocale(locale);
+  const others = all.filter((t) => t.slug !== slug);
+  if (!others.length) return [];
+  const i = all.findIndex((t) => t.slug === slug);
+  const start = i < 0 ? 0 : i % others.length;
+  return Array.from({ length: Math.min(n, others.length) }, (_, k) => others[(start + k) % others.length]);
 }
 
 /** Todas as URLs absolutas das páginas programáticas (para sitemap / IndexNow). */

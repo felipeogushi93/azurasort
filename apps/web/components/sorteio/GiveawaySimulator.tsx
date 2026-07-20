@@ -201,6 +201,11 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   // o pagamento e pula direto pro "Sortear" — não paga de novo.
   useEffect(() => {
     if (lastPayment || result || !IG_URL_RE.test(link)) return;
+    // O pagamento é restaurado SEMPRE (mesmo quando já existe resultado salvo) — senão
+    // o "Refazer" ia sem payment e o servidor respondia 402 pra quem já tinha pago.
+    const claimPago = readPaidClaim(link);
+    if (claimPago) setLastPayment(claimPago);
+
     // 1) já sorteou este post? restaura o RESULTADO + certificado (não força re-sorteio)
     const saved = readResultClaim(link);
     if (saved) {

@@ -17,9 +17,19 @@ export async function GET() {
   return NextResponse.json({ submitted: urls.length, ...r });
 }
 
+/**
+ * POST com lista própria de URLs exige a chave admin — sem isso qualquer um podia
+ * queimar nossa cota do IndexNow (e fazer o Bing/Yandex limitar o domínio).
+ */
 export async function POST(req: Request) {
+  const secret = process.env.AZURA_ADMIN_BYPASS_KEY?.trim();
+  const key = new URL(req.url).searchParams.get("key") || req.headers.get("x-admin-key");
   const body = await req.json().catch(() => ({}));
-  const urls: string[] = Array.isArray(body.urls) && body.urls.length ? body.urls : mainSiteUrls();
+  const custom = Array.isArray(body.urls) && body.urls.length ? (body.urls as string[]) : null;
+  if (custom && (!secret || key !== secret)) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+  const urls = custom ?? mainSiteUrls();
   const r = await submitToIndexNow(urls);
   return NextResponse.json({ submitted: urls.length, ...r });
 }

@@ -106,9 +106,10 @@ export async function POST(req: Request) {
           update: { status: "paid", ...(giveawayId ? { giveawayId } : {}) },
         });
         saved = true;
-        void notifyTelegram(`⚠️ Pagamento salvo em MODO DE SEGURANÇA (campos extras falharam — confira deploy/schema).\n${externalId} · ${provider} · ${(amount / 100).toFixed(2)} ${cur}`).catch(() => {});
+        // await: o alerta é o ÚNICO aviso de que algo deu errado — promessa solta morria
+        await notifyTelegram(`⚠️ Pagamento salvo em MODO DE SEGURANÇA (campos extras falharam — confira deploy/schema).\n${externalId} · ${provider} · ${(amount / 100).toFixed(2)} ${cur}`).catch(() => {});
       } catch (e2) {
-        void notifyTelegram(`🚨🚨 FALHA AO SALVAR PAGAMENTO — VENDA EM RISCO!\n${externalId} · ${provider} · ${(amount / 100).toFixed(2)} ${cur} · ${planId}\nErro: ${e2 instanceof Error ? e2.message.slice(0, 160) : "?"}`).catch(() => {});
+        await notifyTelegram(`🚨🚨 FALHA AO SALVAR PAGAMENTO — VENDA EM RISCO!\n${externalId} · ${provider} · ${(amount / 100).toFixed(2)} ${cur} · ${planId}\nErro: ${e2 instanceof Error ? e2.message.slice(0, 160) : "?"}`).catch(() => {});
       }
     }
     void saved;

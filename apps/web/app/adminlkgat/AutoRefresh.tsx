@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
  * Atualiza os dados do painel a cada N segundos (router.refresh re-roda os
  * server components sem recarregar a página / perder scroll). Dá pra pausar.
  */
-export function AutoRefresh({ seconds = 5 }: { seconds?: number }) {
+export function AutoRefresh({ seconds = 30 }: { seconds?: number }) {
   const router = useRouter();
   const [on, setOn] = useState(true);
   const [last, setLast] = useState<string | null>(null);
@@ -15,9 +15,13 @@ export function AutoRefresh({ seconds = 5 }: { seconds?: number }) {
   useEffect(() => {
     if (!on) return;
     const id = setInterval(() => {
+      // 💸 não recarrega com a aba em segundo plano: cada refresh roda ~15 queries
+      // no banco. Sem isso, uma aba esquecida aberta mantém o Neon acordado o dia
+      // inteiro e gera mais chamadas que todo o tráfego real de clientes.
+      if (typeof document !== "undefined" && document.hidden) return;
       router.refresh();
       setLast(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "America/Sao_Paulo" }));
-    }, Math.max(2, seconds) * 1000);
+    }, Math.max(10, seconds) * 1000);
     return () => clearInterval(id);
   }, [on, seconds, router]);
 

@@ -75,29 +75,35 @@ export async function POST(req: Request) {
 
       // notifica VENDAS pelo webhook (confiável, server-side) — cobre o cartão mesmo
       // se o cliente fechar a aba. Uma vez só, não em teste, só do nosso produto.
+      // ⚠️ AWAIT obrigatório: em serverless a promessa solta é MORTA quando a resposta
+      // retorna. Sem isso o alerta de venda (justamente o caso "cliente fechou a aba")
+      // e a conversão do Google Ads nunca chegavam a completar.
       if (isOurs && !isTest && !alreadyPaid) {
-        void notifyTelegram(paymentMessage({ provider: "stripe", plan, amountCents: pi.amount ?? 0, currency })).catch(() => {});
+        await notifyTelegram(paymentMessage({ provider: "stripe", plan, amountCents: pi.amount ?? 0, currency })).catch(() => {});
       }
 
       // Google Ads offline conversion — server-side (não depende de pixel client-side)
       if (isOurs && !isTest && !alreadyPaid && (gclid || email || phone)) {
-        void uploadOfflineConversion({
-          gclid, email, phone,
-          amountBRL: (pi.amount ?? 0) / 100,
-          externalId: pi.id,
-          paidAt,
-        }).then(async (ok) => {
+        try {
+          const ok = await uploadOfflineConversion({
+            gclid, email, phone,
+            amountBRL: (pi.amount ?? 0) / 100,
+            externalId: pi.id,
+            paidAt,
+          });
           if (ok) {
             await db.payment.update({ where: { externalId: pi.id }, data: { conversionUploaded: true } }).catch(() => {});
           }
-        });
+        } catch {
+          /* nunca derruba o webhook */
+        }
       }
 
       // Painel-IA central: notificar conversão pra atribuir lead à origem (AI/Google/etc).
       // Fire-and-forget — falha do painel não derruba o webhook do Stripe.
       // URL migrada 2026-07-03: painel-ia rodava em Vercel (painel-ia-ten.vercel.app),
       // agora no VPS (painel-ia.sorteigram.app). Vercel antigo retornava 500.
-      void fetch("https://painel-ia.sorteigram.app/api/webhook/order", {
+      await fetch("https://painel-ia.sorteigram.app/api/webhook/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

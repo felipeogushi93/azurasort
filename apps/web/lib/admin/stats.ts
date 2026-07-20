@@ -124,6 +124,7 @@ export async function getRecentDraws(r: DateRange = {}, limit = 50) {
 export type SourceRow = { source: string; visits: number; paid: number; conversion: number };
 
 const SOURCE_LABELS: Record<string, string> = {
+  "paid-google": "💰 Google Ads (pago)", "paid-meta": "💰 Meta Ads (pago)", "paid-other": "💰 Anúncio (pago)",
   "ai-chatgpt": "ChatGPT", "ai-claude": "Claude", "ai-perplexity": "Perplexity",
   "ai-gemini": "Gemini", "ai-copilot": "Copilot",
   "organic-google": "Google (orgânico)", "organic-bing": "Bing", "organic-duckduckgo": "DuckDuckGo",
@@ -137,9 +138,15 @@ export function sourceLabel(src: string): string {
 }
 
 export async function getSourceBreakdown(r: DateRange = {}): Promise<SourceRow[]> {
+  // ⚠️ teto de segurança: sem filtro de data isso puxava a tabela Event INTEIRA
+  // (com o JSON meta de cada visita) a cada carregamento do painel. Cresce sem
+  // limite com o tráfego. Sem range explícito, olha os últimos 90 dias.
+  const floor = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+  const range: DateRange = r.from || r.to ? r : { from: floor };
   const rows = await db.event.findMany({
-    where: { type: { in: ["visit", "pay_done"] }, bot: false, ...whereCreated(r) },
+    where: { type: { in: ["visit", "pay_done"] }, bot: false, ...whereCreated(range) },
     select: { type: true, meta: true },
+    take: 50000,
   });
   const map = new Map<string, { visits: number; paid: number }>();
   for (const e of rows) {

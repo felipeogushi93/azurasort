@@ -43,6 +43,15 @@ function normalizeSource(v: string | null): string | null {
 function detectFresh(): string {
   try {
     const qs = new URLSearchParams(window.location.search);
+    // 💰 PAGO vem ANTES de tudo: clique de anúncio chega com referrer google.com e
+    // era contado como "organic-google" — o painel mostrava tráfego pago como
+    // orgânico (90% do que parecia SEO era Ads). O gclid é a marca definitiva.
+    if (qs.get("gclid") || qs.get("gbraid") || qs.get("wbraid") || qs.get("gad_source")) return "paid-google";
+    if ((qs.get("utm_medium") || "").toLowerCase() === "cpc") {
+      const s = (qs.get("utm_source") || "").toLowerCase();
+      return /google/.test(s) ? "paid-google" : /face|meta|insta/.test(s) ? "paid-meta" : "paid-other";
+    }
+    if (qs.get("fbclid")) return "paid-meta";
     const explicit = qs.get("utm_source") || qs.get("ref") || qs.get("source") || qs.get("via");
     if (explicit) return normalizeSource(explicit) ?? "direct";
     const ref = document.referrer || "";

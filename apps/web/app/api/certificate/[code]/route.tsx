@@ -30,7 +30,11 @@ export async function GET(
   const { code } = await ctx.params;
   const url = new URL(req.url);
   const format = url.searchParams.get("format") === "feed" ? "feed" : "story";
-  const locale = url.searchParams.get("locale") || "pt-br";
+  // ⚠️ locale precisa ser validado: um valor qualquer (?locale=xyz) fazia o
+  // toLocaleDateString lançar RangeError → 500 no certificado público.
+  const LOCALES = ["pt-br", "en", "es", "fr-ma", "ar-ma"];
+  const raw = (url.searchParams.get("locale") || "pt-br").toLowerCase();
+  const locale = LOCALES.includes(raw) ? raw : "pt-br";
 
   const draw = await db.draw.findUnique({
     where: { certificateCode: code.toUpperCase() },

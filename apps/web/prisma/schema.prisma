@@ -19,6 +19,8 @@ model Giveaway {
   draws         Draw[]
   payments      Payment[]
   forced        ForcedWinner[]
+
+  @@index([shortcode])
 }
 
 model Draw {
@@ -36,6 +38,8 @@ model Draw {
   participants    Json? // lista ordenada de @handles elegíveis (auditoria/verify)
   createdAt       DateTime @default(now())
   winners         Winner[]
+
+  @@index([giveawayId])
 }
 
 model Winner {
@@ -45,6 +49,8 @@ model Winner {
   position Int
   handle   String
   isBackup Boolean @default(false)
+
+  @@index([drawId])
 }
 
 model Payment {
@@ -63,6 +69,9 @@ model Payment {
   email              String?
   phone              String?
   conversionUploaded Boolean   @default(false)
+
+  @@index([giveawayId])
+  @@index([status, paidAt])
 }
 
 // Ganhador pré-selecionado pelo admin (painel). runIndex: 0=1ª rodada, 1=2ª, 2=3ª.
@@ -93,6 +102,7 @@ model Event {
 
   @@index([type, createdAt])
   @@index([type, bot, createdAt])
+  @@index([sessionId, type])
 }
 
 // 🚨 RESGATE MANUAL (admin cola comentários do IG quando o scraping pega pouco).

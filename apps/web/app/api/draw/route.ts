@@ -82,14 +82,19 @@ export async function POST(req: Request) {
     };
 
     // 1. giveaway + anti-abuso + runIndex (antes de coletar, p/ permitir re-roll sem custo)
-    const shortcode = body.postUrl ? shortcodeFromUrl(body.postUrl) : null;
+    // 🔒 O sorteio GRÁTIS nunca se liga a um post existente: senão qualquer um mandaria
+    // { free:true, postUrl:<post de um cliente> } e entraria no re-roll/pool DELE —
+    // roubando a lista de participantes e esgotando os sorteios que ele pagou.
+    const shortcode = body.postUrl && !body.free ? shortcodeFromUrl(body.postUrl) : null;
     let giveaway = shortcode ? await db.giveaway.findFirst({ where: { shortcode } }) : null;
 
     // ANTI-ABUSO: um pagamento vale para UM sorteio. Re-rolls do MESMO post são permitidos;
     // reutilizar o mesmo pagamento em OUTRO post é bloqueado.
-    if (paid && body.payment) {
+    // Só dá pra comparar quando ESTE sorteio tem post (shortcode). Sem post (CSV/colado)
+    // o giveaway é sempre novo, e comparar bloqueava o re-roll legítimo do próprio cliente.
+    if (paid && body.payment && giveaway) {
       const prevPay = await db.payment.findUnique({ where: { externalId: body.payment.externalId } });
-      if (prevPay?.giveawayId && prevPay.giveawayId !== giveaway?.id) {
+      if (prevPay?.giveawayId && prevPay.giveawayId !== giveaway.id) {
         return NextResponse.json({ error: "Este pagamento já foi usado em outro sorteio." }, { status: 409 });
       }
     }

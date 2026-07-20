@@ -13,6 +13,11 @@ export function generateStaticParams() {
 }
 
 const COPY: Record<string, { title: string; h1: string; intro: string }> = {
+  "pt-br": {
+    title: "Guias e recursos para sorteios no Instagram — AzuraSort",
+    h1: "Guias e recursos para sorteios no Instagram",
+    intro: "Tudo o que você precisa pra fazer um sorteio no Instagram justo, rápido e verificável: comentários, curtidas, reels, vários ganhadores, revelação em vídeo e mais.",
+  },
   es: {
     title: "Guías y recursos para sorteos en Instagram — AzuraSort",
     h1: "Guías y recursos para sorteos en Instagram",

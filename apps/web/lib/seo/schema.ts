@@ -59,29 +59,11 @@ export function softwareAppSchema(seo: SeoContent) {
       name: "LGP Digital",
       url: SITE.url,
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.9",
-      ratingCount: "1287",
-      bestRating: "5",
-      worstRating: "1",
-    },
-    review: [
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Camila Mendes" },
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-        reviewBody: "O vídeo cinematográfico do reveal é impressionante. Colei nos meus Stories e teve engajamento 4x maior que sorteio comum. Certificado SHA-256 protege da acusação de sorteio arranjado.",
-        datePublished: "2026-06-20",
-      },
-      {
-        "@type": "Review",
-        author: { "@type": "Person", name: "Ricardo Alves" },
-        reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-        reviewBody: "Usei pra lançamento de produto premium. Video 4K com animação cofre ficou perfeito com a estética da marca. PIX brasileiro facilitou o pagamento único.",
-        datePublished: "2026-06-27",
-      },
-    ],
+    // ⚠️ NÃO reintroduzir aggregateRating/review sem avaliações REAIS e visíveis na
+    // página. Havia aqui uma nota 4.9 com 1287 avaliações e depoimentos inventados —
+    // isso viola as diretrizes de dados estruturados do Google (risco de penalidade
+    // manual no site inteiro) e é propaganda enganosa. Quando existirem avaliações
+    // de verdade (ex.: Google Reviews), marcar só o que estiver visível ao usuário.
   };
 }
 
