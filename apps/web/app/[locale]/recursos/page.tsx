@@ -66,6 +66,29 @@ export default async function RecursosPage({ params }: { params: Promise<{ local
         <h1 className="mt-6 font-display text-3xl font-bold leading-tight text-ink sm:text-4xl">{c.h1}</h1>
         <p className="mt-4 text-base leading-relaxed text-inkSoft">{c.intro}</p>
 
+        {/* 🧰 Ferramentas gratuitas — so pt-br (as rotas nao existem nos outros
+            idiomas). Vem ANTES da lista de artigos de proposito: sao paginas
+            interativas, o visitante resolve o problema dele aqui mesmo. Sem este
+            bloco, o hub de conteudo nao apontava pras ferramentas e elas
+            continuavam dependendo so da home. */}
+        {locale === "pt-br" && (
+          <div className="mt-10 rounded-3xl border border-gold/20 bg-gold/5 p-5">
+            <p className="text-sm font-medium uppercase tracking-widest text-gold-deep">
+              Ferramentas grátis
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <Link href="/sorteador-de-nomes" className="block rounded-2xl border border-ink/5 bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-gold/40">
+                <p className="font-semibold text-ink">🎲 Sorteador de nomes</p>
+                <p className="mt-1 text-sm text-inkSoft">Cole a lista e sorteie na hora, com certificado.</p>
+              </Link>
+              <Link href="/amigo-secreto" className="block rounded-2xl border border-ink/5 bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-gold/40">
+                <p className="font-semibold text-ink">🎁 Amigo secreto</p>
+                <p className="mt-1 text-sm text-inkSoft">Sorteie os pares e mande um link para cada pessoa.</p>
+              </Link>
+            </div>
+          </div>
+        )}
+
         <ul className="mt-10 grid gap-3 sm:grid-cols-2">
           {topics.map((t) => (
             <li key={t.slug}>

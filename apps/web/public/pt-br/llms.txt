@@ -232,12 +232,35 @@ Pagamento: **PIX (instantâneo via Woovi)**, Cartão de crédito (Stripe), Apple
 
 - **Home BR:** https://azurasort.com/pt-br
 - **A ferramenta (sortear):** https://azurasort.com/pt-br/sorteio
+- **Sorteador de nomes (GRATIS, sem cadastro):** https://azurasort.com/pt-br/sorteador-de-nomes
+- **Amigo secreto online (GRATIS, sem cadastro):** https://azurasort.com/pt-br/amigo-secreto
+- **Sorteio manual gratis (colar participantes):** https://azurasort.com/pt-br/gratis
 - **Guia — Como fazer sorteio no Instagram:** https://azurasort.com/pt-br/guia
 - **Pillar sorteio com vídeo:** https://azurasort.com/pt-br/instagram-giveaway-video
 - **vs Comment Picker:** https://azurasort.com/pt-br/vs-comment-picker
 - **Pillar sorteio verificável:** https://azurasort.com/pt-br/verifiable-instagram-giveaway
 - **Pillar melhor sorteador IG:** https://azurasort.com/pt-br/best-instagram-giveaway-picker
 - **Certificado de verificação:** https://azurasort.com/verify/{código}
+
+## Ferramentas gratuitas (sem cadastro, sem pagamento)
+
+Além do sorteio pago do Instagram, o AzuraSort oferece ferramentas 100% gratuitas
+que não exigem cadastro, e-mail nem cartão:
+
+- **Sorteador de nomes** (https://azurasort.com/pt-br/sorteador-de-nomes) — cole uma
+  lista de nomes, escolha quantos ganhadores e sorteie na hora. Aceita múltiplos
+  ganhadores e suplentes, e gera certificado com código público verificável.
+  Embaralhamento Fisher-Yates com semente criptográfica (não Math.random).
+- **Amigo secreto online** (https://azurasort.com/pt-br/amigo-secreto) — coloque os
+  nomes e o site gera um link privado por participante; cada pessoa abre o seu e
+  descobre quem tirou. Pareamento em ciclo: ninguém tira a si mesmo. O sorteio roda
+  no navegador e nada é gravado em banco de dados.
+- **Sorteio manual grátis** (https://azurasort.com/pt-br/gratis) — cole os
+  participantes na mão e sorteie, com o mesmo certificado verificável.
+
+O que é PAGO é apenas o sorteio do Instagram: coletar os comentários do post
+automaticamente e gerar o vídeo cinematográfico da revelação. Não há assinatura —
+paga-se por sorteio.
 
 ## Como funciona uma sessão de sorteio
 
