@@ -24,28 +24,35 @@ export default async function Home({
     <main className="relative bg-canvas">
       {/* NAV */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-ink/5 bg-canvas/70 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ink">
+        {/* ⚠️ ESTE NAV VIVE NO LIMITE DE LARGURA EM 360px. Antes do menu "Sorteios"
+            ele cabia com ~5px de folga; o menu adicionou ~90px e passou a estourar
+            (o CTA quebrava em duas linhas e o resto era cortado pela direita).
+            Por isso: logo e CTA menores no celular, gaps menores e nowrap em tudo.
+            Se for adicionar QUALQUER item aqui, mede em 360px antes. */}
+        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-4 sm:px-6">
+          <Link href="/" className="shrink-0 whitespace-nowrap font-display text-lg font-semibold tracking-tight text-ink sm:text-xl">
             Azura<span className="text-gold-deep">sort</span>
           </Link>
           {/* menu "Sorteios" — fica FORA do bloco `hidden md:flex` de proposito:
               no celular aquele bloco some inteiro e a pessoa ficava sem nenhuma
               navegacao, tendo que rolar a home ate o fim pra achar as ferramentas. */}
           {locale === "pt-br" && (
-            <div className="ml-4 mr-auto md:ml-8">
+            <div className="shrink-0">
               <SorteiosMenu />
             </div>
           )}
-          <div className="hidden items-center gap-8 text-sm text-inkSoft md:flex">
-            <a href="#como-funciona" className="transition hover:text-ink">{nav("comoFunciona")}</a>
+          <div className="ml-auto hidden items-center gap-6 text-sm text-inkSoft lg:flex">
+            <a href="#como-funciona" className="whitespace-nowrap transition hover:text-ink">{nav("comoFunciona")}</a>
             <a href="#recursos" className="transition hover:text-ink">{nav("recursos")}</a>
             <a href="#galeria" className="transition hover:text-ink">{nav("galeria")}</a>
             <a href="#faq" className="transition hover:text-ink">{nav("faq")}</a>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3 lg:ml-6">
             <LocaleSwitcher />
-            <Link href="/sorteio" className="btn-gold py-2 text-sm">
-              {nav("criarSorteio")}
+            <Link href="/sorteio" className="btn-gold whitespace-nowrap px-4 py-2 text-sm sm:px-6">
+              {/* "Criar sorteio" nao cabe em 360px junto com o menu novo */}
+              <span className="sm:hidden">Criar</span>
+              <span className="hidden sm:inline">{nav("criarSorteio")}</span>
             </Link>
           </div>
         </nav>

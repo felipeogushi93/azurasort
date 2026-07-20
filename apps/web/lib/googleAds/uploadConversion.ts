@@ -46,6 +46,9 @@ async function getAccessToken(): Promise<string | null> {
       refresh_token,
       grant_type: "refresh_token",
     }),
+    // ⏱️ aguardado dentro do webhook do Stripe — sem teto, o handler pendura
+    // ate o Stripe desistir (~10s) e reenfileirar o evento em loop.
+    signal: AbortSignal.timeout(4000),
   });
   if (!res.ok) return null;
   const data = (await res.json()) as { access_token?: string };
@@ -111,6 +114,7 @@ export async function uploadOfflineConversion(args: UploadArgs): Promise<boolean
         "login-customer-id": LOGIN_CUSTOMER_ID,
         "Content-Type": "application/json",
       },
+      signal: AbortSignal.timeout(5000), // idem: nunca segurar o webhook
       body: JSON.stringify({
         conversions: [conversion],
         partialFailure: true,

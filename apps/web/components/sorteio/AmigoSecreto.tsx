@@ -248,7 +248,7 @@ export function RevelarAmigo({ de, para, grupo }: { de: string; para: string; gr
       <p className="text-sm font-medium uppercase tracking-widest text-gold-deep">
         {grupo ? grupo : "Amigo secreto"}
       </p>
-      <h1 className="mt-3 font-display text-3xl font-bold text-ink sm:text-4xl">Olá, {de}!</h1>
+      <h1 className="mt-3 break-words font-display text-3xl font-bold text-ink sm:text-4xl">Olá, {de}!</h1>
 
       {!revelado ? (
         <>
@@ -266,7 +266,7 @@ export function RevelarAmigo({ de, para, grupo }: { de: string; para: string; gr
       ) : (
         <div className="mt-8 rounded-3xl border border-gold/30 bg-gradient-to-br from-gold/10 to-surface p-8 shadow-gold">
           <p className="text-xs font-medium uppercase tracking-widest text-inkSoft">Você tirou</p>
-          <p className="mt-3 font-display text-4xl font-black leading-tight text-ink">{para}</p>
+          <p className="mt-3 break-words font-display text-4xl font-black leading-tight text-ink">{para}</p>
           <p className="mt-4 text-xs text-inkSoft">
             Guarde segredo 🤫 — e não conte nem para quem te mandou o link.
           </p>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
@@ -7,6 +8,34 @@ import { Link } from "@/i18n/navigation";
 import { SITE } from "@/lib/seo/content";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * Busca + verificação do certificado, memoizadas por request.
+ *
+ * ⚠️ `cache()` do React aqui NAO e otimizacao opcional. O generateMetadata e a
+ * page precisam exatamente dos mesmos dados, e sem isso rodavam DUAS vezes por
+ * visita: duas queries ao Neon e duas verificacoes criptograficas. A verificacao
+ * faz um sha256 POR PARTICIPANTE (shuffle determinístico), entao um sorteio de
+ * 30 mil participantes custava 60 mil hashes por visualizacao — numa pagina
+ * feita justamente pra ser compartilhada em massa no Story e no WhatsApp.
+ * O Next dedupa `fetch` sozinho, mas NAO dedupa Prisma.
+ */
+const carregarCertificado = cache(async (code: string) => {
+  const draw = await db.draw.findUnique({
+    where: { certificateCode: code.toUpperCase() },
+    include: { giveaway: true, winners: { orderBy: { position: "asc" } } },
+  });
+  if (!draw) return null;
+
+  const winnersMain = draw.winners.filter((w) => !w.isBackup);
+  const backups = draw.winners.filter((w) => w.isBackup);
+  const participants = (draw.participants as string[] | null) ?? [];
+  const seedOk = draw.seed ? sha256(draw.seed) === draw.seedHash : false;
+  const recomputed = draw.seed ? verifyFromParticipants(participants, draw.seed, winnersMain.length) : [];
+  const winnersMatch = recomputed.join("|") === winnersMain.map((w) => w.handle).join("|");
+
+  return { draw, winnersMain, backups, participants, seedOk, winnersMatch, valid: seedOk && winnersMatch && !draw.rigged };
+});
 
 /**
  * 🔗 PREVIEW DO CERTIFICADO — o link mais compartilhado do produto.
@@ -28,24 +57,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, code } = await params;
   const t = await getTranslations({ locale, namespace: "sim.verify" });
-  const draw = await db.draw.findUnique({
-    where: { certificateCode: code.toUpperCase() },
-    include: { giveaway: true, winners: { orderBy: { position: "asc" } } },
-  });
+  // memoizado por request: a page abaixo reaproveita este mesmo resultado
+  const cert = await carregarCertificado(code);
 
   // ⚠️ o preview tem que dizer a VERDADE: um certificado que nao confere nao pode
-  // ser compartilhado como "Sorteio verificado". Mesma checagem da pagina.
-  const principais = draw?.winners.filter((w) => !w.isBackup) ?? [];
-  const participantes = (draw?.participants as string[] | null) ?? [];
-  const seedOk = draw?.seed ? sha256(draw.seed) === draw.seedHash : false;
-  const bate =
-    draw?.seed &&
-    verifyFromParticipants(participantes, draw.seed, principais.length).join("|") ===
-      principais.map((w) => w.handle).join("|");
-  const valido = Boolean(seedOk && bate && !draw?.rigged);
-
-  const campanha = draw?.giveaway?.campaign?.trim();
-  const vencedor = principais[0]?.handle;
+  // ser compartilhado como "Sorteio verificado".
+  const valido = cert?.valid ?? false;
+  const campanha = cert?.draw.giveaway?.campaign?.trim();
+  const vencedor = cert?.winnersMain[0]?.handle;
   const selo = valido ? t("okTitle") : t("failTitle");
   const title = campanha ? `${selo} · ${campanha} — AzuraSort` : `${selo} — AzuraSort`;
   const description = valido && vencedor ? `@${vencedor} — ${t("okDesc")}` : valido ? t("okDesc") : t("failDesc");
@@ -79,20 +98,14 @@ export default async function VerifyPage({
 }) {
   const { locale, code } = await params;
   const t = await getTranslations({ locale, namespace: "sim.verify" });
-  const draw = await db.draw.findUnique({
-    where: { certificateCode: code.toUpperCase() },
-    include: { giveaway: true, winners: { orderBy: { position: "asc" } } },
-  });
-  if (!draw) notFound();
+  // mesma chamada do generateMetadata — o cache() devolve sem repetir query nem
+  // refazer a verificacao criptografica
+  const cert = await carregarCertificado(code);
+  if (!cert) notFound();
 
-  const winnersMain = draw.winners.filter((w) => !w.isBackup);
-  const backups = draw.winners.filter((w) => w.isBackup);
-  const participants = (draw.participants as string[] | null) ?? [];
-
-  const seedOk = draw.seed ? sha256(draw.seed) === draw.seedHash : false;
-  const recomputed = draw.seed ? verifyFromParticipants(participants, draw.seed, winnersMain.length) : [];
-  const winnersMatch = recomputed.join("|") === winnersMain.map((w) => w.handle).join("|");
-  const valid = seedOk && winnersMatch && !draw.rigged;
+  // ⚠️ nao recalcular nada aqui: seedOk/winnersMatch/valid ja vem prontos do
+  // cache. Refazer a conta anularia justamente o motivo do cache() existir.
+  const { draw, winnersMain, backups, participants, seedOk, winnersMatch, valid } = cert;
 
   return (
     <main className="min-h-screen bg-canvas bg-mesh">

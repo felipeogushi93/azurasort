@@ -19,10 +19,15 @@ export async function notifyTelegram(text: string, chatId?: string): Promise<voi
   const chat = chatId || process.env.TELEGRAM_CHAT_ID?.trim();
   if (!token || !chat) return; // não configurado → ignora silenciosamente
   try {
+    // ⏱️ timeout obrigatorio: esta chamada e AGUARDADA dentro do webhook do
+    // Stripe. Sem teto, um Telegram lento pendura o handler ate o Stripe
+    // desistir (~10s) e reenfileirar o evento — virando retry em loop por
+    // causa de um alerta. Alerta atrasado e aceitavel; webhook travado nao.
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", disable_web_page_preview: true }),
+      signal: AbortSignal.timeout(3000),
     });
   } catch {
     /* notificação nunca derruba o fluxo */

@@ -54,7 +54,10 @@ export function SorteiosMenu() {
       {aberto && (
         <div
           role="menu"
-          className="absolute left-0 top-full z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-ink/10 bg-surface shadow-card"
+          // ⚠️ `w-64` fixo saia da tela pela direita em 360-390px (o menu comeca a
+          // ~170px do canto, entao 256px de largura terminavam em ~426px) e o que
+          // era cortado eram justamente as tags Gratis/Pago. Limitado a viewport.
+          className="absolute left-0 top-full z-50 mt-3 w-[min(16rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-ink/10 bg-surface shadow-card"
         >
           {ITENS.map((it) => (
             <Link
