@@ -96,7 +96,13 @@ export function Paywall({
           🧪 MODO TESTE ativo — o pagamento com <strong>cartão</strong> cobra só <strong>{formatPrice(100, currency)}</strong>
         </div>
       )}
-      {/* amostra de participantes */}
+      {/* amostra de participantes.
+          ⚠️ So renderiza se TIVER amostra. Quando a coleta do Instagram estoura o
+          tempo, o `sample` vem vazio e isso desenhava a moldura com o titulo
+          "Amostra de quem participou" e NADA embaixo — uma caixa branca no topo
+          do paywall, bem antes de pedir dinheiro. Justamente a unica prova de que
+          a ferramenta leu o post da pessoa aparecendo em branco. Melhor sumir. */}
+      {sample.length > 0 && (
       <div className="rounded-3xl border border-ink/5 bg-surface p-5 shadow-card sm:p-6">
         <div className="mb-4 flex items-center justify-between">
           <p className="text-sm font-medium uppercase tracking-widest text-gold-deep">{t("paywall.sampleTitle")}</p>
@@ -121,6 +127,7 @@ export function Paywall({
           </p>
         )}
       </div>
+      )}
 
       {/* desbloqueie + preview da cena escolhida */}
       <div className="text-center">
