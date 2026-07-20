@@ -123,7 +123,9 @@ function origin(): Record<string, unknown> {
   }
 }
 
-export function track(type: "visit" | "link_loaded" | "unlock_view" | "pay_started" | "pay_done", meta?: Record<string, unknown>) {
+// "upsell_click" fica FORA do funil principal (nao e um passo, e um desvio de
+// plano). Serve so pra medir se o upsell por delta do Padrao -> Premium pega.
+export function track(type: "visit" | "link_loaded" | "unlock_view" | "pay_started" | "pay_done" | "upsell_click", meta?: Record<string, unknown>) {
   if (typeof window === "undefined") return;
   try {
     const body = JSON.stringify({ type, sessionId: sessionId(), path: window.location.pathname, meta: { ...(meta ?? {}), ...origin() } });

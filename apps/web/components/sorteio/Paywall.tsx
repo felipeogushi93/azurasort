@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
 import { track } from "@/lib/track";
-import { priceLabels, formatPrice, cardPriceForCount, type Currency, type PlanId } from "@/lib/payments/pricing";
+import { priceLabels, formatPrice, cardPriceForCount, priceForCount, type Currency, type PlanId } from "@/lib/payments/pricing";
 
 // estrutura dos planos; nomes/recursos vêm das traduções (sim.plans.*)
 const PLAN_META: { id: PlanId; nameKey: string; badgeKey?: string; featureKeys: string[] }[] = [
@@ -167,6 +167,25 @@ export function Paywall({
           );
         })}
       </div>
+
+      {/* 🎬 UPSELL POR DELTA — so aparece pra quem escolheu o Padrao.
+          Enquadra a diferenca ("+R$15 e vira video"), nao o total ("R$34,90 vs
+          R$19,90"): o cliente compara R$15 contra um video, e nao um preco contra
+          outro. ~74% das vendas sao Padrao, entao essa e a alavanca de ticket que
+          nao exige uma visita a mais. Nada e tirado do Padrao — e so um atalho. */}
+      {plan === "padrao" && planAllowed("premium") && !live && (
+        <button
+          onClick={() => { track("upsell_click", { from: "padrao", to: "premium" }); setPlan("premium"); }}
+          className="-mt-2 w-full rounded-2xl border-2 border-gold/50 bg-gradient-to-br from-gold/10 to-surface px-4 py-3 text-center text-sm font-semibold text-ink transition hover:border-gold"
+        >
+          {t("paywall.upsellPadrao", {
+            delta: formatPrice(
+              priceForCount(currency, "premium", count) - priceForCount(currency, "padrao", count),
+              currency,
+            ),
+          })}
+        </button>
+      )}
 
       {live ? (
         <p className="-mt-2 text-center text-xs text-inkSoft">{t("paywall.liveNeedsVip")}</p>

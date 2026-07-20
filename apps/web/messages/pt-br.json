@@ -399,7 +399,8 @@
       "soon": "💳 Pagamento em integração — use o modo teste abaixo por enquanto.",
       "guarantee": "Pagamento único. Liberação instantânea. Garantia de reembolso se falhar.",
       "testMode": "Modo de validação (interno)",
-      "testUnlock": "🔓 Liberar em modo teste (grátis)"
+      "testUnlock": "🔓 Liberar em modo teste (grátis)",
+      "upsellPadrao": "🎬 Só +{delta} e seu sorteio vira um vídeo cinematográfico para publicar →"
     },
     "plans": {
       "padraoName": "Padrão",

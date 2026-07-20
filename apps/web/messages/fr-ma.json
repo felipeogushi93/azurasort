@@ -399,7 +399,8 @@
       "soon": "💳 Paiement en cours d’intégration — utilisez le mode test ci-dessous pour l’instant.",
       "guarantee": "Paiement unique. Déverrouillage instantané. Garantie de remboursement en cas d’échec.",
       "testMode": "Mode de validation (interne)",
-      "testUnlock": "🔓 Déverrouiller en mode test (gratuit)"
+      "testUnlock": "🔓 Déverrouiller en mode test (gratuit)",
+      "upsellPadrao": "🎬 Seulement +{delta} et votre tirage devient une vidéo cinématographique à publier →"
     },
     "plans": {
       "padraoName": "Standard",

@@ -399,7 +399,8 @@
       "soon": "💳 Pago en integración — usa el modo de prueba de abajo por ahora.",
       "guarantee": "Pago único. Desbloqueo instantáneo. Garantía de reembolso si falla.",
       "testMode": "Modo de validación (interno)",
-      "testUnlock": "🔓 Desbloquear en modo de prueba (gratis)"
+      "testUnlock": "🔓 Desbloquear en modo de prueba (gratis)",
+      "upsellPadrao": "🎬 Solo +{delta} y tu sorteo se convierte en un vídeo cinematográfico para publicar →"
     },
     "plans": {
       "padraoName": "Estándar",

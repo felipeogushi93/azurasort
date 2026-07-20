@@ -399,7 +399,8 @@
       "soon": "💳 Payment being integrated — use test mode below for now.",
       "guarantee": "One-time payment. Instant unlock. Money-back guarantee if it fails.",
       "testMode": "Validation mode (internal)",
-      "testUnlock": "🔓 Unlock in test mode (free)"
+      "testUnlock": "🔓 Unlock in test mode (free)",
+      "upsellPadrao": "🎬 Just +{delta} and your draw becomes a cinematic video you can post →"
     },
     "plans": {
       "padraoName": "Standard",
