@@ -125,6 +125,14 @@ export default async function SorteadorDeNomesPage({
             </Link>
           </p>
         </div>
+
+        {/* silo de conteudo: as ferramentas se linkam entre si pra nao ficarem ilhadas */}
+        <p className="mt-6 text-center text-sm text-inkSoft">
+          Vai tirar amigo secreto?{" "}
+          <Link href="/amigo-secreto" className="font-semibold text-gold-deep hover:underline">
+            Use nosso sorteador de amigo secreto grátis →
+          </Link>
+        </p>
       </section>
     </main>
   );

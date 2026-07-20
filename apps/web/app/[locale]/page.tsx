@@ -60,6 +60,42 @@ export default async function Home({
         <Differentials />
       </div>
 
+      {/* 🧭 MAIS SORTEIOS — as ferramentas gratuitas nasceram orfas (so no sitemap).
+          Sem link partindo do site, nem o visitante nem o Google as encontram —
+          exatamente o problema que as ~60 paginas programaticas tinham. */}
+      {locale === "pt-br" && (
+        <section className="bg-canvas px-6 py-16">
+          <div className="mx-auto max-w-5xl">
+            <h2 className="text-center font-display text-2xl font-bold text-ink sm:text-3xl">Mais sorteios</h2>
+            <p className="mt-2 text-center text-sm text-inkSoft">
+              Escolha o tipo de sorteio que você precisa fazer.
+            </p>
+            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              {[
+                { href: "/sorteio", icone: "📸", nome: "Sorteio no Instagram", desc: "Puxa os comentários do seu post e gera o vídeo da revelação.", tag: "Pago" },
+                { href: "/sorteador-de-nomes", icone: "🎲", nome: "Sorteador de nomes", desc: "Cole uma lista de nomes e sorteie na hora, com certificado.", tag: "Grátis" },
+                { href: "/amigo-secreto", icone: "🎁", nome: "Amigo secreto", desc: "Sorteie os pares e mande um link secreto para cada pessoa.", tag: "Grátis" },
+              ].map((f) => (
+                <Link
+                  key={f.href}
+                  href={f.href}
+                  className="group rounded-2xl border border-ink/10 bg-surface p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-gold/40"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl">{f.icone}</span>
+                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${f.tag === "Grátis" ? "bg-emerald/10 text-emerald" : "bg-gold/15 text-gold-deep"}`}>
+                      {f.tag}
+                    </span>
+                  </div>
+                  <p className="mt-3 font-display font-bold text-ink group-hover:text-gold-deep">{f.nome}</p>
+                  <p className="mt-1 text-sm leading-relaxed text-inkSoft">{f.desc}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       <div id="faq">
         <Faq />
       </div>
@@ -103,6 +139,12 @@ export default async function Home({
             <Link href="/gratis" className="hover:text-ink hover:underline">
               {locale === "pt-br" ? "Sorteio grátis" : locale === "es" ? "Sorteo gratis" : locale === "fr-ma" ? "Tirage gratuit" : locale === "ar-ma" ? "سحب مجاني" : "Free draw"}
             </Link>
+            {locale === "pt-br" && (
+              <>
+                <Link href="/sorteador-de-nomes" className="hover:text-ink hover:underline">Sorteador de nomes</Link>
+                <Link href="/amigo-secreto" className="hover:text-ink hover:underline">Amigo secreto</Link>
+              </>
+            )}
             <Link href="/recursos" className="hover:text-ink hover:underline">
               {locale === "pt-br" || locale === "es" ? "Recursos" : locale === "fr-ma" ? "Ressources" : locale === "ar-ma" ? "الموارد" : "Resources"}
             </Link>

@@ -114,16 +114,26 @@ export default async function AmigoSecretoPage({
           ))}
         </div>
 
-        {/* upsell discreto — a página é grátis de verdade, o link é só um convite */}
+        {/* upsell discreto — a página é grátis de verdade, o link é só um convite.
+            O texto tem que falar de SORTEIO DE PRÊMIO, não de amigo secreto: quem
+            está aqui não tem post no Instagram, tem um grupo de amigos. */}
         <div className="mt-10 rounded-2xl border border-ink/5 bg-surface p-5 shadow-soft">
           <p className="text-sm leading-relaxed text-inkSoft">
-            Esses nomes vieram dos comentários de um post do Instagram? O AzuraSort puxa os
-            comentários automaticamente e gera o vídeo da revelação{" "}
+            Também faz sorteio de prêmio no Instagram? O AzuraSort puxa os comentários do seu
+            post automaticamente, sorteia e entrega o vídeo da revelação pronto para postar{" "}
             <Link href="/sorteio" className="font-semibold text-violet hover:underline">
               →
             </Link>
           </p>
         </div>
+
+        {/* silo de conteudo: as ferramentas se linkam entre si pra nao ficarem ilhadas */}
+        <p className="mt-6 text-center text-sm text-inkSoft">
+          Precisa só sortear um nome de uma lista?{" "}
+          <Link href="/sorteador-de-nomes" className="font-semibold text-gold-deep hover:underline">
+            Use nosso sorteador de nomes grátis →
+          </Link>
+        </p>
       </section>
     </main>
   );
