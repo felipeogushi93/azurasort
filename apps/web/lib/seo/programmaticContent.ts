@@ -366,6 +366,66 @@ export const PROGRAMMATIC: Record<string, Record<string, ProgrammaticTopic>> = {
       ],
       "cta": "Criar meu sorteio",
       "keywords": ["como divulgar sorteio instagram", "divulgar sorteio instagram", "como fazer sorteio bombar instagram", "aumentar participantes sorteio", "sorteio instagram alcance", "promover sorteio instagram", "sorteio instagram engajamento"]
+    },
+    "quanto-custa": {
+      "slug": "quanto-custa-fazer-um-sorteio-no-instagram",
+      "title": "Quanto custa fazer um sorteio no Instagram? | AzuraSort",
+      "description": "Fazer sorteio no Instagram pode custar zero. Veja o que é grátis, quando vale pagar e quanto custa um sorteio com certificado e vídeo — sem assinatura.",
+      "h1": "Quanto custa fazer um sorteio no Instagram?",
+      "intro": "Resposta curta: pode custar nada. Dá pra sortear de graça colando os comentários. Você só paga quando quer o que o grátis não entrega — coleta automática, vídeo cinematográfico e certificado público. Aqui vai o que é grátis, o que é pago e quanto custa de verdade.",
+      "sections": [
+        { "h2": "O que dá pra fazer de graça", "body": "No modo grátis você cola os participantes, sorteia e ainda recebe um certificado verificável — sem pagar nada e sem cadastro. Pra sorteio pequeno e simples, isso já resolve." },
+        { "h2": "Quando vale a pena pagar", "body": "Vale quando você quer economizar tempo (coleta automática dos comentários) e causar impressão (vídeo cinematográfico da revelação pra Stories). É o que transforma o anúncio do ganhador em conteúdo que engaja." },
+        { "h2": "Quanto custa no AzuraSort", "body": "É pagamento único por sorteio, nunca mensalidade. O plano Padrão começa em R$19,90 e o Cinematográfico em R$34,90, variando conforme o tamanho do post. Você vê o preço exato antes de pagar, sem surpresa." }
+      ],
+      "faq": [
+        { "q": "Dá pra fazer sorteio no Instagram de graça?", "a": "Dá. No modo grátis você cola os participantes e sorteia com certificado, sem custo." },
+        { "q": "Tem mensalidade?", "a": "Não. É pagamento único por sorteio, via PIX ou cartão — nunca assinatura." },
+        { "q": "O preço muda conforme o tamanho do sorteio?", "a": "Sim, varia por faixa de participantes, e você vê o valor exato antes de pagar." },
+        { "q": "Preciso cadastrar cartão pra testar?", "a": "Não. Você usa o modo grátis sem cadastro nenhum." }
+      ],
+      "cta": "Ver quanto custa o meu",
+      "keywords": ["quanto custa sorteio instagram", "preco sorteador instagram", "sorteio instagram gratis ou pago", "valor sorteio instagram", "sorteador instagram preco", "sorteio instagram custo", "fazer sorteio barato instagram"]
+    },
+    "premio": {
+      "slug": "o-que-sortear-no-instagram-ideias-de-premio",
+      "title": "O que sortear no Instagram: ideias de prêmio que funcionam | AzuraSort",
+      "description": "Escolher o prêmio certo é o que separa um sorteio que traz cliente de um que só traz caçador de brinde. Veja ideias por tipo de perfil e o que evitar.",
+      "h1": "O que sortear no Instagram: ideias de prêmio que funcionam",
+      "intro": "O prêmio decide quem participa. Um iPhone traz milhares de pessoas que somem depois; um produto seu traz menos gente, mas gente que compra. Veja como escolher o prêmio certo pro seu objetivo — e o erro que faz todo mundo perder dinheiro.",
+      "sections": [
+        { "h2": "Regra de ouro: prêmio ligado ao seu nicho", "body": "O melhor prêmio é o seu próprio produto ou serviço. Ele filtra naturalmente: só participa quem tem interesse no que você vende. É menos alcance bruto, mas muito mais seguidor que vira cliente." },
+        { "h2": "Ideias por tipo de perfil", "body": "Loja: um produto ou vale-compras. Serviço: uma sessão/consultoria grátis. Criador de conteúdo: mentoria, curso ou kit exclusivo. Restaurante: um jantar para dois. Sempre algo que sua audiência já desejava." },
+        { "h2": "O erro que custa caro", "body": "Sortear algo genérico e caro (celular, dinheiro) atrai caçadores de prêmio que seguem, ganham e deixam de te seguir. Você paga caro por seguidor que nunca compra. Prêmio menor e específico rende muito mais no fim." }
+      ],
+      "faq": [
+        { "q": "Qual o melhor prêmio pra sorteio no Instagram?", "a": "Um produto ou serviço seu. Atrai quem realmente tem interesse no que você vende." },
+        { "q": "Vale sortear iPhone ou dinheiro?", "a": "Traz muito alcance, mas atrai caçadores de prêmio que não viram clientes. Costuma sair caro pelo retorno." },
+        { "q": "Prêmio pequeno funciona?", "a": "Sim, desde que seja desejado pelo seu público específico. Relevância vale mais que valor." },
+        { "q": "Posso sortear mais de um prêmio?", "a": "Pode, e o AzuraSort sorteia vários ganhadores de uma vez, com suplentes." }
+      ],
+      "cta": "Sortear meu prêmio",
+      "keywords": ["o que sortear no instagram", "ideias de premio sorteio", "premio para sorteio instagram", "melhor premio sorteio", "o que dar de premio", "sorteio premio ideias", "premio sorteio loja"]
+    },
+    "erros": {
+      "slug": "erros-em-sorteio-no-instagram",
+      "title": "Erros em sorteio no Instagram que acabam com a sua credibilidade | AzuraSort",
+      "description": "Os erros que fazem seu público desconfiar do sorteio — e como evitar cada um. Do print no lugar de prova até esquecer os suplentes.",
+      "h1": "Erros em sorteio no Instagram que acabam com a sua credibilidade",
+      "intro": "Um sorteio mal conduzido não só frustra: ele queima a confiança que você levou meses construindo. E o pior é que os erros mais comuns são fáceis de evitar. Veja os principais e como não cair neles.",
+      "sections": [
+        { "h2": "Erro 1: escolher o ganhador na mão", "body": "Print de comentário e 'sorteei aqui' não provam nada. É o convite perfeito pro comentário 'foi armado'. Use um sorteio aleatório e auditável, com resultado que a audiência consiga conferir sozinha." },
+        { "h2": "Erro 2: regras confusas ou mudadas no meio", "body": "Regra que ninguém entende afasta participante; regra alterada depois do começo destrói a confiança. Defina tudo antes de postar — quantos ganhadores, o que é preciso fazer, até quando vale — e não mude." },
+        { "h2": "Erro 3: não ter suplentes e sumir no fim", "body": "Ganhador que não responde trava tudo, e sorteio sem anúncio claro parece golpe. Sorteie suplentes junto e anuncie o resultado publicamente, com o certificado, mesmo que o primeiro não apareça." }
+      ],
+      "faq": [
+        { "q": "Qual o erro mais comum em sorteio?", "a": "Escolher o ganhador manualmente e anunciar com print — parece injusto e gera acusação de fraude." },
+        { "q": "Posso mudar as regras no meio do sorteio?", "a": "Evite. Mudar regra depois de começar é o que mais destrói a credibilidade." },
+        { "q": "E se o ganhador não responder?", "a": "Por isso sorteie suplentes na mesma hora; assim você chama o próximo sem refazer nada." },
+        { "q": "Como provar que foi justo?", "a": "Use um sorteador que gere certificado público verificável e compartilhe o link no anúncio." }
+      ],
+      "cta": "Fazer um sorteio sem erro",
+      "keywords": ["erros sorteio instagram", "sorteio instagram credibilidade", "como nao errar sorteio", "sorteio parece armado", "regras sorteio instagram", "sorteio confiavel", "problemas sorteio instagram"]
     }
   },
   "es": {
