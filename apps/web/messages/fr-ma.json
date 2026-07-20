@@ -7,13 +7,13 @@
     "criarSorteio": "Créer un tirage"
   },
   "hero": {
-    "badge": "Tirage équitable et vérifiable · SHA-256",
+    "badge": "Certificat public · vérifiable par tous",
     "title": "Tirages au sort Instagram",
     "titleHighlight": "avec une fin de cinéma.",
-    "subtitle": "Tirez au sort parmi les commentaires de façon équitable et vérifiable — et révélez le gagnant comme une scène de film, avec une vidéo prête à partager.",
+    "subtitle": "Tirez au sort parmi les commentaires de votre publication et prouvez que c'était honnête : chaque tirage génère un certificat public que n'importe quel abonné peut vérifier. Et la révélation sort en vidéo, prête à publier.",
     "ctaPrimary": "Créer mon tirage →",
     "ctaSecondary": "Comment ça marche",
-    "trust1": "🔒 Résultat vérifiable",
+    "trust1": "🔒 Preuve publique que rien n'était arrangé",
     "trust2": "🎬 Révélation cinématographique",
     "trust3": "🎞️ Vidéo 9:16 · 16:9 · 1:1"
   },
@@ -371,7 +371,7 @@
     },
     "paywall": {
       "videoHeroSub": "Votre tirage devient un Reel cinématographique qui capte l'attention — plus d'engagement, plus d'abonnés.",
-      "trust1": "Tirage 100% vérifiable",
+      "trust1": "🔒 Preuve publique que rien n'était arrangé",
       "trust2": "Certificat public vérifiable",
       "trust3": "Sans inscription",
       "trust4": "Paiement sécurisé",
@@ -400,7 +400,8 @@
       "guarantee": "Paiement unique. Déverrouillage instantané. Garantie de remboursement en cas d’échec.",
       "testMode": "Mode de validation (interne)",
       "testUnlock": "🔓 Déverrouiller en mode test (gratuit)",
-      "upsellPadrao": "🎬 Seulement +{delta} et votre tirage devient une vidéo cinématographique à publier →"
+      "upsellPadrao": "🎬 Seulement +{delta} et votre tirage devient une vidéo cinématographique à publier →",
+      "freeExit": "Vous voulez juste un nom, sans vidéo ? Tirez au sort gratuitement en collant les participants →"
     },
     "plans": {
       "padraoName": "Standard",

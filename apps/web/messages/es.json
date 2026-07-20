@@ -7,13 +7,13 @@
     "criarSorteio": "Crear sorteo"
   },
   "hero": {
-    "badge": "Sorteo justo y verificable · SHA-256",
+    "badge": "Certificado público · cualquiera puede comprobarlo",
     "title": "Sorteos de Instagram",
     "titleHighlight": "con final de película.",
-    "subtitle": "Sortea entre los comentarios de forma justa y auditable — y revela al ganador como una escena de cine, con un vídeo listo para compartir.",
+    "subtitle": "Sortea entre los comentarios de tu publicación y demuestra que fue limpio: cada sorteo genera un certificado público que cualquier seguidor puede comprobar. Y la revelación sale en vídeo, lista para publicar.",
     "ctaPrimary": "Crear mi sorteo →",
     "ctaSecondary": "Cómo funciona",
-    "trust1": "🔒 Resultado verificable",
+    "trust1": "🔒 Prueba pública de que no fue amañado",
     "trust2": "🎬 Revelación cinematográfica",
     "trust3": "🎞️ Vídeo 9:16 · 16:9 · 1:1"
   },
@@ -371,7 +371,7 @@
     },
     "paywall": {
       "videoHeroSub": "Tu sorteo se convierte en un Reel cinematográfico que capta la atención — más interacción, más seguidores.",
-      "trust1": "Sorteo 100% auditable",
+      "trust1": "🔒 Prueba pública de que no fue amañado",
       "trust2": "Certificado público verificable",
       "trust3": "Sin registro",
       "trust4": "Pago seguro",
@@ -400,7 +400,8 @@
       "guarantee": "Pago único. Desbloqueo instantáneo. Garantía de reembolso si falla.",
       "testMode": "Modo de validación (interno)",
       "testUnlock": "🔓 Desbloquear en modo de prueba (gratis)",
-      "upsellPadrao": "🎬 Solo +{delta} y tu sorteo se convierte en un vídeo cinematográfico para publicar →"
+      "upsellPadrao": "🎬 Solo +{delta} y tu sorteo se convierte en un vídeo cinematográfico para publicar →",
+      "freeExit": "¿Solo quieres un nombre, sin vídeo? Sortea gratis pegando los participantes →"
     },
     "plans": {
       "padraoName": "Estándar",

@@ -98,6 +98,11 @@ export default async function Home({
             {/* 🔗 Hub de conteúdo. Sem este link, as ~60 paginas programaticas ficavam
                 ORFAS: existiam no sitemap mas nenhuma pagina do site apontava pra elas,
                 entao o Google as tratava como conteudo de baixa prioridade. */}
+            {/* 🆓 O /gratis existia so no sitemap — nenhuma pagina linkava pra ele.
+                O FAQ agora cita ele, entao precisa ser encontravel. */}
+            <Link href="/gratis" className="hover:text-ink hover:underline">
+              {locale === "pt-br" ? "Sorteio grátis" : locale === "es" ? "Sorteo gratis" : locale === "fr-ma" ? "Tirage gratuit" : locale === "ar-ma" ? "سحب مجاني" : "Free draw"}
+            </Link>
             <Link href="/recursos" className="hover:text-ink hover:underline">
               {locale === "pt-br" || locale === "es" ? "Recursos" : locale === "fr-ma" ? "Ressources" : locale === "ar-ma" ? "الموارد" : "Resources"}
             </Link>

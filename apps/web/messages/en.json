@@ -7,13 +7,13 @@
     "criarSorteio": "Create giveaway"
   },
   "hero": {
-    "badge": "Fair, verifiable giveaways · SHA-256",
+    "badge": "Public certificate · anyone can check it",
     "title": "Instagram giveaways",
     "titleHighlight": "with a cinematic finale.",
-    "subtitle": "Draw winners from your comments fairly and verifiably — and reveal the winner like a movie scene, with a video ready to share.",
+    "subtitle": "Draw from your post's comments and prove it was clean: every draw generates a public certificate any follower can check. And the reveal comes out as a video, ready to post.",
     "ctaPrimary": "Create my giveaway →",
     "ctaSecondary": "How it works",
-    "trust1": "🔒 Verifiable result",
+    "trust1": "🔒 Public proof it was not rigged",
     "trust2": "🎬 Cinematic reveal",
     "trust3": "🎞️ Video 9:16 · 16:9 · 1:1"
   },
@@ -371,7 +371,7 @@
     },
     "paywall": {
       "videoHeroSub": "Your giveaway becomes a cinematic Reel that grabs attention — more engagement, more followers.",
-      "trust1": "100% auditable draw",
+      "trust1": "🔒 Public proof it was not rigged",
       "trust2": "Public verifiable certificate",
       "trust3": "No sign-up",
       "trust4": "Secure payment",
@@ -400,7 +400,8 @@
       "guarantee": "One-time payment. Instant unlock. Money-back guarantee if it fails.",
       "testMode": "Validation mode (internal)",
       "testUnlock": "🔓 Unlock in test mode (free)",
-      "upsellPadrao": "🎬 Just +{delta} and your draw becomes a cinematic video you can post →"
+      "upsellPadrao": "🎬 Just +{delta} and your draw becomes a cinematic video you can post →",
+      "freeExit": "Just need a name, no video? Draw for free by pasting the entrants →"
     },
     "plans": {
       "padraoName": "Standard",

@@ -1182,6 +1182,30 @@ function BaseCard({ active, onClick, icon, title, desc }: { active: boolean; onC
 }
 
 function ScenePreviewCard({ scene, name, desc, exampleLabel, tierLabel, isPremium, active, onClick }: { scene: SceneOption; name: string; desc: string; exampleLabel: string; tierLabel: string; isPremium: boolean; active: boolean; onClick: () => void }) {
+  // 📱 LAZY-LOAD: as 6 cenas somam ~20 MB de MP4 e TODAS baixavam de uma vez,
+  // em autoplay, na tela imediatamente anterior ao paywall. A maior parte do
+  // trafego e anuncio no celular — isso queimava plano de dados e deixava a
+  // tela travada bem na hora de decidir pagar. Agora o video so comeca a
+  // carregar quando o card entra na viewport; o visual final e identico.
+  const boxRef = useRef<HTMLDivElement>(null);
+  const [naTela, setNaTela] = useState(false);
+
+  useEffect(() => {
+    const el = boxRef.current;
+    if (!el || naTela) return;
+    // sem IntersectionObserver (browser antigo): carrega tudo, como era antes
+    if (typeof IntersectionObserver === "undefined") {
+      setNaTela(true);
+      return;
+    }
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setNaTela(true)),
+      { rootMargin: "200px" }, // comeca um pouco antes de aparecer, pra nao piscar
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [naTela]);
+
   return (
     <button
       onClick={onClick}
@@ -1189,9 +1213,9 @@ function ScenePreviewCard({ scene, name, desc, exampleLabel, tierLabel, isPremiu
         active ? "border-gold bg-gold/5 shadow-gold" : "border-ink/10 bg-surface hover:border-gold/40 shadow-soft"
       }`}
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-void">
+      <div ref={boxRef} className="relative aspect-[4/5] overflow-hidden bg-void">
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video src={scene.src} autoPlay muted loop playsInline className="h-full w-full object-contain" />
+        {naTela && <video src={scene.src} autoPlay muted loop playsInline preload="metadata" className="h-full w-full object-contain" />}
         {active && (
           <span className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-gold text-xs font-bold text-void">✓</span>
         )}

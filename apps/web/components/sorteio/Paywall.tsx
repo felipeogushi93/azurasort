@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { StripeCard } from "./StripeCard";
 import { WooviPix } from "./WooviPix";
 import { track } from "@/lib/track";
@@ -113,13 +114,17 @@ export function Paywall({
         <span className="absolute left-4 top-4 z-10 rounded-full bg-gold px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-void">
           {t("paywall.yourScene", { scene: previewName })}
         </span>
+        {/* ⚠️ NAO reintroduzir key={previewSrc}: isso REMONTAVA o elemento a cada
+            troca de plano (Padrao <-> Premium muda a cena), refazendo o download
+            do zero — e a cena do Padrao e contagem.mp4, o maior arquivo (5,66 MB).
+            Trocando so o src, o browser reaproveita o que ja tem em cache. */}
         <video
-          key={previewSrc}
           src={previewSrc}
           autoPlay
           muted
           loop
           playsInline
+          preload="metadata"
           className="mx-auto block max-h-[340px] w-full object-contain"
         />
         <span className="absolute bottom-4 right-4 z-10 flex gap-1.5">
@@ -217,6 +222,17 @@ export function Paywall({
             seguem), entao a promessa de reembolso precisa estar no ponto da decisao. */}
         <p className="mt-3 text-center text-xs font-semibold text-emerald">
           {t("paywall.guarantee")}
+        </p>
+
+        {/* 🆓 SAIDA, nao concorrente. Discreto e por ultimo, DEPOIS dos botoes de
+            pagar: quem ia pagar ja pagou antes de chegar aqui. Quem nao ia,
+            antes simplesmente sumia do site — agora desce um degrau e vira
+            usuario conhecido, que pode voltar. O /gratis nao coleta comentario
+            nem gera video, entao nao canibaliza o produto pago. */}
+        <p className="mt-4 text-center text-xs text-inkSoft">
+          <Link href="/gratis" className="underline underline-offset-2 hover:text-ink">
+            {t("paywall.freeExit")}
+          </Link>
         </p>
       </div>
 
