@@ -11,7 +11,6 @@ export const routing = defineRouting({
   localePrefix: "always",
 });
 
-export type AppLocale = (typeof routing.locales)[number];
 
 /** Idiomas escritos da direita para a esquerda. */
 export const RTL_LOCALES: string[] = ["ar-ma"];

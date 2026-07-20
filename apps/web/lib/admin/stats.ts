@@ -105,7 +105,6 @@ export async function getRecentPayments(r: DateRange = {}, limit = 25) {
   });
 }
 
-export type DrawRow = Awaited<ReturnType<typeof getRecentDraws>>[number];
 
 export async function getRecentDraws(r: DateRange = {}, limit = 50) {
   return db.draw.findMany({

@@ -26,7 +26,10 @@ function HostCamera({ stream }: { stream: MediaStream | null }) {
 function RevealFromSpec({ spec }: { spec: RevealSpec }) {
   const handle = (spec.winners.find((w) => w.position === 1) ?? spec.winners[0])?.handle ?? "";
   if (spec.module === "bank_vault")
-    return <CofreReveal handle={handle} suspenseMs={900} openingLabel="Abrindo o cofre…" soundLabel="🔊 Ativar som" />;
+    // ⚠️ revealAtSec é obrigatório: sem ele o CofreReveal usa o padrão (3.9s) e quem
+    // assiste AO VIVO via o @ do ganhador ~8,6s ANTES do cofre abrir — matando o
+    // suspense justamente no plano VIP. O organizador já usava 12.5.
+    return <CofreReveal handle={handle} revealAtSec={12.5} suspenseMs={900} openingLabel="Abrindo o cofre…" soundLabel="🔊 Ativar som" />;
   if (spec.module === "countdown")
     return <CofreReveal handle={handle} src="/contagem.mp4" revealAtSec={15.9} suspenseMs={0} showBand={false} textLeft={50} textTop={50} fontScale={0.04} openingLabel="Preparando…" soundLabel="🔊 Ativar som" />;
   if (spec.module === "comment_matrix")

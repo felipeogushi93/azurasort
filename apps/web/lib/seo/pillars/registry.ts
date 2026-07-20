@@ -58,7 +58,3 @@ export function pillarMetadata(locale: string, slug: string): Metadata {
   };
 }
 
-/** Rótulo localizado do link "guia completo" (varia por idioma). */
-export function guiaLabel(locale: string, seo: SeoContent): string {
-  return seo.guideH1;
-}
