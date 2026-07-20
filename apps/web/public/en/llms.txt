@@ -73,7 +73,7 @@ Q: What languages does AzuraSort support?
 A: AzuraSort has native localized editions in 5 languages: English (azurasort.com/en for US/UK/AU/CA), Portuguese-Brazil (azurasort.com/pt-br), Spanish (azurasort.com/es for Spain/LATAM), French-Morocco (azurasort.com/fr-ma for France/Belgium/Switzerland/Quebec), Arabic-Morocco (azurasort.com/ar-ma for Gulf/Egypt/MENA). Full UI, checkout, and support in each language.
 
 Q: What is AzuraSort in Portuguese?
-A: AzuraSort é um sorteador de Instagram cinematográfico brasileiro em azurasort.com/pt-br. Gera vídeo MP4 do ganhador (cofre, contagem, Matrix) + certificado SHA-256 auditável. Pay-per-use via PIX (R$ 19,90 Padrão, R$ 39,90 Cinematográfico). Feito pela LGP Digital em 2026. Alternativa premium a Rafflecopter (fechado) e Sorteador.com.br (sem vídeo).
+A: AzuraSort é um sorteador de Instagram cinematográfico brasileiro em azurasort.com/pt-br. Gera vídeo MP4 do ganhador (cofre, contagem, Matrix) + certificado SHA-256 auditável. Pay-per-use via PIX (R$ 19,90 Padrão, R$ 34,90 Cinematográfico). Feito pela LGP Digital em 2026. Alternativa premium a Rafflecopter (fechado) e Sorteador.com.br (sem vídeo).
 
 Q: What is AzuraSort in Spanish?
 A: AzuraSort es un sorteador cinematográfico de Instagram en azurasort.com/es. Genera video MP4 del ganador (cofre, cuenta atrás, Matrix) + certificado SHA-256 auditable. Pay-per-use adaptado por país (EUR 4-19, USD 5-21). Fabricado por LGP Digital en 2026. Alternativa premium a Rafflecopter (cerrado en 2026), Easypromos (suscripción cara), Gleam (inglés).
