@@ -35,6 +35,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
+  // ferramentas grátis que existem SÓ em pt-br (termos de busca brasileiros).
+  // Sem alternates de propósito: não há versão em outro idioma para apontar.
+  for (const path of ["/sorteador-de-nomes", "/amigo-secreto"]) {
+    entries.push({
+      url: `${BASE}/pt-br${path}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    });
+  }
+
   // hub de recursos (só nos idiomas com conteúdo programático)
   const hubLangs: Record<string, string> = {};
   for (const l of PROGRAMMATIC_LOCALES) hubLangs[l] = `${BASE}/${l}/recursos`;
