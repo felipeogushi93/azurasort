@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/seo/schema";
 import { SITE } from "@/lib/seo/content";
+import { ToolHeader, ToolFooter } from "@/components/ToolChrome";
 
 /**
  * 🎯 SORTEADOR DE NOMES — página de cauda longa em PT-BR (só pt-br: é um termo
@@ -83,6 +84,7 @@ export default async function SorteadorDeNomesPage({
 
   return (
     <main className="min-h-screen bg-canvas bg-mesh">
+      <ToolHeader />
       <JsonLd
         data={[
           faqSchema(FAQ),
@@ -134,6 +136,7 @@ export default async function SorteadorDeNomesPage({
           </Link>
         </p>
       </section>
+      <ToolFooter />
     </main>
   );
 }

@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { RevelarAmigo } from "@/components/sorteio/AmigoSecreto";
 import { decodeAmigoToken } from "@/lib/amigoSecreto";
+import { ToolHeader, ToolFooter } from "@/components/ToolChrome";
 
 /**
  * 🎁 LINK INDIVIDUAL DO AMIGO SECRETO — a URL que o organizador manda no privado
@@ -53,6 +54,9 @@ export default async function AmigoSecretoTokenPage({
   if (locale !== "pt-br") notFound();
   setRequestLocale(locale);
 
+  // Decodifica SÓ pra validar o link (variável local do servidor, não vira prop).
+  // O resultado é descartado de propósito: quem decodifica pra exibir é o
+  // navegador, senão o nome sorteado ia junto no HTML — ver RevelarAmigo.
   const payload = decodeAmigoToken(token);
 
   // link truncado/adulterado: recado amigável, nunca um erro estourado na cara
@@ -60,6 +64,7 @@ export default async function AmigoSecretoTokenPage({
   if (!payload) {
     return (
       <main className="min-h-screen bg-canvas bg-mesh">
+      <ToolHeader />
         <div className="mx-auto max-w-md px-6 py-20 text-center">
           <h1 className="font-display text-2xl font-bold text-ink">
             Esse link não parece completo
@@ -73,19 +78,22 @@ export default async function AmigoSecretoTokenPage({
             Fazer um amigo secreto
           </Link>
         </div>
-      </main>
+        <ToolFooter />
+    </main>
     );
   }
 
   return (
     <main className="min-h-screen bg-canvas bg-mesh">
-      <RevelarAmigo de={payload.d} para={payload.p} grupo={payload.g} />
+      <ToolHeader />
+      <RevelarAmigo token={token} />
 
       <div className="mx-auto max-w-md px-6 pb-20 text-center">
         <Link href="/amigo-secreto" className="text-sm text-violet hover:underline">
           Fazer o meu próprio amigo secreto →
         </Link>
       </div>
+      <ToolFooter />
     </main>
   );
 }

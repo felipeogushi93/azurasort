@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/seo/schema";
 import { SITE } from "@/lib/seo/content";
+import { ToolHeader, ToolFooter } from "@/components/ToolChrome";
 
 /**
  * 🎁 AMIGO SECRETO ONLINE — ferramenta grátis de topo de funil, só em pt-br
@@ -82,6 +83,7 @@ export default async function AmigoSecretoPage({
 
   return (
     <main className="min-h-screen bg-canvas bg-mesh">
+      <ToolHeader />
       <JsonLd
         data={[
           faqSchema(FAQ),
@@ -135,6 +137,7 @@ export default async function AmigoSecretoPage({
           </Link>
         </p>
       </section>
+      <ToolFooter />
     </main>
   );
 }

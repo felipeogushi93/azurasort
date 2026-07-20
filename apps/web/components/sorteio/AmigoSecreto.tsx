@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { encodeAmigoToken } from "@/lib/amigoSecreto";
+import { useMemo, useState } from "react";
+import { decodeAmigoToken, encodeAmigoToken } from "@/lib/amigoSecreto";
 
 /**
  * 🎁 AMIGO SECRETO — 100% no cliente. Não passa pelo /api/draw, não grava nada
@@ -240,8 +240,21 @@ export function AmigoSecreto() {
  * escondido atrás de um clique: print acidental e olhar por cima do ombro não
  * estragam a brincadeira.
  */
-export function RevelarAmigo({ de, para, grupo }: { de: string; para: string; grupo: string }) {
+/**
+ * Tela do participante.
+ *
+ * ⚠️ Recebe o TOKEN, nao os nomes. O servidor nao pode decodificar e passar
+ * `para` como prop: props de client component sao serializadas no HTML, entao o
+ * nome sorteado ficava no codigo-fonte da pagina (invisivel na tela, mas
+ * achavel com Ctrl+U) ANTES de a pessoa clicar em "Revelar". Decodificando aqui
+ * no navegador, o nome nunca entra no HTML que vem do servidor.
+ */
+export function RevelarAmigo({ token }: { token: string }) {
   const [revelado, setRevelado] = useState(false);
+  const dados = useMemo(() => decodeAmigoToken(token), [token]);
+  const de = dados?.d ?? "";
+  const para = dados?.p ?? "";
+  const grupo = dados?.g ?? "";
 
   return (
     <div className="mx-auto max-w-md px-6 py-16 text-center">
