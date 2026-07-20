@@ -1,10 +1,76 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { db } from "@/lib/db";
 import { sha256, verifyFromParticipants } from "@/lib/draw/server";
 import { Link } from "@/i18n/navigation";
+import { SITE } from "@/lib/seo/content";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * 🔗 PREVIEW DO CERTIFICADO — o link mais compartilhado do produto.
+ *
+ * O cliente manda esta pagina pros seguidores dele pra provar que o sorteio foi
+ * limpo. Sem metadata, ela aparecia como um RETANGULO EM BRANCO no WhatsApp,
+ * Story e Telegram: sem titulo, sem imagem, sem descricao — desperdicando o
+ * unico canal de aquisicao organico que a operacao ja gera sozinha.
+ *
+ * ⚠️ robots: noindex de proposito. Nao e SEO — ninguem busca "certificado
+ * ABC123". E a pagina expoe @ de participantes: compartilhar com o publico do
+ * organizador e uma coisa, deixar o Google indexar o @ de cada participante
+ * permanentemente e outra (LGPD). O valor esta em COMPARTILHAR, nao em indexar.
+ */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; code: string }>;
+}): Promise<Metadata> {
+  const { locale, code } = await params;
+  const t = await getTranslations({ locale, namespace: "sim.verify" });
+  const draw = await db.draw.findUnique({
+    where: { certificateCode: code.toUpperCase() },
+    include: { giveaway: true, winners: { orderBy: { position: "asc" } } },
+  });
+
+  // ⚠️ o preview tem que dizer a VERDADE: um certificado que nao confere nao pode
+  // ser compartilhado como "Sorteio verificado". Mesma checagem da pagina.
+  const principais = draw?.winners.filter((w) => !w.isBackup) ?? [];
+  const participantes = (draw?.participants as string[] | null) ?? [];
+  const seedOk = draw?.seed ? sha256(draw.seed) === draw.seedHash : false;
+  const bate =
+    draw?.seed &&
+    verifyFromParticipants(participantes, draw.seed, principais.length).join("|") ===
+      principais.map((w) => w.handle).join("|");
+  const valido = Boolean(seedOk && bate && !draw?.rigged);
+
+  const campanha = draw?.giveaway?.campaign?.trim();
+  const vencedor = principais[0]?.handle;
+  const selo = valido ? t("okTitle") : t("failTitle");
+  const title = campanha ? `${selo} · ${campanha} — AzuraSort` : `${selo} — AzuraSort`;
+  const description = valido && vencedor ? `@${vencedor} — ${t("okDesc")}` : valido ? t("okDesc") : t("failDesc");
+
+  return {
+    title,
+    description,
+    robots: { index: false, follow: true },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE.url}/${locale}/verify/${code}`,
+      siteName: "AzuraSort",
+      locale,
+      type: "article",
+      images: [{ url: `${SITE.url}/opengraph-image.png`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [`${SITE.url}/opengraph-image.png`],
+    },
+  };
+}
 
 export default async function VerifyPage({
   params,
