@@ -401,7 +401,8 @@
       "testMode": "Modo de validación (interno)",
       "testUnlock": "🔓 Desbloquear en modo de prueba (gratis)",
       "upsellPadrao": "🎬 Solo +{delta} y tu sorteo se convierte en un vídeo cinematográfico para publicar →",
-      "freeExit": "¿Solo quieres un nombre, sin vídeo? Sortea gratis pegando los participantes →"
+      "freeExit": "¿Solo quieres un nombre, sin vídeo? Sortea gratis pegando los participantes →",
+      "stickyCta": "Pagar →"
     },
     "plans": {
       "padraoName": "Estándar",

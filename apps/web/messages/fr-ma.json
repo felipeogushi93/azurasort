@@ -401,7 +401,8 @@
       "testMode": "Mode de validation (interne)",
       "testUnlock": "🔓 Déverrouiller en mode test (gratuit)",
       "upsellPadrao": "🎬 Seulement +{delta} et votre tirage devient une vidéo cinématographique à publier →",
-      "freeExit": "Vous voulez juste un nom, sans vidéo ? Tirez au sort gratuitement en collant les participants →"
+      "freeExit": "Vous voulez juste un nom, sans vidéo ? Tirez au sort gratuitement en collant les participants →",
+      "stickyCta": "Payer →"
     },
     "plans": {
       "padraoName": "Standard",

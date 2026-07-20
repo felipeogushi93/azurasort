@@ -401,7 +401,8 @@
       "testMode": "Validation mode (internal)",
       "testUnlock": "🔓 Unlock in test mode (free)",
       "upsellPadrao": "🎬 Just +{delta} and your draw becomes a cinematic video you can post →",
-      "freeExit": "Just need a name, no video? Draw for free by pasting the entrants →"
+      "freeExit": "Just need a name, no video? Draw for free by pasting the entrants →",
+      "stickyCta": "Pay →"
     },
     "plans": {
       "padraoName": "Standard",

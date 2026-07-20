@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { StripeCard } from "./StripeCard";
@@ -70,8 +70,27 @@ export function Paywall({
   const previewSrc = showingPadraoScene ? "/contagem.mp4" : sceneSrc;
   const previewName = showingPadraoScene ? t("scenes.countdownName") : sceneName;
 
+  // 📱 BARRA FIXA NO CELULAR. Os 3 planos so viram colunas em 768px (md), entao no
+  // celular eles EMPILHAM e o primeiro botao de pagar fica a ~1.600px do topo:
+  // 2,5 telas de rolagem so pra descobrir que existe um botao. A maior parte do
+  // trafego e anuncio no celular. A barra some quando os botoes reais aparecem,
+  // pra nao duplicar CTA na mesma tela.
+  const blocoPagarRef = useRef<HTMLDivElement>(null);
+  const [pagarNaTela, setPagarNaTela] = useState(true);
+  useEffect(() => {
+    const el = blocoPagarRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const obs = new IntersectionObserver((es) => es.forEach((e) => setPagarNaTela(e.isIntersecting)), {
+      rootMargin: "-80px 0px 0px 0px",
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div className="space-y-6">
+    // pb extra no celular enquanto a barra fixa esta visivel, senao ela tampa o
+    // ultimo bloco (a saida do /gratis).
+    <div className={`space-y-6 ${!pagarNaTela ? "pb-24 sm:pb-0" : ""}`}>
       {allowTest && (
         <div className="rounded-2xl border border-dashed border-emerald/40 bg-emerald/5 px-4 py-2.5 text-center text-sm font-medium text-emerald">
           🧪 MODO TESTE ativo — o pagamento com <strong>cartão</strong> cobra só <strong>{formatPrice(100, currency)}</strong>
@@ -209,7 +228,7 @@ export function Paywall({
       </div>
 
       {/* pagamento */}
-      <div>
+      <div ref={blocoPagarRef}>
         <div className={`grid gap-3 ${isBrazil ? "sm:grid-cols-2" : "mx-auto max-w-xs"}`}>
           {isBrazil && (
             <PayCard icon="⚡" title="PIX" sub={t("paywall.pixSub")} price={priceLabel} cta={t("paywall.pixCta")} accent onClick={() => { track("pay_started", { method: "pix", plan }); setShowPix(true); }} />
@@ -235,6 +254,24 @@ export function Paywall({
           </Link>
         </p>
       </div>
+
+      {/* 📱 barra fixa (só celular) — leva pros botões sem exigir 2,5 telas de rolagem */}
+      {!pagarNaTela && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-ink/10 bg-surface/95 px-4 py-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] backdrop-blur sm:hidden">
+          <div className="flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="truncate text-[11px] uppercase tracking-wider text-inkSoft">{t(`plans.${PLAN_META.find((p) => p.id === plan)!.nameKey}`)}</p>
+              <p className="font-display text-lg font-bold leading-tight text-ink">{priceLabel}</p>
+            </div>
+            <button
+              onClick={() => blocoPagarRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })}
+              className="shrink-0 rounded-xl bg-gold px-5 py-2.5 text-sm font-bold text-void shadow-gold"
+            >
+              {t("paywall.stickyCta")}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* MODO TESTE — só com ?teste=1 na URL (não aparece pro público) */}
       {allowTest && (
