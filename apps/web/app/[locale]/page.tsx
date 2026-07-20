@@ -7,6 +7,7 @@ import { SceneGallery } from "@/components/landing/SceneGallery";
 import { Differentials } from "@/components/landing/Differentials";
 import { Faq } from "@/components/landing/Faq";
 import { LocaleSwitcher } from "@/components/landing/LocaleSwitcher";
+import { SorteiosMenu } from "@/components/SorteiosMenu";
 
 export default async function Home({
   params,
@@ -27,6 +28,14 @@ export default async function Home({
           <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ink">
             Azura<span className="text-gold-deep">sort</span>
           </Link>
+          {/* menu "Sorteios" — fica FORA do bloco `hidden md:flex` de proposito:
+              no celular aquele bloco some inteiro e a pessoa ficava sem nenhuma
+              navegacao, tendo que rolar a home ate o fim pra achar as ferramentas. */}
+          {locale === "pt-br" && (
+            <div className="ml-4 mr-auto md:ml-8">
+              <SorteiosMenu />
+            </div>
+          )}
           <div className="hidden items-center gap-8 text-sm text-inkSoft md:flex">
             <a href="#como-funciona" className="transition hover:text-ink">{nav("comoFunciona")}</a>
             <a href="#recursos" className="transition hover:text-ink">{nav("recursos")}</a>
