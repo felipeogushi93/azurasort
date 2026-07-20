@@ -2,7 +2,7 @@
  * Pillar "AzuraSort vs Wheel of Names / roleta de nomes".
  * Ângulo: a roleta genérica exige digitar os nomes na mão, não é nativa do
  * Instagram (não puxa comentários), não tem prova nem vídeo pronto pra postar.
- * EN default + pt-br + es; fr-ma/ar-ma caem no en.
+ * Multilíngue (en default, pt-br, es, fr-ma, ar-ma) com fallback para en.
  */
 
 import type { PillarContent } from "./video";
@@ -124,7 +124,91 @@ const es: PillarContent = {
   breadcrumb: "Ruleta de nombres vs AzuraSort",
 };
 
-const BY_LOCALE: Record<string, PillarContent> = { en, "pt-br": ptBr, es };
+const frMa: PillarContent = {
+  metaTitle: "Roue de noms (Wheel of Names) pour les tirages Instagram vs AzuraSort",
+  metaDescription:
+    "Une roue de noms est parfaite pour une liste que vous saisissez à la main — mais elle ne lit pas les commentaires Instagram, ne prouve rien et ne vous donne aucune vidéo à publier. Voici pourquoi AzuraSort est l'alternative native à la roue de noms.",
+  keywords: [
+    "wheel of names instagram",
+    "roue de noms tirage au sort",
+    "roue de la chance instagram",
+    "tirage de noms instagram",
+    "roulette tirage instagram",
+    "tirage au sort vérifiable",
+  ],
+  h1: "Roue de noms vs AzuraSort sur Instagram",
+  intro:
+    "La roue de noms est un classique : vous saisissez une liste, vous lancez la roue et elle s'arrête sur quelqu'un. C'est ludique et gratuit pour un petit groupe. Mais pour un tirage Instagram, elle se heurte vite à un mur — il faut taper chaque nom à la main, elle ne lit pas vos commentaires, et elle ne vous laisse ni preuve ni contenu à publier. Cette page compare la roue de noms à AzuraSort.",
+  whyTitle: "Là où la roue de noms s'arrête sur Instagram",
+  whyParas: [
+    "La roue de noms est conçue pour des listes que vous avez déjà. Pour un tirage Instagram, cela veut dire recopier à la main le @ de chaque personne qui a commenté — acceptable pour 20 noms, impossible pour 2 000. Elle ignore aussi totalement les règles d'Instagram : elle ne bloque pas les comptes en double, n'exige ni mention ni hashtag, et ne tire pas parmi les likes. Et quand elle s'arrête sur un nom, vous n'avez que ça : aucun moyen de prouver que la roue n'a pas été relancée jusqu'à ce qu'un ami gagne, et aucun clip pensé pour votre feed.",
+    "AzuraSort est natif d'Instagram. Il récupère les commentaires automatiquement — sans rien taper — applique vos règles (bloquer les doublons, exiger des mentions ou des hashtags, plusieurs gagnants et suppléants) et il est prouvablement équitable : commit-reveal avec SHA-256, le hash étant publié avant le résultat, si bien que chacun peut vérifier le gagnant sur une page de certificat public. Au lieu d'un tour de roue générique, la révélation se joue comme une animation cinématographique (coffre-fort, roulette, compte à rebours et d'autres), générée automatiquement en MP4 identique à l'écran et prête à publier. Paiement à l'usage, carte ou PIX, prix affiché avant de payer.",
+  ],
+  stepsTitle: "La méthode native Instagram",
+  steps: [
+    { name: "Collez le lien du post ou du Reel", text: "AzuraSort charge tous les commentaires automatiquement — sans recopier les noms un par un dans une roue." },
+    { name: "Définissez les règles Instagram", text: "Bloquez les comptes en double, exigez une mention ou un hashtag, tirez parmi les commentaires ou les likes, et choisissez gagnants et suppléants." },
+    { name: "Révélez avec une animation thématique", text: "Choisissez une révélation cinématographique — coffre-fort, roulette, compte à rebours — au lieu d'un tour de roue générique, en direct si vous voulez." },
+    { name: "Partagez la vidéo et le certificat", text: "Publiez le MP4 de la révélation et diffusez le lien du certificat pour que chacun vérifie le tirage — une preuve qu'une roue de noms ne peut pas offrir." },
+  ],
+  faqTitle: "Roue de noms vs AzuraSort : questions fréquentes",
+  faq: [
+    { q: "Puis-je utiliser Wheel of Names pour un tirage Instagram ?", a: "C'est possible, mais vous devez saisir à la main le nom de chaque participant, et l'outil ne lit pas les commentaires, n'applique aucune règle et ne prouve pas le résultat. AzuraSort récupère les commentaires automatiquement et vous remet un certificat vérifiable." },
+    { q: "Une roue de noms prouve-t-elle que le gagnant est équitable ?", a: "Non. Elle tourne sur votre écran et vous pourriez la relancer jusqu'à obtenir le résultat qui vous plaît — vos spectateurs n'ont que votre parole. AzuraSort publie un hash avant le tirage et un certificat public après, ce qui rend le résultat vérifiable." },
+    { q: "Et une vidéo à publier ?", a: "Une roue de noms ne vous donne qu'un tour générique. AzuraSort produit une révélation cinématographique thématique en MP4, identique à l'écran et prête pour votre feed ou vos Reels." },
+    { q: "Peut-elle gérer des milliers de commentaires Instagram ?", a: "Une roue, non — vous taperiez des noms indéfiniment. AzuraSort les collecte automatiquement : la taille du post n'est jamais le goulot d'étranglement." },
+    { q: "Quand une roue de noms suffit-elle ?", a: "Pour une petite liste de noms hors ligne que vous avez déjà, la roue est parfaite. Pour un tirage Instagram où vous voulez puiser dans les commentaires, appliquer des règles, prouver l'équité et publier une vidéo, AzuraSort est le bon choix." },
+  ],
+  cta: "Tirer au sort parmi mes commentaires Instagram",
+  breadcrumb: "Roue de noms vs AzuraSort",
+};
+
+const arMa: PillarContent = {
+  metaTitle: "عجلة الأسماء (Wheel of Names) لسحوبات إنستغرام مقابل AzuraSort",
+  metaDescription:
+    "عجلة الأسماء ممتازة لقائمة تكتبها بيدك — لكنها لا تقرأ تعليقات إنستغرام، ولا تُثبت النزاهة، ولا تمنحك فيديو للنشر. اكتشف لماذا يُعدّ AzuraSort البديل الأصلي لعجلة الأسماء على إنستغرام.",
+  keywords: [
+    "عجلة الأسماء إنستغرام",
+    "بديل عجلة الأسماء",
+    "عجلة سحب عشوائي",
+    "سحب أسماء إنستغرام",
+    "عجلة سحب إنستغرام",
+    "سحب قابل للتحقق",
+  ],
+  h1: "عجلة الأسماء مقابل AzuraSort على إنستغرام",
+  intro:
+    "عجلة الأسماء كلاسيكية: تكتب قائمة، تُديرها، فتتوقف عند أحدهم. إنها ممتعة ومجانية لمجموعة صغيرة. لكنها تصطدم بحائط سريعًا في سحوبات إنستغرام — عليك إدخال كل اسم يدويًا، وهي لا تقرأ تعليقاتك، ولا تترك لك دليلًا ولا شيئًا تنشره. تقارن هذه الصفحة بين عجلة الأسماء وAzuraSort.",
+  whyTitle: "أين تتوقف عجلة الأسماء على إنستغرام",
+  whyParas: [
+    "صُمِّمت عجلة الأسماء لقوائم تملكها مسبقًا. في سحب على إنستغرام يعني ذلك نسخ معرّف (@) كل من علّق إلى داخل العجلة يدويًا — مقبول مع 20 اسمًا، ومستحيل مع 2000. كما أنها لا تعرف شيئًا عن قواعد إنستغرام: لا تحجب الحسابات المكرّرة، ولا تشترط إشارة أو وسمًا، ولا تسحب من الإعجابات. وحين تتوقف عند اسم، فهذا كل ما تحصل عليه: لا وسيلة لإثبات أنك لم تُعِد إدارتها حتى يفوز صديق، ولا مقطع مصمَّم لحسابك.",
+    "أما AzuraSort فمبني أصلًا لإنستغرام. يسحب التعليقات تلقائيًا — بلا كتابة — ويطبّق قواعدك (حجب المكرّرين، اشتراط الإشارات أو الوسوم، عدة فائزين واحتياطيين)، وهو قابل للإثبات: commit-reveal مع SHA-256، إذ يُنشر الهاش قبل النتيجة، فيتمكن أي شخص من التحقق من الفائز عبر صفحة شهادة عامة. وبدل دوران عام لا هوية له، يُعرض الكشف كرسوم متحركة سينمائية (خزنة، روليت، عدّ تنازلي وغيرها) تُولَّد تلقائيًا كملف MP4 مطابق للشاشة وجاهز للنشر. الدفع حسب الاستخدام، بالبطاقة أو PIX، والسعر يظهر قبل الدفع.",
+  ],
+  stepsTitle: "الطريقة الأصلية لإنستغرام",
+  steps: [
+    { name: "الصق رابط المنشور أو الـ Reel", text: "يحمّل AzuraSort كل التعليقات تلقائيًا — بلا نسخ الأسماء واحدًا واحدًا إلى عجلة." },
+    { name: "اضبط قواعد إنستغرام", text: "احجب الحسابات المكرّرة، اشترط إشارة أو وسمًا، اسحب من التعليقات أو الإعجابات، وحدّد الفائزين والاحتياطيين." },
+    { name: "اكشف الفائز برسوم متحركة مميزة", text: "اختر كشفًا سينمائيًا — خزنة أو روليت أو عدّ تنازلي — بدل دوران عام، وبثّه مباشرةً إن أردت." },
+    { name: "شارك الفيديو والشهادة", text: "انشر ملف MP4 للكشف وشارك رابط الشهادة ليتحقق أي شخص من السحب — دليل لا تستطيع عجلة الأسماء تقديمه." },
+  ],
+  faqTitle: "عجلة الأسماء مقابل AzuraSort: أسئلة شائعة",
+  faq: [
+    { q: "هل يمكنني استخدام Wheel of Names لسحب على إنستغرام؟", a: "يمكنك ذلك، لكن عليك كتابة اسم كل مشارك يدويًا، وهي لا تقرأ التعليقات ولا تطبّق القواعد ولا تُثبت النتيجة. أما AzuraSort فيسحب التعليقات تلقائيًا ويمنحك شهادة قابلة للتحقق." },
+    { q: "هل تُثبت عجلة الأسماء نزاهة الفائز؟", a: "لا. إنها تدور على شاشتك، ويمكنك إعادة إدارتها حتى تُعجبك النتيجة — ولا يملك المشاهدون سوى الثقة بك. أما AzuraSort فينشر هاشًا قبل السحب وشهادة عامة بعده، فتصبح النتيجة قابلة للتحقق." },
+    { q: "وماذا عن فيديو للنشر؟", a: "عجلة الأسماء تمنحك دورانًا عامًا فقط. أما AzuraSort فيُنتج كشفًا سينمائيًا بطابع مميز كملف MP4 مطابق للشاشة وجاهز لحسابك أو للـ Reels." },
+    { q: "هل تتحمّل آلاف التعليقات على إنستغرام؟", a: "العجلة لا تتحمّل ذلك — ستظل تكتب الأسماء بلا نهاية. أما AzuraSort فيجمعها تلقائيًا، فلا يكون حجم المنشور عائقًا أبدًا." },
+    { q: "متى تكفي عجلة الأسماء؟", a: "لقائمة صغيرة من أسماء تملكها مسبقًا خارج الإنترنت، العجلة مثالية. أما إذا أردت السحب من التعليقات وتطبيق القواعد وإثبات النزاهة ونشر فيديو، فإن AzuraSort هو الخيار المناسب." },
+  ],
+  cta: "اسحب من تعليقات منشوري على إنستغرام",
+  breadcrumb: "عجلة الأسماء مقابل AzuraSort",
+};
+
+const BY_LOCALE: Record<string, PillarContent> = {
+  en,
+  "pt-br": ptBr,
+  es,
+  "fr-ma": frMa,
+  "ar-ma": arMa,
+};
 
 export function getVsWheelOfNames(locale: string): PillarContent {
   return BY_LOCALE[locale] ?? en;

@@ -95,6 +95,12 @@ export default async function Home({
           </span>
           <span>{footer("tagline")}</span>
           <nav className="flex items-center gap-4 text-xs">
+            {/* 🔗 Hub de conteúdo. Sem este link, as ~60 paginas programaticas ficavam
+                ORFAS: existiam no sitemap mas nenhuma pagina do site apontava pra elas,
+                entao o Google as tratava como conteudo de baixa prioridade. */}
+            <Link href="/recursos" className="hover:text-ink hover:underline">
+              {locale === "pt-br" || locale === "es" ? "Recursos" : locale === "fr-ma" ? "Ressources" : locale === "ar-ma" ? "الموارد" : "Resources"}
+            </Link>
             <Link href="/termos" className="hover:text-ink hover:underline">
               {locale === "pt-br" ? "Termos de Uso" : "Terms"}
             </Link>

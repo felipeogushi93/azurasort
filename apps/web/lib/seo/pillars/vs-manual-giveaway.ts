@@ -2,7 +2,7 @@
  * Pillar "AzuraSort vs sortear na mão (manual)".
  * Ângulo: fazer o sorteio manualmente (rolar comentários, random.org, print) vs.
  * automático + auditável. Dor: tempo, suspeita de manipulação, zero prova.
- * EN default + pt-br + es; fr-ma/ar-ma caem no en (fallback no BY_LOCALE).
+ * Multilíngue (en default, pt-br, es, fr-ma, ar-ma) com fallback para en.
  */
 
 import type { PillarContent } from "./video";
@@ -124,7 +124,91 @@ const es: PillarContent = {
   breadcrumb: "Manual vs AzuraSort",
 };
 
-const BY_LOCALE: Record<string, PillarContent> = { en, "pt-br": ptBr, es };
+const frMa: PillarContent = {
+  metaTitle: "Tirer au sort un gagnant Instagram à la main vs AzuraSort",
+  metaDescription:
+    "Faire un tirage Instagram manuellement — faire défiler les commentaires, random.org, une capture d'écran — est lent et impossible à prouver. Découvrez comment AzuraSort automatise le tirage et vous donne un certificat vérifiable et une vidéo de révélation.",
+  keywords: [
+    "tirage au sort instagram à la main",
+    "tirage instagram manuel",
+    "comment choisir un gagnant de tirage",
+    "random.org tirage instagram",
+    "générateur de gagnant instagram",
+    "tirage au sort vérifiable",
+  ],
+  h1: "Tirage à la main vs AzuraSort",
+  intro:
+    "Beaucoup de gens font encore leurs tirages manuellement : faire défiler les commentaires, les compter, saisir un nombre sur random.org et faire une capture d'écran. Ça marche, mais c'est lent, facile à rater et — le vrai problème — impossible à prouver à un abonné sceptique. Cette page compare la méthode manuelle à ce qu'AzuraSort automatise.",
+  whyTitle: "Là où la méthode manuelle s'effondre",
+  whyParas: [
+    "La voie manuelle a trois points faibles. D'abord le temps : sur un post à plusieurs milliers de commentaires, vous ne pouvez pas tous les lire, donc vous échantillonnez — et échantillonner n'est pas équitable. Ensuite, les doublons et le respect des règles (une participation par personne, mentions obligatoires, hashtags) sont quasi impossibles à contrôler à la main. Enfin la preuve : une capture d'écran de random.org ne prouve rien, puisque personne n'a vu comment vous avez obtenu ce nombre. Vos abonnés les plus engagés sont justement ceux qui se demandent si c'était truqué.",
+    "AzuraSort automatise les trois. Il récupère tous les commentaires, applique vos règles (bloquer les doublons, exiger des mentions ou des hashtags) et tire au sort avec un algorithme prouvablement équitable : commit-reveal avec SHA-256 + Fisher-Yates. Le hash est publié avant le résultat, donc chacun peut reproduire le tirage sur une page de certificat public — une vraie preuve, pas une capture d'écran. Et au lieu d'une image figée, vous obtenez une vidéo de révélation cinématographique (MP4) prête à publier, plus plusieurs gagnants et suppléants en une seule fois. Le manuel est gratuit ; AzuraSort fonctionne au paiement à l'usage, avec le prix affiché avant de payer, par carte ou PIX.",
+  ],
+  stepsTitle: "La méthode automatisée, étape par étape",
+  steps: [
+    { name: "Collez le lien du post ou du Reel", text: "AzuraSort charge l'aperçu et le nombre de commentaires automatiquement — sans défilement, sans comptage, sans tableur." },
+    { name: "Définissez vos règles", text: "Bloquez les comptes en double, exigez des mentions ou des hashtags, choisissez le nombre de gagnants et de suppléants — appliqué automatiquement, pas à l'œil." },
+    { name: "Lancez le tirage", text: "Chaque commentaire éligible est mélangé de façon déterministe et le gagnant est révélé à l'écran, en direct si vous voulez." },
+    { name: "Partagez la preuve et la vidéo", text: "Publiez le MP4 de la révélation et diffusez le lien du certificat pour que chacun revérifie l'équité du résultat — ce qu'un tirage manuel ne pourra jamais vous offrir." },
+  ],
+  faqTitle: "Tirage manuel vs AzuraSort : questions fréquentes",
+  faq: [
+    { q: "random.org suffit-il pour un tirage Instagram ?", a: "Il vous donne un nombre aléatoire, mais il ne lit pas vos commentaires, ne supprime pas les doublons et ne prouve rien à votre audience. Vous faites toujours tout à la main et vous finissez avec une capture d'écran que personne ne peut vérifier. AzuraSort se charge de la collecte, des règles et de la preuve." },
+    { q: "Pourquoi la preuve compte-t-elle ?", a: "Plus le lot et l'audience sont importants, plus les gens se demandent en silence si le gagnant était un ami. Un tirage manuel leur demande de vous croire sur parole. AzuraSort publie un hash avant le tirage et un certificat public après : l'équité devient mathématique, pas une question de confiance." },
+    { q: "Le faire à la main n'est-il pas moins cher ?", a: "Si — le manuel est gratuit. AzuraSort est payant à l'usage parce qu'il vous donne aussi une vidéo à partager et un certificat vérifiable. Si le tirage est informel, le manuel suffit. S'il compte, la petite somme vous achète du temps et de la crédibilité." },
+    { q: "Comment AzuraSort gère-t-il des milliers de commentaires ?", a: "Il les collecte automatiquement, donc la taille du post n'est pas un problème — contrairement à une lecture à la main, où les gros posts vous obligent à échantillonner et à perdre l'équité." },
+    { q: "Puis-je quand même faire une révélation en direct ?", a: "Oui. Vous pouvez diffuser la révélation pour que votre audience voie le gagnant apparaître en temps réel, puis conserver le MP4 et le certificat." },
+  ],
+  cta: "Automatiser mon prochain tirage",
+  breadcrumb: "Manuel vs AzuraSort",
+};
+
+const arMa: PillarContent = {
+  metaTitle: "اختيار الفائز يدويًا على إنستغرام مقابل AzuraSort",
+  metaDescription:
+    "إجراء سحب إنستغرام يدويًا — تصفّح التعليقات وrandom.org ولقطة شاشة — بطيء ويستحيل إثباته. اكتشف كيف يُؤتمت AzuraSort السحب ويمنحك شهادة قابلة للتحقق وفيديو كشف جاهزًا.",
+  keywords: [
+    "اختيار فائز إنستغرام يدويًا",
+    "سحب إنستغرام يدوي",
+    "كيف تختار الفائز في السحب",
+    "random.org سحب إنستغرام",
+    "مولّد فائز إنستغرام",
+    "سحب قابل للتحقق",
+  ],
+  h1: "السحب اليدوي مقابل AzuraSort",
+  intro:
+    "لا يزال كثيرون يُجرون السحوبات يدويًا: تصفّح التعليقات، عدّها، إدخال رقم في random.org، ثم أخذ لقطة شاشة. الطريقة تعمل، لكنها بطيئة وسهلة الخطأ، والمشكلة الحقيقية أنها يستحيل إثباتها لمتابع مرتاب. تقارن هذه الصفحة بين الطريقة اليدوية وما يُؤتمته AzuraSort.",
+  whyTitle: "أين تنهار الطريقة اليدوية",
+  whyParas: [
+    "للمسار اليدوي ثلاث نقاط ضعف. أولًا الوقت: في منشور بآلاف التعليقات لا يمكنك واقعيًا قراءتها كلها، فتلجأ إلى عيّنة — والعيّنة ليست عادلة. ثانيًا، المكرّرون وضبط الشروط (مشاركة واحدة لكل شخص، الإشارات المطلوبة، الوسوم) شبه مستحيل يدويًا. ثالثًا، الإثبات: لقطة شاشة من random.org لا تُثبت شيئًا، لأن أحدًا لم يرَ كيف وصلت إلى ذلك الرقم. ومتابعوك الأكثر تفاعلًا هم بالضبط من يتساءلون إن كان السحب مُرتّبًا.",
+    "يُؤتمت AzuraSort الثلاثة معًا. يسحب كل التعليقات، ويطبّق شروطك (حجب المكرّرين، اشتراط الإشارات أو الوسوم)، ويجري السحب بخوارزمية قابلة للإثبات: commit-reveal مع SHA-256 وخلط Fisher-Yates. يُنشر الهاش قبل النتيجة، فيستطيع أي شخص إعادة إنتاج السحب على صفحة شهادة عامة — إثبات حقيقي لا لقطة شاشة. وبدل صورة ثابتة، تحصل على فيديو كشف سينمائي (MP4) جاهز للنشر، إضافة إلى عدة فائزين واحتياطيين في تشغيل واحد. الطريقة اليدوية مجانية؛ أما AzuraSort فالدفع فيه حسب الاستخدام، والسعر يظهر قبل الدفع، بالبطاقة أو PIX.",
+  ],
+  stepsTitle: "الطريقة الآلية خطوة بخطوة",
+  steps: [
+    { name: "الصق رابط المنشور أو الـ Reel", text: "يحمّل AzuraSort المعاينة وعدد التعليقات تلقائيًا — بلا تصفّح ولا عدّ ولا جداول." },
+    { name: "اضبط شروطك", text: "احجب الحسابات المكرّرة، اشترط الإشارات أو الوسوم، وحدّد عدد الفائزين والاحتياطيين — تُطبَّق تلقائيًا لا بالتقدير." },
+    { name: "نفّذ السحب", text: "يُخلط كل تعليق مؤهَّل بطريقة حتمية ويُكشف الفائز على الشاشة، مباشرةً إن أردت." },
+    { name: "شارك الدليل والفيديو", text: "انشر ملف MP4 للكشف وشارك رابط الشهادة ليُعيد أي شخص التحقق من نزاهة النتيجة — وهو ما لا يمنحك إياه السحب اليدوي أبدًا." },
+  ],
+  faqTitle: "السحب اليدوي مقابل AzuraSort: أسئلة شائعة",
+  faq: [
+    { q: "هل يكفي random.org لسحب على إنستغرام؟", a: "يمنحك رقمًا عشوائيًا، لكنه لا يقرأ تعليقاتك ولا يزيل المكرّرين ولا يُثبت النتيجة لجمهورك. تبقى تؤدي كل العمل يدويًا وتنتهي بلقطة شاشة لا يستطيع أحد التحقق منها. أما AzuraSort فيتولّى الجمع والشروط والإثبات نيابةً عنك." },
+    { q: "لماذا يهمّ الإثبات؟", a: "كلما كبرت الجائزة والجمهور، ازداد عدد من يتساءلون بصمت إن كان الفائز صديقًا. السحب اليدوي يطلب منهم الثقة بك فحسب. أما AzuraSort فينشر هاشًا قبل السحب وشهادة عامة بعده، فتصبح النزاهة رياضية لا مسألة ثقة." },
+    { q: "أليس القيام به يدويًا أرخص؟", a: "بلى — اليدوي مجاني. AzuraSort يعمل بالدفع حسب الاستخدام لأنه يمنحك أيضًا فيديو قابلًا للمشاركة وشهادة قابلة للتحقق. إن كان السحب عابرًا فاليدوي يكفي، أما إن كان مهمًّا فالرسم الصغير يشتري لك وقتًا ومصداقية." },
+    { q: "كيف يتعامل AzuraSort مع آلاف التعليقات؟", a: "يجمعها تلقائيًا، فلا يشكّل حجم المنشور مشكلة — بخلاف قراءتها يدويًا حيث تُجبرك المنشورات الكبيرة على أخذ عيّنة وفقدان العدالة." },
+    { q: "هل ما زال بإمكاني إجراء كشف مباشر؟", a: "نعم. يمكنك بثّ الكشف ليشاهد جمهورك ظهور الفائز لحظةً بلحظة، ثم تحتفظ بملف MP4 والشهادة بعد ذلك." },
+  ],
+  cta: "أتمتة سحبي القادم",
+  breadcrumb: "اليدوي مقابل AzuraSort",
+};
+
+const BY_LOCALE: Record<string, PillarContent> = {
+  en,
+  "pt-br": ptBr,
+  es,
+  "fr-ma": frMa,
+  "ar-ma": arMa,
+};
 
 export function getVsManualGiveaway(locale: string): PillarContent {
   return BY_LOCALE[locale] ?? en;

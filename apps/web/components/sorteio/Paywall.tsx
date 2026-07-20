@@ -192,7 +192,11 @@ export function Paywall({
           )}
           <PayCard icon="💳" title={t("paywall.cardCta")} sub={t("paywall.cardSub")} price={allowTest ? `${formatPrice(100, currency)} (teste)` : cardLabel} cta={t("paywall.cardCta")} onClick={() => { track("pay_started", { method: "card", plan }); setShowCard(true); }} />
         </div>
-        <p className="mt-3 text-center text-xs text-inkSoft">
+        {/* 💚 Reversao de risco ANTES do clique, nao depois. Era um texto cinza pequeno
+            embaixo dos cartoes — ou seja, so era lido por quem JA tinha decidido pagar.
+            No funil, o vazamento esta entre ver o preco e iniciar o pagamento (~21%
+            seguem), entao a promessa de reembolso precisa estar no ponto da decisao. */}
+        <p className="mt-3 text-center text-xs font-semibold text-emerald">
           {t("paywall.guarantee")}
         </p>
       </div>

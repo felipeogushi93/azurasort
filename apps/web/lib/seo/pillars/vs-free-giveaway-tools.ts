@@ -2,7 +2,7 @@
  * Pillar "AzuraSort vs ferramentas de sorteio grátis".
  * Ângulo: grátis mostra só um nome, com anúncios e sem prova; AzuraSort entrega
  * vídeo + certificado. Ponte: o AzuraSort TAMBÉM tem um sorteio grátis (/gratis).
- * EN default + pt-br + es; fr-ma/ar-ma caem no en.
+ * Multilíngue (en default, pt-br, es, fr-ma, ar-ma) com fallback para en.
  */
 
 import type { PillarContent } from "./video";
@@ -124,7 +124,91 @@ const es: PillarContent = {
   breadcrumb: "Gratis vs AzuraSort",
 };
 
-const BY_LOCALE: Record<string, PillarContent> = { en, "pt-br": ptBr, es };
+const frMa: PillarContent = {
+  metaTitle: "Outils de tirage Instagram gratuits vs AzuraSort : ce que vous obtenez vraiment",
+  metaDescription:
+    "Les outils de tirage Instagram gratuits affichent un nom et s'arrêtent là — publicités, aucune preuve, aucune vidéo. Voyez quand le gratuit suffit et quand la vidéo de révélation et le certificat vérifiable d'AzuraSort valent le coup. AzuraSort propose aussi un tirage gratuit.",
+  keywords: [
+    "outil de tirage instagram gratuit",
+    "tirage commentaires gratuit",
+    "tirage instagram gratuit ou payant",
+    "un outil de tirage gratuit est-il fiable",
+    "outil de tirage instagram",
+    "tirage au sort vérifiable",
+  ],
+  h1: "Outils gratuits vs AzuraSort",
+  intro:
+    "Chercher un outil de tirage Instagram gratuit est logique — pour un petit tirage informel, vous n'avez peut-être besoin de rien d'autre. Voici un regard honnête sur ce que donnent les outils gratuits, là où ils restent discrètement en deçà, et le moment où le tirage payant d'AzuraSort mérite son prix. À savoir d'emblée : AzuraSort a aussi un tirage gratuit.",
+  whyTitle: "Ce que « gratuit » comprend vraiment",
+  whyParas: [
+    "La plupart des outils gratuits font une seule chose : lire les commentaires et afficher un nom au hasard à l'écran, généralement entouré de publicités. C'est réellement utile pour un tirage rapide. Ce qu'ils incluent rarement, c'est de quoi publier ensuite, un moyen de prouver l'équité du résultat, ou de la clarté sur le sort des données qu'ils collectent. Le résultat vit sur votre écran puis disparaît — et l'abonné qui l'a manqué n'a que votre parole.",
+    "AzuraSort garde une option gratuite précisément pour ces tirages rapides (liste manuelle, sans frais) et ajoute une formule payante quand le tirage compte. Le tirage payant collecte les commentaires pour vous, applique des règles comme le blocage des doublons, et il est prouvablement équitable : commit-reveal avec SHA-256, si bien que chacun peut vérifier le gagnant sur un certificat public. Vous obtenez aussi une vidéo de révélation cinématographique (MP4) prête à publier, plusieurs gagnants et suppléants, une option de révélation en direct, et le paiement par carte ou PIX — avec le prix affiché avant de payer. Le gratuit, c'est pour l'informel ; le payant, c'est quand vous voulez du contenu et de la crédibilité.",
+  ],
+  stepsTitle: "Comment choisir entre gratuit et payant",
+  steps: [
+    { name: "Post petit et informel ?", text: "Prenez un tirage gratuit — la page gratuite d'AzuraSort ou n'importe quel outil de base convient quand il vous faut seulement un nom." },
+    { name: "Vous voulez quelque chose à publier ?", text: "Si vous voulez une vidéo de révélation partageable pour votre feed ou vos Reels, c'est là que le gratuit s'arrête et que le payant commence." },
+    { name: "Lot ou audience importants ?", text: "Plus l'enjeu est grand, plus vous voulez une preuve. Le tirage payant délivre un certificat que chacun peut revérifier, pour que personne ne puisse vous accuser de truquage." },
+    { name: "Lancez le tirage", text: "Collez le lien, définissez vos règles, tirez, puis partagez la vidéo et le certificat — ou commencez gratuitement et passez au payant seulement quand c'est nécessaire." },
+  ],
+  faqTitle: "Gratuit vs AzuraSort : questions fréquentes",
+  faq: [
+    { q: "Un outil de tirage Instagram gratuit est-il fiable ?", a: "Beaucoup conviennent pour un tirage informel, mais lisez ce qu'ils font des commentaires qu'ils collectent, et attendez-vous à des publicités et à aucune preuve d'équité. Le tirage gratuit d'AzuraSort est manuel et reste simple ; le tirage payant ajoute la collecte, la preuve et la vidéo." },
+    { q: "AzuraSort propose-t-il une option gratuite ?", a: "Oui. Il existe un tirage gratuit pour les tirages rapides et simples — sans paiement. Quand vous voulez la vidéo de révélation, le certificat ou la collecte automatique des commentaires, vous passez au tirage payant à l'usage." },
+    { q: "Pourquoi payer si des outils gratuits existent ?", a: "Parce que les outils gratuits ne font qu'afficher un nom. Le tirage payant vous donne un MP4 à publier et un certificat que votre audience peut vérifier — les deux choses qui transforment un tirage en contenu et en preuve, pas seulement en résultat." },
+    { q: "Les outils gratuits prouvent-ils l'équité du gagnant ?", a: "Presque jamais. Ils affichent un nom et il faut vous croire sur parole. AzuraSort publie le hash avant le tirage et un certificat public après, si bien que le résultat est vérifiable par n'importe qui." },
+    { q: "Les outils gratuits peuvent-ils générer une vidéo ?", a: "Non. Un MP4 de révélation cinématographique, partageable et strictement identique à l'écran fait partie du tirage payant d'AzuraSort, pas des outils gratuits." },
+  ],
+  cta: "Essayer AzuraSort (gratuit ou payant)",
+  breadcrumb: "Outils gratuits vs AzuraSort",
+};
+
+const arMa: PillarContent = {
+  metaTitle: "أدوات السحب المجانية على إنستغرام مقابل AzuraSort: ماذا تحصل فعلًا",
+  metaDescription:
+    "أدوات السحب المجانية على إنستغرام تعرض اسمًا وتتوقف عند ذلك — إعلانات، بلا إثبات، بلا فيديو. اعرف متى يكفي المجاني ومتى يستحق فيديو الكشف والشهادة القابلة للتحقق من AzuraSort. ولدى AzuraSort سحب مجاني أيضًا.",
+  keywords: [
+    "أداة سحب إنستغرام مجانية",
+    "سحب تعليقات مجاني",
+    "سحب إنستغرام مجاني أم مدفوع",
+    "هل أدوات السحب المجانية آمنة",
+    "أداة سحب إنستغرام",
+    "سحب قابل للتحقق",
+  ],
+  h1: "الأدوات المجانية مقابل AzuraSort",
+  intro:
+    "البحث عن أداة سحب مجانية على إنستغرام أمر منطقي — فلسحب صغير وعابر قد لا تحتاج إلى أكثر من ذلك. هذه نظرة صادقة إلى ما تمنحك إياه الأدوات المجانية، وأين تقصّر بهدوء، ومتى يستحق السحب المدفوع من AzuraSort سعره. ومن الجيد معرفته منذ البداية: لدى AzuraSort سحب مجاني أيضًا.",
+  whyTitle: "ما الذي يشمله «المجاني» حقًا",
+  whyParas: [
+    "معظم الأدوات المجانية تؤدي مهمة واحدة: قراءة التعليقات وعرض اسم عشوائي على الشاشة، وغالبًا وسط الإعلانات. وهذا مفيد فعلًا لسحب سريع. لكن ما نادرًا ما تشمله هو شيء تنشره بعد ذلك، أو وسيلة لإثبات نزاهة النتيجة، أو وضوح بشأن مصير البيانات التي تجمعها. تعيش النتيجة على شاشتك ثم تختفي — ولا يبقى للمتابع الذي فاتته سوى كلامك.",
+    "يحتفظ AzuraSort بخيار مجاني لهذه السحوبات السريعة بالضبط (قائمة يدوية، بلا تكلفة)، ويضيف مستوى مدفوعًا حين يكون السحب مهمًّا. السحب المدفوع يجمع التعليقات نيابةً عنك، ويطبّق شروطًا مثل حجب المكرّرين، وهو قابل للإثبات: commit-reveal مع SHA-256 ليتحقق أي شخص من الفائز عبر شهادة عامة. كما تحصل على فيديو كشف سينمائي (MP4) جاهز للنشر، وعدة فائزين واحتياطيين، وخيار كشف مباشر، والدفع بالبطاقة أو PIX — مع عرض السعر قبل الدفع. المجاني للسحوبات العابرة؛ والمدفوع حين تريد محتوى ومصداقية.",
+  ],
+  stepsTitle: "كيف تختار بين المجاني والمدفوع",
+  steps: [
+    { name: "منشور صغير وعابر؟", text: "استخدم سحبًا مجانيًا — صفحة AzuraSort المجانية أو أي أداة بسيطة تكفي حين تحتاج إلى اسم فقط." },
+    { name: "تريد شيئًا تنشره؟", text: "إن أردت فيديو كشف قابلًا للمشاركة على حسابك أو في الـ Reels، فهنا يتوقف المجاني ويبدأ المدفوع." },
+    { name: "الجائزة أو الجمهور كبيران؟", text: "كلما زادت الأهمية زادت حاجتك إلى الإثبات. يمنحك السحب المدفوع شهادة يعيد أي شخص التحقق منها، فلا يستطيع أحد اتهامك بالتلاعب." },
+    { name: "نفّذ السحب", text: "الصق الرابط، اضبط شروطك، اسحب، ثم شارك الفيديو مع الشهادة — أو ابدأ مجانًا وارتقِ للمدفوع فقط عند الحاجة." },
+  ],
+  faqTitle: "المجاني مقابل AzuraSort: أسئلة شائعة",
+  faq: [
+    { q: "هل أدوات السحب المجانية على إنستغرام آمنة؟", a: "كثير منها مناسب لسحب عابر، لكن اقرأ ما تفعله بالتعليقات التي تجمعها، وتوقّع إعلانات وغياب أي إثبات للنزاهة. السحب المجاني في AzuraSort يدوي وبسيط، أما المدفوع فيضيف الجمع والإثبات والفيديو." },
+    { q: "هل لدى AzuraSort خيار مجاني؟", a: "نعم. هناك سحب مجاني للسحوبات السريعة والبسيطة — بلا دفع. وحين تريد فيديو الكشف أو الشهادة أو الجمع التلقائي للتعليقات، تنتقل إلى السحب المدفوع حسب الاستخدام." },
+    { q: "لماذا أدفع مع وجود أدوات مجانية؟", a: "لأن الأدوات المجانية تعرض اسمًا فقط. أما السحب المدفوع فيمنحك ملف MP4 للنشر وشهادة يتحقق منها جمهورك — وهما ما يحوّلان السحب إلى محتوى ودليل، لا مجرد نتيجة." },
+    { q: "هل تُثبت الأدوات المجانية نزاهة الفائز؟", a: "نادرًا جدًّا. تعرض اسمًا وعليك أن تكون محلّ ثقة. أما AzuraSort فينشر الهاش قبل السحب وشهادة عامة بعده، فتصبح النتيجة قابلة للتحقق من أي شخص." },
+    { q: "هل تستطيع الأدوات المجانية إنشاء فيديو؟", a: "لا. فيديو الكشف السينمائي القابل للمشاركة والمطابق للشاشة تمامًا جزء من السحب المدفوع في AzuraSort، لا من الأدوات المجانية." },
+  ],
+  cta: "جرّب AzuraSort (مجانًا أو مدفوعًا)",
+  breadcrumb: "المجاني مقابل AzuraSort",
+};
+
+const BY_LOCALE: Record<string, PillarContent> = {
+  en,
+  "pt-br": ptBr,
+  es,
+  "fr-ma": frMa,
+  "ar-ma": arMa,
+};
 
 export function getVsFreeGiveawayTools(locale: string): PillarContent {
   return BY_LOCALE[locale] ?? en;
