@@ -417,7 +417,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   }, [showReveal, liveActive, liveRoom.configured, liveStarted, spec, campaign]);
 
   /* ----- pagamento confirmado: NÃO sorteia já; vai pra etapa "pronto" com botão ----- */
-  function handlePaid(payment?: { provider: string; externalId: string; plan?: string; adminKey?: string }) {
+  function handlePaid(payment?: { provider: string; externalId: string; plan?: string; adminKey?: string; email?: string }) {
     if (payment) {
       setLastPayment(payment);
       // Padrão inclui só a animação Contagem → se pagou Padrão, usa ela na revelação
@@ -454,7 +454,7 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
           try { return window.localStorage.getItem("gclid"); } catch { return null; }
         };
         const gclid = readGclid();
-        const confirmBody = JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined, postUrl: link || undefined, gclid });
+        const confirmBody = JSON.stringify({ provider: payment.provider, externalId: payment.externalId, plan: payment.plan, currency, count: displayCount, campaign: campaign.trim() || undefined, postUrl: link || undefined, gclid, email: payment.email || undefined });
         const blob = new Blob([confirmBody], { type: "application/json" });
         if (typeof navigator !== "undefined" && navigator.sendBeacon) {
           navigator.sendBeacon("/api/pay/confirm", blob);
@@ -465,41 +465,50 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
         /* nunca quebra a UX */
       }
       track("pay_done", { provider: payment.provider, plan: payment.plan });
-      // conversão de COMPRA para o GA4 (base das campanhas Google/Meta)
-      const planId = (payment.plan === "padrao" || payment.plan === "vip" ? payment.plan : "premium") as PlanId;
-      const value = priceForCount(currency, planId, displayCount) / 100;
-      const gtagFn = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
-      // GA4 (relatórios)
-      gtagFn?.("event", "purchase", {
-        currency,
-        value,
-        transaction_id: payment.externalId,
-        items: [{ item_name: planId }],
-      });
-      // Google Ads (conversão de compra — otimização das campanhas)
-      gtagFn?.("event", "conversion", {
-        send_to: "AW-18276235962/gmOFCOnLl8YcELr15IpE",
-        value,
-        currency,
-        transaction_id: payment.externalId,
-      });
-      // Google Ads Rafflecopter US (conta USD onde roda a campanha AzuraSort BR)
-      gtagFn?.("event", "conversion", {
-        send_to: "AW-18240050787/ybDqCNSMkb8cEOOsxPlD",
-        value,
-        currency,
-        transaction_id: payment.externalId,
-      });
-      // Google Ads AzuraSort BR (conta BRL — Compra id=7673165170)
-      gtagFn?.("event", "conversion", {
-        send_to: "AW-18290962377/TCaBCPLq7MocEMnf55FE",
-        value,
-        currency,
-        transaction_id: payment.externalId,
-      });
-      // Meta Pixel (conversão de compra — otimização das campanhas Facebook/Instagram)
-      const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq;
-      fbq?.("track", "Purchase", { value, currency });
+
+      // 🔒 DEDUP à prova de reload: o handledPayRef acima cobre a MESMA sessão,
+      // mas some ao recarregar a página. Se o cliente der F5 na tela de resultado,
+      // as conversões redisparavam e o Google/Meta contavam a venda 2x. A trava
+      // no sessionStorage sobrevive ao reload e garante 1 disparo por venda.
+      const convKey = `azconv_${payment.externalId}`;
+      let jaDisparou = false;
+      try { jaDisparou = sessionStorage.getItem(convKey) === "1"; } catch { /* modo privado */ }
+
+      if (!jaDisparou) {
+        try { sessionStorage.setItem(convKey, "1"); } catch { /* noop */ }
+
+        const planId = (payment.plan === "padrao" || payment.plan === "vip" ? payment.plan : "premium") as PlanId;
+        const value = priceForCount(currency, planId, displayCount) / 100;
+        const gtagFn = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+        const fbq = (window as unknown as { fbq?: (...a: unknown[]) => void }).fbq;
+        const tid = payment.externalId;
+
+        const dispararPixels = () => {
+          gtagFn?.("event", "purchase", { currency, value, transaction_id: tid, items: [{ item_name: planId }] }); // GA4
+          gtagFn?.("event", "conversion", { send_to: "AW-18276235962/gmOFCOnLl8YcELr15IpE", value, currency, transaction_id: tid });
+          gtagFn?.("event", "conversion", { send_to: "AW-18240050787/ybDqCNSMkb8cEOOsxPlD", value, currency, transaction_id: tid });
+          gtagFn?.("event", "conversion", { send_to: "AW-18290962377/TCaBCPLq7MocEMnf55FE", value, currency, transaction_id: tid }); // AzuraSort BR
+          fbq?.("track", "Purchase", { value, currency });
+        };
+
+        // ✨ ENHANCED CONVERSIONS: se temos o email do cliente, mandamos o HASH
+        // SHA-256 (nunca o email puro) junto — o Google casa vendas que o cookie
+        // sozinho perderia. Hash feito no navegador; se não houver email ou o
+        // browser não suportar, dispara igual a antes (zero regressão).
+        const email = payment.email?.trim().toLowerCase();
+        if (email && gtagFn && typeof crypto !== "undefined" && crypto.subtle) {
+          crypto.subtle
+            .digest("SHA-256", new TextEncoder().encode(email))
+            .then((buf) => {
+              const hex = Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
+              gtagFn("set", "user_data", { sha256_email_address: hex });
+            })
+            .catch(() => { /* segue sem enhanced */ })
+            .finally(dispararPixels);
+        } else {
+          dispararPixels();
+        }
+      }
     }
     setStep("ready");
   }

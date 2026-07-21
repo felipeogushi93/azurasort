@@ -42,11 +42,13 @@ export async function POST(req: Request) {
     let paid = false;
     let amount = 0;
     let currency = (body.currency || "BRL").toUpperCase();
+    let providerEmail: string | null = null; // email vindo do gateway (fonte de verdade)
     if (provider === "stripe") {
       const v = await verifyStripePayment(externalId);
       paid = v.paid;
       amount = v.amount;
       currency = v.currency;
+      providerEmail = v.email ?? null;
     } else if (provider === "woovi") {
       const v = await getWooviStatus(externalId);
       paid = v.paid;
@@ -82,7 +84,8 @@ export async function POST(req: Request) {
     }
 
     const gclid = body.gclid?.trim() || null;
-    const email = body.email?.trim().toLowerCase() || null;
+    // prioriza o email do gateway (Stripe/Link); cai no que o cliente mandou
+    const email = providerEmail?.trim().toLowerCase() || body.email?.trim().toLowerCase() || null;
     const phone = body.phone?.trim() || null;
     const paidAt = new Date();
 

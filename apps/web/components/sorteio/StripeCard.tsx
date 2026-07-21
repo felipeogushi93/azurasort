@@ -18,7 +18,7 @@ export function StripeCard({
   count = 0,
   test = false,
 }: {
-  onSuccess: (externalId: string) => void;
+  onSuccess: (externalId: string, email?: string | null) => void;
   onClose: () => void;
   plan?: string;
   priceLabel?: string;
@@ -75,7 +75,7 @@ export function StripeCard({
   );
 }
 
-function CardForm({ onSuccess, priceLabel }: { onSuccess: (externalId: string) => void; priceLabel: string }) {
+function CardForm({ onSuccess, priceLabel }: { onSuccess: (externalId: string, email?: string | null) => void; priceLabel: string }) {
   const t = useTranslations("sim.card");
   const stripe = useStripe();
   const elements = useElements();
@@ -97,7 +97,11 @@ function CardForm({ onSuccess, priceLabel }: { onSuccess: (externalId: string) =
       return;
     }
     if (paymentIntent && paymentIntent.status === "succeeded") {
-      onSuccess(paymentIntent.id);
+      // Enhanced Conversions: o Stripe (via Link) às vezes já traz o email no
+      // PaymentIntent. Se vier, repassa pra virar hash no pixel do Google Ads.
+      // Se não vier, segue sem — zero regressão.
+      const email = (paymentIntent as { receipt_email?: string | null }).receipt_email ?? null;
+      onSuccess(paymentIntent.id, email);
       return;
     }
     setBusy(false);

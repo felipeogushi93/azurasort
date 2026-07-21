@@ -38,7 +38,7 @@ export function Paywall({
   count: number;
   campaign: string;
   sample: { handle: string; text: string }[];
-  onUnlock: (payment?: { provider: string; externalId: string; plan?: string }) => void;
+  onUnlock: (payment?: { provider: string; externalId: string; plan?: string; email?: string }) => void;
   allowTest?: boolean;
   currency?: Currency;
   sceneName?: string;
@@ -297,9 +297,9 @@ export function Paywall({
           currency={currency}
           count={count}
           test={allowTest}
-          onSuccess={(externalId) => {
+          onSuccess={(externalId, email) => {
             setShowCard(false);
-            onUnlock({ provider: "stripe", externalId, plan });
+            onUnlock({ provider: "stripe", externalId, plan, email: email ?? undefined });
           }}
           onClose={() => setShowCard(false)}
         />
