@@ -85,6 +85,10 @@ export default async function RecursosPage({ params }: { params: Promise<{ local
                 <p className="font-semibold text-ink">🎁 Amigo secreto</p>
                 <p className="mt-1 text-sm text-inkSoft">Sorteie os pares e mande um link para cada pessoa.</p>
               </Link>
+              <Link href="/alternativa-ao-sorteador" className="block rounded-2xl border border-ink/5 bg-surface p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-gold/40 sm:col-span-2">
+                <p className="font-semibold text-ink">🆚 Alternativa ao Sorteador</p>
+                <p className="mt-1 text-sm text-inkSoft">Comparação: sorteador de nomes vs sorteio de Instagram com vídeo e certificado.</p>
+              </Link>
             </div>
           </div>
         )}

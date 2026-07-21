@@ -41,6 +41,7 @@ export function ToolFooter() {
           <Link href="/sorteio" className="hover:text-ink hover:underline">Sorteio no Instagram</Link>
           <Link href="/sorteador-de-nomes" className="hover:text-ink hover:underline">Sorteador de nomes</Link>
           <Link href="/amigo-secreto" className="hover:text-ink hover:underline">Amigo secreto</Link>
+          <Link href="/alternativa-ao-sorteador" className="hover:text-ink hover:underline">Alternativa ao Sorteador</Link>
           <Link href="/guia" className="hover:text-ink hover:underline">Como fazer um sorteio</Link>
           <Link href="/termos" className="hover:text-ink hover:underline">Termos</Link>
           <Link href="/privacidade" className="hover:text-ink hover:underline">Privacidade</Link>

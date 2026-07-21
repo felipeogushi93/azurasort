@@ -39,6 +39,6 @@ export function mainSiteUrls(): string[] {
   for (const l of routing.locales) for (const s of PILLAR_SLUGS) urls.add(`https://${HOST}/${l}/${s}`);
   // ferramentas gratuitas — SO pt-br (as rotas usam dynamicParams=false e os
   // outros idiomas retornam 404 de proposito). Nao mover pro loop de locales.
-  for (const p of ["/gratis", "/sorteador-de-nomes", "/amigo-secreto"]) urls.add(`https://${HOST}/pt-br${p}`);
+  for (const p of ["/gratis", "/sorteador-de-nomes", "/amigo-secreto", "/alternativa-ao-sorteador"]) urls.add(`https://${HOST}/pt-br${p}`);
   return [...urls];
 }
