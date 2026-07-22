@@ -189,6 +189,24 @@ export default async function VerifyPage({
           </p>
         </div>
 
+        {/* 🎯 CTA — quem abre um certificado compartilhado é lead QUENTE: acabou de
+            ver a prova de que um amigo/marca fez um sorteio limpo. Era o único
+            canal organico com vida (12 visitas/sem, cresce a cada venda) e nao
+            tinha pra onde converter. Aquisicao a custo ZERO. */}
+        <div className="mt-8 rounded-3xl border border-gold/30 bg-gradient-to-br from-gold/10 to-surface p-6 text-center shadow-gold">
+          <p className="font-display text-lg font-bold text-ink">
+            {locale === "pt-br" ? "Faça o seu sorteio verificável" : "Run your own verifiable giveaway"}
+          </p>
+          <p className="mx-auto mt-2 max-w-sm text-sm text-inkSoft">
+            {locale === "pt-br"
+              ? "Sorteie os comentários do seu post no Instagram, receba o vídeo da revelação e um certificado como este — que prova que foi justo."
+              : "Draw your Instagram post's comments, get the reveal video and a certificate like this one — proof it was fair."}
+          </p>
+          <Link href="/sorteio" className="btn-gold mt-5 inline-block px-8 py-3 text-base">
+            {locale === "pt-br" ? "Criar meu sorteio →" : "Create my giveaway →"}
+          </Link>
+        </div>
+
         <p className="mt-6 text-center text-xs text-inkSoft">
           <Link href="/" className="text-gold-deep hover:underline">azurasort.com</Link> · {t("tagline")}
         </p>
