@@ -99,8 +99,8 @@ gtag('config', 'G-3H6JSKZNM5');
 // no site e usa como user identifier hasheado, elevando o match rate quando o
 // browser bloqueia cookies / o cliente fecha aba antes do simulator carregar.
 // Precisa Enhanced Conversions ligado no dashboard Google Ads.
-gtag('config', 'AW-18276235962', { 'allow_enhanced_conversions': true });
-gtag('config', 'AW-18240050787', { 'allow_enhanced_conversions': true });
+// SÓ a conta AzuraSort BR — as outras duas (AW-18276235962 fantasma e
+// AW-18240050787 Rafflecopter US) foram removidas: nao existiam/eram conta errada.
 gtag('config', 'AW-18290962377', { 'allow_enhanced_conversions': true });`}
         </Script>
         {/* Meta Pixel (Facebook/Instagram Ads) — base PageView; eventos de conversão (Purchase)

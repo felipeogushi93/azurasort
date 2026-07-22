@@ -485,10 +485,15 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
 
         const dispararPixels = () => {
           gtagFn?.("event", "purchase", { currency, value, transaction_id: tid, items: [{ item_name: planId }] }); // GA4
-          gtagFn?.("event", "conversion", { send_to: "AW-18276235962/gmOFCOnLl8YcELr15IpE", value, currency, transaction_id: tid });
-          gtagFn?.("event", "conversion", { send_to: "AW-18240050787/ybDqCNSMkb8cEOOsxPlD", value, currency, transaction_id: tid });
-          gtagFn?.("event", "conversion", { send_to: "AW-18290962377/TCaBCPLq7MocEMnf55FE", value, currency, transaction_id: tid }); // AzuraSort BR
+          // ✅ ÚNICO pixel de Ads correto — AW-18290962377 = conta AzuraSort BR (customer
+          // 1569133219), ação "Compra" (id 7673165170), que conta pro bidding.
+          gtagFn?.("event", "conversion", { send_to: "AW-18290962377/TCaBCPLq7MocEMnf55FE", value, currency, transaction_id: tid });
           fbq?.("track", "Purchase", { value, currency });
+          // 🚫 REMOVIDOS (confirmado pelo relatorio da API do Lucas, 22/jul):
+          //  - AW-18276235962 → NENHUMA conta. Pixel fantasma: disparava no vazio.
+          //  - AW-18240050787 → conta Rafflecopter US (7884949603), marca ERRADA.
+          //    Estavamos jogando conversao de venda BR na conta US de outra marca.
+          // Nao re-adicionar sem confirmar a conta receptora via tag_snippets.
         };
 
         // ✨ ENHANCED CONVERSIONS: se temos o email do cliente, mandamos o HASH
