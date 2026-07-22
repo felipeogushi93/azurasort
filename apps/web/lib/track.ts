@@ -105,6 +105,21 @@ function stickySource(): string {
   }
 }
 
+/** Celular vs desktop pela largura da tela — o Google Ads mostra que o mobile
+ *  converte metade do desktop, mas o nosso funil nao registrava device, entao
+ *  nao dava pra ver EM QUE PASSO o celular vaza. Agora da. Heuristica simples
+ *  (largura < 768px = mobile), suficiente pra segmentar o funil. */
+function device(): "mobile" | "tablet" | "desktop" {
+  try {
+    const w = window.innerWidth || document.documentElement.clientWidth || 0;
+    if (w > 0 && w < 768) return "mobile";
+    if (w >= 768 && w < 1024) return "tablet";
+    return "desktop";
+  } catch {
+    return "desktop";
+  }
+}
+
 /** Origem do lead anexada a cada evento (de onde veio + UTM + click IDs de ads). */
 function origin(): Record<string, unknown> {
   try {
@@ -112,6 +127,7 @@ function origin(): Record<string, unknown> {
     return {
       src: stickySource(),
       ref: document.referrer || null,
+      device: device(),
       utm_source: qs.get("utm_source") || null,
       utm_medium: qs.get("utm_medium") || null,
       utm_campaign: qs.get("utm_campaign") || null,
