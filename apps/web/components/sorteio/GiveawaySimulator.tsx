@@ -121,6 +121,9 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
   const [preview, setPreview] = useState<PreviewState | null>(null);
   const [sample, setSample] = useState<{ handle: string; text: string }[]>([]);
   const [certCode, setCertCode] = useState<string | null>(null);
+  // captura de contato na tela de resultado (foundation de LTV/remarketing)
+  const [leadEmail, setLeadEmail] = useState("");
+  const [leadStatus, setLeadStatus] = useState<"idle" | "sending" | "done">("idle");
   const [lastPayment, setLastPayment] = useState<{ provider: string; externalId: string; plan?: string; adminKey?: string } | undefined>(undefined);
   // guarda os pagamentos já processados → conversões (GA/Ads/Meta) disparam 1x só,
   // mesmo se o onSuccess do PIX chamar handlePaid várias vezes.
@@ -960,6 +963,52 @@ export function GiveawaySimulator({ currency = "BRL" }: { currency?: Currency })
                   ⬇ Certificado Feed 1:1
                 </a>
               </div>
+
+              {/* 📇 CAPTURA DE CONTATO — troca natural (eles ja querem o certificado/
+                  video). Foundation de LTV: hoje temos 0 contatos de 134 clientes,
+                  e o publico e lojinha que repete sorteio. Pos-pagamento, nao mexe
+                  no paywall. */}
+              {leadStatus === "done" ? (
+                <p className="mt-3 rounded-lg bg-emerald/10 px-3 py-2 text-xs font-medium text-emerald">
+                  ✓ Pronto! Vamos te avisar quando for hora do próximo sorteio.
+                </p>
+              ) : (
+                <div className="mt-3 border-t border-gold/20 pt-3">
+                  <p className="text-xs font-medium text-ink">
+                    📩 Quer receber este certificado e o vídeo por email?
+                  </p>
+                  <p className="mt-0.5 text-[11px] text-inkSoft">
+                    E a gente te avisa quando for hora do próximo sorteio.
+                  </p>
+                  <div className="mt-2 flex gap-2">
+                    <input
+                      type="email"
+                      inputMode="email"
+                      value={leadEmail}
+                      onChange={(e) => setLeadEmail(e.target.value)}
+                      placeholder="seu@email.com"
+                      className="inp flex-1 text-sm"
+                    />
+                    <button
+                      disabled={leadStatus === "sending" || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(leadEmail.trim())}
+                      onClick={async () => {
+                        setLeadStatus("sending");
+                        try {
+                          await fetch("/api/lead", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ certCode, email: leadEmail.trim() }),
+                          });
+                        } catch { /* best-effort */ }
+                        setLeadStatus("done");
+                      }}
+                      className="shrink-0 rounded-lg bg-gold px-4 py-2 text-sm font-bold text-void shadow-gold transition disabled:opacity-40"
+                    >
+                      {leadStatus === "sending" ? "…" : "Receber"}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
